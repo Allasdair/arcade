@@ -136,7 +136,7 @@ textarea.field{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:12p
 // The Arcade owns: the username, settings shared by every game, the combined backup, and the overview.
 // Each game owns its own save, XP, levels and unlocks. The Arcade only ever reads a game's summary record,
 // `arcade.summary.<id>`, which the game writes. Storage keys are prefixed with the game's id so nothing collides.
-const VERSION='0.7', AKEY='arcade.v1';
+const VERSION='0.8', AKEY='arcade.v1';
 const $=q=>document.querySelector(q), $$=q=>[...document.querySelectorAll(q)];
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
@@ -148,6 +148,7 @@ const GAMES=[
   {id:'t2048',name:'2048',desc:'Slide, merge, reach 2048',path:'t2048/index.html',prefix:'t2048.',art:'tiles'},
   {id:'linefall',name:'Linefall',desc:'Stack, clear, keep it falling',path:'linefall/index.html',prefix:'linefall.',art:'linefall'},
   {id:'drift',name:'Drift',desc:'Thrust, shoot, clear the field',path:'drift/index.html',prefix:'drift.',art:'drift'},
+  {id:'tilecraft',name:'Tilecraft',desc:'Craft words, outscore the rest',path:'tilecraft/index.html',prefix:'tilecraft.',art:'tilecraft'},
   {id:'nonogram',name:'Nonograms',desc:'Picture logic puzzles',soon:true,art:'nono'},
 
 ];
@@ -200,6 +201,10 @@ function art(kind){ const a='var(--accent)', s='var(--sub)';
       <path d="M8 46l10-3" stroke="${s}" stroke-width="2" stroke-linecap="round" opacity=".35"/><path d="M12 49l7-2.5" stroke="${s}" stroke-width="1.5" stroke-linecap="round" opacity=".25"/>
       <path d="M30 36L17 40l4-6-4-7z" fill="${a}" transform="rotate(-8 24 36)"/>
       <circle cx="35" cy="31" r="1.6" fill="${a}"/><circle cx="40" cy="27.5" r="1.6" fill="${a}"/></svg>`; }
+  if(kind==='tilecraft'){ // letter tiles crossing on a board, with their point values
+    const T=(x,y,ch,v)=>`<rect x="${x}" y="${y}" width="13" height="13" rx="2.5" fill="${a}"/><text x="${x+6.2}" y="${y+10}" font-size="9" font-weight="800" text-anchor="middle" fill="var(--accentInk)" font-family="Inter,sans-serif">${ch}</text><text x="${x+11.2}" y="${y+11.6}" font-size="3.6" font-weight="700" text-anchor="end" fill="var(--accentInk)" font-family="Inter,sans-serif">${v}</text>`;
+    let g=''; for(let y=0;y<4;y++) for(let x=0;x<5;x++) g+=`<rect x="${4+x*14}" y="${2+y*14}" width="13" height="13" rx="2" fill="var(--panel)"/>`;
+    return `<svg viewBox="0 0 74 58" width="76" height="60">${g}<rect x="46" y="44" width="13" height="13" rx="2" fill="${s}" opacity=".35"/>${T(4,16,'W',5)}${T(18,16,'O',1)}${T(32,16,'R',1)}${T(46,16,'D',2)}${T(32,2,'A',1)}${T(32,30,'Y',4)}</svg>`; }
   if(kind==='nono'){ let c=''; const g=['01110','11011','11111','01010','01110']; g.forEach((r,y)=>[...r].forEach((v,x)=>{ c+=`<rect x="${10+x*10}" y="${3+y*10}" width="9" height="9" rx="1.5" fill="${v==='1'?s:'var(--panel)'}"/>`; })); return `<svg viewBox="0 0 70 56" width="74" height="58">${c}</svg>`; }
   return `<svg viewBox="0 0 70 50" width="74" height="54"><path d="M10 30h50l-7 10H17z" fill="${s}"/><path d="M26 30V16h16v14M33 16V8" fill="none" stroke="${s}" stroke-width="3"/><path d="M6 44q6-4 12 0t12 0 12 0 12 0 12 0" fill="none" stroke="${s}" stroke-width="2"/></svg>`; }
 
@@ -321,6 +326,10 @@ function openPrivacy(){ sheet(`<h2>Privacy</h2><div class="sub">The Arcade and i
   <div class="btns"><button class="ghost" data-close>Close</button></div>`); }
 function openAbout(){ sheet(`<h2>About Arcade</h2><div class="sub">A home for ad-free games. Each game keeps its own levels and unlocks; the Arcade adds them up, holds the settings they share, and backs everything up in one file.</div>
   <div class="kv">Version<span>${VERSION}</span></div>${LIVE.map(g=>{ const s=summary(g.id); return `<div class="kv">${g.name}<span>${s?'v'+esc(s.ver):'–'}</span></div>`; }).join('')}
+  <div class="slabel" style="margin-top:14px">Credits</div>
+  <div class="note" style="margin:4px 2px 0">Fonts: Inter, JetBrains Mono and Caveat, under the SIL Open Font License.<br>
+  Tilecraft's words: the ENABLE word list (public domain). Its filter of offensive words started from the "List of Dirty, Naughty, Obscene and Otherwise Bad Words" by its contributors, under CC BY 4.0.<br>
+  Arcade and its games are open source under the MIT licence.</div>
   <div class="btns"><button class="ghost" data-close>Close</button></div>`); }
 
 // ---------- combined backup ----------

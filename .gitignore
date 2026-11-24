@@ -2,3 +2,4 @@ games/*/dist/
 node_modules/
 __pycache__/
 tests/shots/
+games/tilecraft/src/banned.js

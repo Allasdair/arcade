@@ -10,6 +10,7 @@ Ad-free games. Nothing to buy, nothing tracked. Play at **https://allasdair.gith
 | 2048 | `games/2048` | Slide and merge tiles |
 | Linefall | `games/linefall` | Falling-block stacking on a handheld-style console |
 | Drift | `games/drift` | Thrust, shoot, clear the field |
+| Tilecraft | `games/tilecraft` | Word game against the computer or a friend |
 
 Each game keeps its own save, levels and unlocks. The Arcade adds the levels up, keeps the settings every game shares (username, appearance, sound, accessibility, language), and backs everything up in one file. Progress lives only on your device.
 
@@ -28,7 +29,7 @@ docs/                 built site — don't edit by hand
 2. Run `python3 build.py`. It builds every game, runs the import check on each (see below) and writes `docs/`.
 3. Test (below), then commit and push. Pages redeploys in 1–2 minutes; players get the update in the background and see "Arcade updated · Reload".
 
-**Saves must stay compatible.** Storage keys start with each game's id (`sweep.`, `shipfight.`, `snake.`, `t2048.`, `linefall.`, `drift.`), and the Arcade's own are `arcade.*`. Never rename or remove a key players already have.
+**Saves must stay compatible.** Storage keys start with each game's id (`sweep.`, `shipfight.`, `snake.`, `t2048.`, `linefall.`, `drift.`, `tilecraft.`), and the Arcade's own are `arcade.*`. Never rename or remove a key players already have.
 
 ## Tests
 - Each game: `cd games/<game> && node tests/run.js`
@@ -48,3 +49,4 @@ The **import check** in `build.py` runs on every game: it makes sure leaving for
 
 ## Licence
 MIT (see `LICENSE`). Fonts: Inter, JetBrains Mono and Caveat under the SIL Open Font License (licences in `docs/fonts/`).
+Tilecraft's word list is ENABLE (public domain); its offensive-word filter started from the LDNOOBW list (CC BY 4.0). The filter list itself is kept private and isn't in this repository; the shipped dictionary already leaves those words out.

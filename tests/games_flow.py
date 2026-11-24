@@ -9,6 +9,7 @@ GAMES=[  # id, name, Arcade button, settings button, settings screen, how to giv
   ('t2048','2048','#toArcade','#homeSet','#set',"S.xp=200; persist(); writeSummary();"),
   ('linefall','Linefall','#arcadeBtn','#settingsBtn','#set',"S.xp=200; persist(); writeSummary();"),
   ('drift','Drift','#arcadeBtn','#settingsBtn','#set',"S.xp=200; persist(); writeSummary();"),
+  ('tilecraft','Tilecraft','#arcadeBtn','#settingsBtn','#set',"S.xp=200; persist(); writeSummary();"),
 ]
 ok_all=True
 def check(n,c,x=''):
