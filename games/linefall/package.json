@@ -1,0 +1,14 @@
+{
+  "name": "linefall",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Linefall — Arcade Game Lab",
+  "scripts": {
+    "build": "python3 build.py",
+    "test": "node tests/run.js",
+    "layout": "node tests/layout.js"
+  },
+  "devDependencies": {
+    "playwright": "^1.63.0"
+  }
+}

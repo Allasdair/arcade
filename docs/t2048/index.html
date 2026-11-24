@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f4f4f6">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<script>window.__ARCADE__=1</script>
+<title>2048</title>
+<link rel="stylesheet" href="../fonts.css">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="../icons/favicon-32.png">
+<link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Arcade">
+
+<style>
+:root{--bg:#f4f4f6;--panel:#fff;--ink:#1c1c1e;--sub:#8e8e93;--accent:#c93a68;--accentInk:#fff;--line:rgba(0,0,0,.08);--slide:100ms;--pop:120ms;--tfont:Inter,system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,sans-serif;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;overflow:hidden}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+svg.i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.screen{position:fixed;inset:0;display:none;flex-direction:column;background:var(--bg);padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+.screen.on{display:flex}
+.scroll{overflow-y:auto;overflow-x:hidden;flex:1;padding:14px 18px 36px;max-width:560px;width:100%;margin:0 auto}
+.arcbar{display:none;margin:2px 0 0}.arcade .arcbar{display:block}
+.arcbar button{color:var(--sub);font-weight:600;font-size:14px;padding:6px 0}
+.brand{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin:10px 0 18px}
+.brand h1{font-size:46px;font-weight:800;letter-spacing:-.05em;line-height:1}
+.brand h1 i{font-style:normal;color:var(--accent)}
+.brand p{color:var(--sub);font-size:14px;margin-top:8px;line-height:1.35}
+.brand .acts{display:flex;gap:8px;flex:none}
+.iconbtn{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:var(--panel);border:1px solid var(--line);flex:none}
+.label{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--sub);margin:22px 4px 10px;display:flex;justify-content:space-between;gap:8px}
+.label span{letter-spacing:.02em;text-transform:none;font-weight:600}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:15px 16px;display:flex;align-items:center;gap:14px;width:100%;text-align:left;margin-bottom:10px;transition:transform .12s}
+button.card:active{transform:scale(.98)}
+.card .t{font-weight:700;font-size:17px;letter-spacing:-.01em}
+.card .s{color:var(--sub);font-size:13px;margin-top:2px;line-height:1.3}
+.card .r{margin-left:auto;text-align:right;font-variant-numeric:tabular-nums;flex:none}
+.card .r b{display:block;font-size:15px}
+.card .r span{font-size:10.5px;color:var(--sub);text-transform:uppercase;letter-spacing:.07em;font-weight:600}
+.grow{flex:1;min-width:0}
+.ico{width:42px;height:42px;border-radius:12px;flex:none;display:grid;place-items:center;background:var(--bg);color:var(--accent);font-weight:800;font-variant-numeric:tabular-nums;font-size:13px}
+.ico.mt{color:#fff;font-size:12px;letter-spacing:-.04em}.ico.mt.d5{font-size:10px}.ico.mt.d6{font-size:8.5px}
+.lvl .badge{width:50px;height:50px;border-radius:15px;background:var(--accent);color:var(--accentInk);display:grid;place-items:center;font-weight:800;font-size:22px;flex:none}
+.bar{height:8px;border-radius:99px;background:var(--bg);overflow:hidden;margin:8px 0 6px}
+.bar i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .6s}
+.primary{background:var(--accent);color:var(--accentInk);border-radius:14px;padding:14px 16px;font-weight:700;font-size:15px;width:100%;transition:transform .12s}
+.primary:active{transform:scale(.98)}
+.primary.big{padding:17px 16px;font-size:17px;border-radius:18px;margin-bottom:10px}
+.ghost{padding:12px;border-radius:14px;font-weight:600;color:var(--sub)}
+.ghost.warn{color:var(--accent)}
+.seg{display:flex;background:var(--bg);border-radius:12px;padding:3px;gap:3px}
+.seg button{flex:1;padding:8px 6px;border-radius:9px;font-size:13px;font-weight:600;color:var(--sub);min-width:0}
+.seg button.on{background:var(--panel);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.14)}
+.topseg{background:var(--panel);border:1px solid var(--line);margin:0 0 16px;flex-wrap:wrap}
+.topseg button.on{background:var(--accent);color:var(--accentInk)}
+#styleTabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}#styleTabs button{padding:9px 4px}
+.srow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 2px;width:100%;font-weight:600;font-size:15px;text-align:left;border-bottom:1px solid var(--line)}
+.srow:last-child{border-bottom:0}
+.srow small{display:block;color:var(--sub);font-weight:500;font-size:12.5px;margin-top:2px}
+.srow .seg{flex:none}
+.sw{width:46px;height:28px;border-radius:99px;background:var(--bg);position:relative;transition:background .2s;flex:none}
+.sw::after{content:'';position:absolute;top:4px;left:4px;width:20px;height:20px;border-radius:50%;background:var(--sub);transition:left .2s,background .2s}
+.sw.on{background:var(--accent)}.sw.on::after{left:22px;background:var(--accentInk)}
+.chev{color:var(--sub)}
+.dailyx{color:var(--accent);font-weight:700}
+.foot{margin-top:26px;display:flex;justify-content:space-between;align-items:center;color:var(--sub);font-size:12px;gap:10px;flex-wrap:wrap}
+.foot button{color:var(--sub);font-size:12px;font-weight:600;padding:8px 0}
+/* game */
+.hud{display:flex;align-items:center;gap:10px;padding:10px 12px 4px;max-width:620px;width:100%;margin:0 auto}
+.scores{flex:1;display:flex;justify-content:center;gap:8px}
+.sbox{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:6px 14px;min-width:96px;text-align:center;position:relative}
+.sbox span{display:block;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--sub)}
+.sbox b{display:block;font-size:20px;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.plus{position:absolute;left:50%;top:6px;transform:translateX(-50%);font-weight:800;color:var(--accent);font-size:15px;pointer-events:none;animation:plus .7s ease-out forwards}
+@keyframes plus{to{transform:translate(-50%,-26px);opacity:0}}
+.subhud{display:flex;align-items:center;justify-content:center;gap:12px;font-size:13px;font-weight:600;color:var(--sub);padding:4px 12px 0;font-variant-numeric:tabular-nums;flex-wrap:wrap}
+.tag{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;background:var(--accent);color:var(--accentInk);padding:4px 9px;border-radius:99px;font-weight:700}
+.minis{letter-spacing:2px;font-size:14px}.minis .sr{color:var(--sub);opacity:.35}.minis .sr.on{color:#f5b301;opacity:1}
+#stage{flex:1;min-height:0;display:grid;place-items:center;touch-action:none;position:relative}
+#board{position:relative;transition:filter .5s,opacity .5s}
+#board.dim{filter:saturate(.6);opacity:.55}
+#board.glow{animation:glow 0.9s ease-out}
+@keyframes glow{0%{filter:drop-shadow(0 0 0 transparent)}40%{filter:drop-shadow(0 0 26px var(--glow))}100%{filter:drop-shadow(0 0 0 transparent)}}
+.plate{position:absolute}
+.cell{position:absolute;border-radius:var(--crad)}
+.tile{position:absolute;left:0;top:0;display:grid;place-items:center;border-radius:var(--trad);font-family:var(--tfont);font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums;transition:transform var(--slide) ease-in-out;will-change:transform;z-index:2}
+.tile>i{font-style:normal;display:block;line-height:1;white-space:nowrap}
+.tile.new{animation:appear var(--pop) ease-out}
+.tile.pop{animation:pop var(--pop) ease-out;z-index:3}
+@keyframes appear{from{transform:var(--at) scale(0)}to{transform:var(--at) scale(1)}}
+@keyframes pop{0%{transform:var(--at) scale(1)}50%{transform:var(--at) scale(1.16)}100%{transform:var(--at) scale(1)}}
+#board.snap .tile,#board.still .tile{transition:none!important;animation:none!important}
+.tile.hi{box-shadow:0 0 18px 2px var(--glow)}
+body.cb .tile>i{font-weight:900;text-shadow:0 0 2px var(--tsh),0 0 1px var(--tsh)}
+body.cb .tile{box-shadow:inset 0 0 0 2px rgba(0,0,0,.18)}
+.tools{display:flex;justify-content:center;align-items:center;gap:14px;padding:8px 14px 16px}
+body.lefty .tools{flex-direction:row-reverse}
+.tbtn{height:52px;border-radius:16px;background:var(--panel);border:1px solid var(--line);display:flex;align-items:center;gap:8px;padding:0 18px;font-weight:700;font-size:14.5px;position:relative}
+.tbtn .cnt{min-width:22px;height:22px;padding:0 6px;border-radius:99px;background:var(--accent);color:var(--accentInk);font-size:11.5px;font-weight:800;display:grid;place-items:center;font-variant-numeric:tabular-nums}
+.tbtn.off{opacity:.45}.tbtn.off .cnt{background:var(--sub);color:var(--bg)}
+.overlay{position:absolute;inset:0;display:grid;place-items:center;background:rgba(0,0,0,.3);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);padding:20px;z-index:5}
+.overlay.hidden{display:none}
+#ov2{position:fixed;z-index:6}
+.sheet{background:var(--panel);color:var(--ink);border-radius:26px;padding:24px 20px 16px;width:100%;max-width:360px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.3);animation:sheetin .28s cubic-bezier(.2,.9,.3,1.2);max-height:calc(100% - 10px);overflow-y:auto}
+@keyframes sheetin{from{transform:scale(.9);opacity:0}}
+.sheet h2{font-size:30px;font-weight:800;letter-spacing:-.035em}
+.sheet .sub{color:var(--sub);margin:4px 0 16px;font-size:14px;line-height:1.4}
+.sheet .slabel{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--sub);text-align:left;margin:4px 2px 8px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.stats div{background:var(--bg);border-radius:14px;padding:10px 8px}
+.stats b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
+.stats span{font-size:10.5px;color:var(--sub);text-transform:uppercase;letter-spacing:.07em;font-weight:600}
+.stats div.nb{box-shadow:inset 0 0 0 2px var(--accent)}
+.xpline{display:flex;align-items:center;justify-content:center;gap:8px;font-weight:800;font-size:16px;margin:4px 0 12px;color:var(--accent);flex-wrap:wrap}
+.xpline small{font-weight:600;color:var(--sub);font-size:12px}
+.unl{display:flex;align-items:center;gap:10px;text-align:left;background:var(--bg);border-radius:14px;padding:10px 12px;margin-bottom:8px;font-size:13px}
+.unl svg.i{color:var(--accent)}
+.btns{display:grid;gap:4px;margin-top:6px}
+.row-b{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 8px}
+.row-b .ghost{background:var(--bg);display:flex;align-items:center;justify-content:center;gap:7px;color:var(--ink);font-size:13.5px;padding:11px 6px}
+.row-b svg.i{width:17px;height:17px}
+.bigstars{display:flex;justify-content:center;gap:12px;font-size:44px;line-height:1;margin:6px 0 12px}
+.bigstars span{color:var(--sub);opacity:.22}
+.bigstars span.on{color:#f5b301;opacity:1;animation:starpop .5s cubic-bezier(.2,.9,.3,1.5) both}
+@keyframes starpop{0%{transform:scale(0) rotate(-40deg);opacity:0}100%{transform:scale(1) rotate(0)}}
+.bgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:0 0 14px}
+.bpick{background:var(--bg);border-radius:14px;padding:9px 2px 7px;font-size:11.5px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:5px;border:2px solid transparent;color:var(--ink);min-width:0}
+.bpick.on{border-color:var(--accent)}
+.bpick .mk{display:grid;gap:1.5px;width:34px;height:34px}
+.bpick .mk i{background:var(--accent);border-radius:2px;opacity:.75}.bpick .mk i.w{opacity:0}
+.bpick small{font-size:10px;color:#f5b301;letter-spacing:1px;min-height:12px;font-weight:700}
+.bpick span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%;padding:0 2px}
+.pauseov{position:absolute;left:0;right:0;top:calc(env(safe-area-inset-top) + 60px);bottom:0;background:var(--bg);z-index:4;display:grid;place-items:center;text-align:center}
+.pauseov.hidden{display:none}.pauseov h2{font-size:34px;font-weight:800;letter-spacing:-.035em}.pauseov .sub{color:var(--sub);margin:6px 0 22px}
+.pauseov .primary{min-width:220px}.pauseov .ghost{display:block;margin:6px auto 0}
+/* style + progress */
+.topbar{display:flex;align-items:center;gap:12px;padding:12px 16px 0;max-width:560px;width:100%;margin:0 auto}
+.topbar h2{font-size:24px;font-weight:800;letter-spacing:-.03em}
+.topbar .c{margin-left:auto;color:var(--sub);font-weight:600;font-size:14px}
+.tgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tcard{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:7px;text-align:left;position:relative;min-width:0}
+.tcard .pv{aspect-ratio:7/4;border-radius:12px;display:grid;place-items:center;overflow:hidden}
+.tcard .pv .row{display:flex;gap:5px}
+.tcard .pv .t{width:34px;height:34px;display:grid;place-items:center;font-weight:800;font-size:13px;border-radius:8px}
+.tcard .n{font-weight:700;font-size:14px;margin:9px 5px 2px}
+.tcard .q{font-size:11.5px;color:var(--sub);margin:0 5px 5px;line-height:1.3;min-height:2.6em}
+.tcard.sel{box-shadow:0 0 0 2.5px var(--accent)}
+.tcard.locked .pv{filter:grayscale(.9);opacity:.45}
+.lock{position:absolute;top:13px;right:13px;width:28px;height:28px;border-radius:9px;background:rgba(0,0,0,.6);color:#fff;display:grid;place-items:center}
+.lock svg.i{width:15px;height:15px}
+.ach{display:flex;gap:14px;align-items:center;padding:13px 2px;border-bottom:1px solid var(--line)}
+.ach>div:not(.ico){flex:1 1 auto;min-width:0;overflow-wrap:break-word}
+.ach .ico{color:var(--sub)}
+.ach.got .ico{background:var(--accent);color:var(--accentInk)}
+.ach:not(.got) .t{color:var(--sub)}
+.ach .t{font-weight:700;font-size:15px}
+.ach .d{font-size:12.5px;color:var(--sub);margin-top:2px;line-height:1.3}
+.chip{font-size:11px;font-weight:700;padding:5px 9px;border-radius:12px;background:var(--bg);color:var(--sub);white-space:normal;flex:0 1 auto;max-width:46%;text-align:right;line-height:1.35}
+.ach.got .chip{color:var(--ink)}
+.ach.cur{background:var(--panel);border-radius:14px;padding-left:10px;padding-right:10px;border-bottom-color:transparent}
+.ppage{display:none}.ppage.on{display:block}
+table{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums}
+td,th{padding:10px 4px;text-align:right;border-bottom:1px solid var(--line)}
+th{font-size:10.5px;color:var(--sub);text-transform:uppercase;letter-spacing:.07em;font-weight:700}
+td:first-child,th:first-child{text-align:left;font-weight:600}
+td small{display:block;color:var(--sub);font-size:11px;font-weight:500}
+.sr{color:var(--sub);opacity:.3}.sr.on{color:#f5b301;opacity:1}
+.code{width:100%;height:78px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:11px/1.4 "JetBrains Mono",monospace;padding:10px;resize:none;-webkit-user-select:text;user-select:text;word-break:break-all}
+ul.news{margin:0 0 4px;padding:0 0 0 18px;text-align:left;font-size:14px;line-height:1.45}ul.news li{margin:0 0 7px}
+.howto{text-align:left;font-size:14px;line-height:1.45}.howto p{margin:0 0 10px}.howto b{font-weight:700}
+.lb{margin:6px 0 12px;display:flex;flex-direction:column;gap:4px}
+.lbr{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;background:var(--bg);text-align:left;font-size:14.5px;width:100%}
+.lbr.me{box-shadow:inset 0 0 0 2px var(--accent)}
+#toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 12px);transform:translate(-50%,calc(-100% - env(safe-area-inset-top) - 40px));visibility:hidden;opacity:0;pointer-events:none;background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:16px;font-weight:600;font-size:14px;transition:transform .4s cubic-bezier(.2,.9,.3,1.15),opacity .3s,visibility 0s .4s;z-index:9;width:max-content;max-width:calc(100vw - 32px);text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+#toast.on{transform:translate(-50%,0);visibility:visible;opacity:1;pointer-events:auto;transition:transform .4s cubic-bezier(.2,.9,.3,1.15),opacity .15s,visibility 0s}
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:8}
+</style></head>
+<body>
+<!-- HOME -->
+<div class="screen on" id="home"><div class="scroll">
+  <div class="arcbar"><button id="toArcade">‹ Arcade</button></div>
+  <div class="brand"><div><h1>2048<i>.</i></h1><p>Slide, merge, reach 2048.</p></div>
+    <div class="acts"><button class="iconbtn" id="homeStyle" aria-label="Style"></button><button class="iconbtn" id="homeSet" aria-label="Settings"></button></div></div>
+  <button class="card lvl" data-go="awards" data-pt="levels" id="lvlCard"></button>
+  <div id="contSlot"></div>
+  <button class="primary big" id="newBtn">New game</button>
+  <div class="label">Daily Board <span id="dailyLeft"></span></div>
+  <div id="dailySlot"></div>
+  <div class="label">Your boards</div>
+  <div id="boardsSlot"></div>
+  <div class="foot"><button id="howBtn">How to play</button><button id="newsBtn">What's new</button><span id="verLbl" data-raw></span></div>
+</div></div>
+
+<!-- GAME -->
+<div class="screen" id="game">
+  <div class="hud"><button class="iconbtn" id="gBack" aria-label="Home"></button>
+    <div class="scores"><div class="sbox" id="scoreBox"><span>Score</span><b id="score">0</b></div><div class="sbox"><span>Best</span><b id="best">0</b></div></div>
+    <button class="iconbtn" id="pauseBtn" aria-label="Pause"></button></div>
+  <div class="subhud"><span class="tag" id="gTag"></span><span id="gMoves"></span><span class="minis" id="gStars"></span><span id="gNext"></span></div>
+  <div id="stage"><div id="board"></div></div>
+  <div class="tools"><button class="tbtn" id="undoBtn"></button><button class="tbtn" id="restartBtn"></button></div>
+  <div class="pauseov hidden" id="pauseOv"><div><h2>Paused</h2><div class="sub">The board is hidden while paused.</div>
+    <button class="primary" id="resumeBtn">Resume</button><button class="ghost" id="pauseHome">Home</button></div></div>
+  <div class="overlay hidden" id="ov"><div class="sheet" id="sheet"></div></div>
+</div>
+
+<!-- STYLE -->
+<div class="screen" id="style"><div class="topbar"><button class="iconbtn" data-go="home" aria-label="Back"></button><h2>Style</h2><span class="c" id="styleCount"></span></div>
+  <div class="scroll"><div class="seg topseg" id="styleTabs"></div><div class="tgrid" id="styleGrid"></div></div></div>
+
+<!-- PROGRESS -->
+<div class="screen" id="awards"><div class="topbar"><button class="iconbtn" data-go="home" aria-label="Back"></button><h2>Progress</h2><span class="c" id="progLvl"></span></div>
+  <div class="scroll"><div class="seg topseg" id="progTabs"><button data-pt="levels">Levels</button><button data-pt="ach">Achievements</button><button data-pt="stats">Stats</button></div>
+    <div class="ppage" id="pg-levels"></div><div class="ppage" id="pg-ach"></div><div class="ppage" id="pg-stats"></div></div></div>
+
+<!-- SETTINGS -->
+<div class="screen" id="set"><div class="topbar"><button class="iconbtn" data-go="home" aria-label="Back"></button><h2>Settings</h2></div>
+  <div class="scroll" id="setBody"></div></div>
+
+<div class="overlay hidden" id="ov2"><div class="sheet" id="sheet2"></div></div>
+<div id="toast" role="status"></div>
+<canvas id="fx"></canvas>
+<script>
+// 2048 engine — pure: no DOM, no timers. Our own code (not derived from Cirulli's 2048).
+// move(G,dir) returns a new state plus the list of slides, merges and the spawn, so the UI can animate
+// from it and the bots can play at full speed. A state is plain JSON, so it saves and restores exactly.
+
+// ---------- seeded RNG: cyrb128 -> sfc32 (as in Sweep's League), with the state kept in the game ----------
+function seedState(str){
+  let h1=1779033703,h2=3144134277,h3=1013904242,h4=2773480762;
+  for(let i=0;i<str.length;i++){ const k=str.charCodeAt(i); h1=h2^Math.imul(h1^k,597399067); h2=h3^Math.imul(h2^k,2869860233); h3=h4^Math.imul(h3^k,951274213); h4=h1^Math.imul(h4^k,2716044813); }
+  h1=Math.imul(h3^(h1>>>18),597399067); h2=Math.imul(h4^(h2>>>22),2869860233); h3=Math.imul(h1^(h3>>>17),951274213); h4=Math.imul(h2^(h4>>>19),2716044813);
+  const rs=[(h1^h2^h3^h4)>>>0,(h2^h1)>>>0,(h3^h1)>>>0,(h4^h1)>>>0];
+  for(let i=0;i<15;i++) rnext(rs); return rs;
+}
+function rnext(rs){ let a=rs[0]>>>0,b=rs[1]>>>0,c=rs[2]>>>0,d=rs[3]>>>0;
+  let t=(a+b)|0; a=b^(b>>>9); b=(c+(c<<3))|0; c=(c<<21)|(c>>>11); d=(d+1)|0; t=(t+d)|0; c=(c+t)|0;
+  rs[0]=a>>>0; rs[1]=b>>>0; rs[2]=c>>>0; rs[3]=d>>>0; return (t>>>0)/4294967296; }
+const seedRng=str=>{ const rs=seedState(str); return ()=>rnext(rs); };
+
+// ---------- boards ----------
+// Square boards, plus shaped boards built from masks (1 = playable cell, 0 = wall).
+// Cross and Diamond use Sweep's mask formulas; Ring and Swiss Cheese follow the 2048 kickoff exactly.
+const BOARDS=['3','4','5','6','cross','ring','diamond','swiss'];
+const SHAPED=['cross','ring','diamond','swiss'];
+const BOARD_NAMES={'3':'3×3','4':'4×4','5':'5×5','6':'6×6',cross:'Cross',ring:'Ring',diamond:'Diamond',swiss:'Swiss Cheese'};
+function sweepMask(name,W,H){ const m=new Array(W*H).fill(1);
+  for(let y=0;y<H;y++) for(let x=0;x<W;x++){ const u=(x+.5)/W*2-1, v=(y+.5)/H*2-1;
+    if(name==='diamond') m[y*W+x]=Math.abs(u)+Math.abs(v)<=1.04?1:0;
+    else if(name==='cross') m[y*W+x]=(Math.abs(u)<=.37||Math.abs(v)<=.37)?1:0; }
+  return m; }
+function makeMask(board,seed){
+  if(/^[3-6]$/.test(board)){ const n=+board; return {W:n,H:n,mask:new Array(n*n).fill(1)}; }
+  if(board==='cross') return {W:6,H:6,mask:sweepMask('cross',6,6)};       // corner 2×2 blocks removed: 20 cells
+  if(board==='diamond') return {W:7,H:7,mask:sweepMask('diamond',7,7)};   // 25 cells
+  if(board==='ring'){ const m=new Array(36).fill(1); for(const i of [14,15,20,21]) m[i]=0; return {W:6,H:6,mask:m}; } // centre 2×2 removed: 32 cells
+  if(board==='swiss'){ // 5×5 with 2–3 seeded holes; never leaves a row or column segment of a single cell
+    const r=seedRng(`T2048SW|${seed}`);
+    for(let a=0;a<500;a++){ const m=new Array(25).fill(1), n=2+(r()*2|0);
+      for(let h=0;h<n;h++){ let i; do i=r()*25|0; while(!m[i]); m[i]=0; }
+      if(segmentsOk(5,5,m)) return {W:5,H:5,mask:m}; }
+    const m=new Array(25).fill(1); m[0]=m[24]=0; return {W:5,H:5,mask:m}; }
+  throw new Error('unknown board '+board);
+}
+function segmentsOk(W,H,mask){ for(const L of linesFor(W,H,mask)) for(const seg of L) if(seg.length<2) return false; return true; }
+
+// LINES[dir] = segments, each an array of cell indices ordered from the side the tiles move toward.
+// dir: 0 up, 1 right, 2 down, 3 left. Walls split a row or column into segments that slide on their own.
+const LCACHE=new Map();
+function linesFor(W,H,mask){ const key=W+'x'+H+':'+mask.join(''); let L=LCACHE.get(key); if(L) return L;
+  L=[0,1,2,3].map(dir=>{ const segs=[];
+    const outer=dir%2===0?W:H, inner=dir%2===0?H:W;
+    for(let o=0;o<outer;o++){ let seg=[];
+      for(let k=0;k<inner;k++){ let x,y;
+        if(dir===0){ x=o; y=k; } else if(dir===2){ x=o; y=H-1-k; } else if(dir===3){ x=k; y=o; } else { x=W-1-k; y=o; }
+        const i=y*W+x; if(mask[i]) seg.push(i); else { if(seg.length) segs.push(seg); seg=[]; } }
+      if(seg.length) segs.push(seg); }
+    return segs; });
+  if(LCACHE.size>64) LCACHE.clear(); LCACHE.set(key,L); return L; }
+
+// ---------- game state ----------
+const WIN_TILE=2048;
+function newGame(opt={}){
+  const board=String(opt.board||'4'), seed=opt.seed||randSeed();
+  const {W,H,mask}=makeMask(board,seed);
+  const G={v:1,board,W,H,mask,b:new Array(W*H).fill(0),ids:new Array(W*H).fill(0),nid:1,score:0,moves:0,
+    seed,rs:seedState((opt.daily?'T2048D1|'+opt.daily:'T2048G1|'+seed)),daily:opt.daily||null,
+    max:0,won:false,keep:false,over:false,undos:0,prev:null,cornerAt:-1,cornerRun:0,cornerBest:0,merges:0};
+  const s1=spawn(G), s2=spawn(G); G.start=[s1,s2]; G.max=Math.max(s1.v,s2.v);
+  return G;
+}
+function randSeed(){ let s=''; const c='abcdefghijklmnopqrstuvwxyz0123456789';
+  const u=(typeof crypto!=='undefined'&&crypto.getRandomValues)?crypto.getRandomValues(new Uint8Array(10)):Array.from({length:10},()=>Math.random()*256|0);
+  for(const x of u) s+=c[x%36]; return s; }
+const clone=G=>JSON.parse(JSON.stringify(G));
+const empties=G=>{ const e=[]; for(let i=0;i<G.b.length;i++) if(G.mask[i]&&!G.b[i]) e.push(i); return e; };
+// One new tile on a random empty playable cell: 2 (90%) or 4 (10%). Two RNG draws, always in this order.
+function spawn(G){ const e=empties(G); if(!e.length) return null;
+  const at=e[Math.floor(rnext(G.rs)*e.length)], v=rnext(G.rs)<.9?2:4, id=G.nid++;
+  G.b[at]=v; G.ids[at]=id; return {id,at,v}; }
+
+// Slide one direction. Returns {moved:false} for a move that changes nothing (no spawn, no move count).
+function move(G0,dir,opt={}){
+  if(G0.over) return {moved:false,G:G0};
+  const G=clone(G0), L=linesFor(G.W,G.H,G.mask)[dir], slides=[], merges=[];
+  const snap={b:G0.b.slice(),ids:G0.ids.slice(),nid:G0.nid,score:G0.score,moves:G0.moves,rs:G0.rs.slice(),max:G0.max,won:G0.won,keep:G0.keep,
+    cornerAt:G0.cornerAt,cornerRun:G0.cornerRun,cornerBest:G0.cornerBest,merges:G0.merges};
+  let moved=false, gained=0;
+  for(const seg of L){
+    const tiles=[]; for(const i of seg) if(G0.b[i]) tiles.push({i,v:G0.b[i],id:G0.ids[i]});
+    for(const i of seg){ G.b[i]=0; G.ids[i]=0; }
+    let k=0, last=null; // last = the tile placed at seg[k-1], if it can still merge this move
+    for(const t of tiles){
+      if(last&&last.v===t.v&&!last.merged){ const at=seg[k-1], v=t.v*2, id=G.nid++;
+        G.b[at]=v; G.ids[at]=id; gained+=v; slides.push({id:t.id,from:t.i,to:at});
+        merges.push({id,a:last.id,b:t.id,at,v}); last.merged=true; last.v=v; moved=true; }
+      else { const to=seg[k++]; G.b[to]=t.v; G.ids[to]=t.id; if(to!==t.i){ moved=true; slides.push({id:t.id,from:t.i,to}); }
+        last={v:t.v,merged:false,id:t.id}; }
+    }
+  }
+  if(!moved) return {moved:false,G:G0};
+  G.score+=gained; G.moves++; G.merges+=merges.length; G.prev=opt.noUndo?null:snap;
+  let newWin=false;
+  for(const m of merges){ if(m.v>G.max) G.max=m.v; if(m.v>=WIN_TILE&&!G.won){ G.won=true; newWin=true; } }
+  const sp=spawn(G); if(sp&&sp.v>G.max) G.max=sp.v;
+  trackCorner(G);
+  G.over=!canMove(G);
+  return {moved:true,G,slides,merges,spawn:sp,gained,newWin,over:G.over,dir};
+}
+// Undo: one step back. Restores the board, score and spawn RNG, so repeating the move gives the same spawn.
+function undo(G0){ if(!G0.prev||G0.daily) return null; const G=clone(G0), p=G0.prev;
+  Object.assign(G,{b:p.b.slice(),ids:p.ids.slice(),nid:p.nid,score:p.score,moves:p.moves,rs:p.rs.slice(),max:p.max,won:p.won,keep:p.keep,
+    cornerAt:p.cornerAt,cornerRun:p.cornerRun,cornerBest:p.cornerBest,merges:p.merges});
+  G.prev=null; G.over=false; G.undos++; return G; }
+function canMove(G){ for(let i=0;i<G.b.length;i++) if(G.mask[i]&&!G.b[i]) return true;
+  const L=linesFor(G.W,G.H,G.mask); for(const d of [0,3]) for(const seg of L[d]) for(let k=1;k<seg.length;k++) if(G.b[seg[k]]===G.b[seg[k-1]]) return true;
+  return false; }
+const canDir=(G,dir)=>{ for(const seg of linesFor(G.W,G.H,G.mask)[dir]){ let gap=false;
+  for(let k=0;k<seg.length;k++){ const v=G.b[seg[k]]; if(!v){ gap=true; continue; } if(gap) return true; if(k&&G.b[seg[k-1]]===v) return true; } } return false; };
+// Corner Keeper: how many moves in a row the highest tile has stayed in the same corner.
+function corners(G){ const W=G.W,H=G.H; return [0,W-1,(H-1)*W,H*W-1].filter(i=>G.mask[i]); }
+function trackCorner(G){ let at=-1; for(const c of corners(G)) if(G.b[c]===G.max){ at=c; break; }
+  if(at>=0&&at===G.cornerAt) G.cornerRun++; else if(at>=0){ G.cornerAt=at; G.cornerRun=1; } else { G.cornerAt=-1; G.cornerRun=0; }
+  if(G.cornerRun>G.cornerBest) G.cornerBest=G.cornerRun; }
+
+// ---------- Daily Board: the same board and spawns for everyone, seeded from the date ----------
+const DAILY_BOARD='4';
+const newDaily=date=>newGame({board:DAILY_BOARD,daily:date,seed:'daily-'+date});
+// Fingerprint: the start tiles plus the spawns after a fixed sequence of moves.
+function dailyPrint(date,n=60){ let G=newDaily(date), h=2166136261; const add=v=>{ h^=v&255; h=Math.imul(h,16777619); };
+  for(const s of G.start){ add(s.at); add(s.v); }
+  const seq=[3,2,1,2]; for(let k=0,step=0;k<n&&step<4*n;step++){ const r=move(G,seq[step%4],{noUndo:true}); if(!r.moved) continue; G=r.G; k++; if(r.spawn){ add(r.spawn.at); add(r.spawn.v); } if(G.over) break; }
+  return (h>>>0).toString(16).padStart(8,'0'); }
+const dateStr=t=>{ const d=new Date(t); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
+
+// ---------- bots (tests and threshold tuning) ----------
+// Bots work on bare value arrays (no ids, no cloning) so 1,000-game sims run in seconds. sim() uses the same
+// segment rules and the same spawn RNG as move(); a test checks the two agree move for move.
+function slideFast(b,segs){ const nb=b.slice(); let moved=false, gain=0;
+  for(const seg of segs){ let k=0, lastV=0, lastFree=false;
+    for(let j=0;j<seg.length;j++){ const v=b[seg[j]]; if(!v) continue;
+      if(lastFree&&lastV===v){ nb[seg[k-1]]=v*2; gain+=v*2; lastFree=false; moved=true; }
+      else { if(seg[k]!==seg[j]) moved=true; nb[seg[k++]]=v; lastV=v; lastFree=true; } }
+    for(let j=k;j<seg.length;j++) nb[seg[j]]=0;
+    // a merge also clears its source cell; any cells past k are empty
+  }
+  return {nb,moved,gain}; }
+function evalFast(b,mask,L,crn){ let emp=0, mono=0, smooth=0, mx=0;
+  for(let i=0;i<b.length;i++){ if(!mask[i]) continue; if(!b[i]) emp++; else if(b[i]>mx) mx=b[i]; }
+  for(const d of [0,3]) for(const seg of L[d]){ let inc=0,dec=0;
+    for(let k=1;k<seg.length;k++){ const x=b[seg[k-1]], y=b[seg[k]], a=x?Math.log2(x):0, c=y?Math.log2(y):0;
+      if(a>c) dec+=a-c; else inc+=c-a; if(a&&c) smooth-=Math.abs(a-c); }
+    mono-=Math.min(inc,dec); }
+  let cb=0; for(const c of crn) if(b[c]===mx){ cb=Math.log2(mx); break; }
+  return emp*2.7+mono+smooth*.1+cb*1.5; }
+// Expectimax, depth 2: our move, a (sampled) spawn, our next move, then the heuristic.
+function expectimaxDir(b,mask,L,crn){ let best=-1, bv=-Infinity;
+  for(let d=0;d<4;d++){ const r=slideFast(b,L[d]); if(!r.moved) continue;
+    const e=[]; for(let i=0;i<b.length;i++) if(mask[i]&&!r.nb[i]) e.push(i);
+    let v; if(!e.length) v=evalFast(r.nb,mask,L,crn);
+    else { const step=Math.ceil(e.length/6); let tot=0, w=0;
+      for(let q=0;q<e.length;q+=step) for(const [tv,p] of [[2,.9],[4,.1]]){ const at=e[q]; r.nb[at]=tv; let m=-1e9;
+        for(let d2=0;d2<4;d2++){ const r2=slideFast(r.nb,L[d2]); if(r2.moved) m=Math.max(m,evalFast(r2.nb,mask,L,crn)); }
+        if(m===-1e9) m=evalFast(r.nb,mask,L,crn)-100; tot+=m*p; w+=p; r.nb[at]=0; }
+      v=tot/w; }
+    if(v>bv){ bv=v; best=d; } }
+  return best; }
+// Corner strategy: prefer left, then down, then right; up only when forced.
+const cornerDir=(b,mask,L)=>{ for(const d of [3,2,1,0]) if(slideFast(b,L[d]).moved) return d; return -1; };
+function sim(board,seed,kind='expectimax',limit=1e6){ const G=newGame({board,seed}), L=linesFor(G.W,G.H,G.mask), crn=corners(G);
+  let b=G.b.slice(), score=0, moves=0, max=G.max;
+  for(;moves<limit;){ const d=kind==='corner'?cornerDir(b,G.mask,L):expectimaxDir(b,G.mask,L,crn); if(d<0) break;
+    const r=slideFast(b,L[d]); if(!r.moved) break; b=r.nb; score+=r.gain; moves++;
+    const e=[]; for(let i=0;i<b.length;i++) if(G.mask[i]&&!b[i]) e.push(i);
+    if(e.length){ const at=e[Math.floor(rnext(G.rs)*e.length)]; b[at]=rnext(G.rs)<.9?2:4; }
+    for(const v of b) if(v>max) max=v;
+    if(!canMove({b,mask:G.mask,W:G.W,H:G.H})) break; }
+  return {max,score,moves,b}; }
+// Single-step helpers on a full game state (used by tests).
+const botCorner=G=>cornerDir(G.b,G.mask,linesFor(G.W,G.H,G.mask));
+const botExpectimax=G=>expectimaxDir(G.b,G.mask,linesFor(G.W,G.H,G.mask),corners(G));
+function playOut(G,bot,limit=1e6){ for(let n=0;n<limit&&!G.over;n++){ const d=bot(G); if(d<0) break; const r=move(G,d,{noUndo:true}); if(!r.moved) break; G=r.G; } return G; }
+
+if(typeof module!=='undefined') module.exports={seedState,rnext,seedRng,BOARDS,SHAPED,BOARD_NAMES,makeMask,linesFor,segmentsOk,newGame,newDaily,move,undo,canMove,canDir,
+  spawn,empties,clone,dailyPrint,dateStr,DAILY_BOARD,WIN_TILE,slideFast,sim,botExpectimax,botCorner,playOut,corners};
+
+// 2048 core: save, XP/levels, stars, bests, undo economy, achievements, cosmetics and the Arcade contract.
+// No DOM, so the tests can run it in Node. Every function takes the save object S explicitly.
+const VERSION='0.1.0', GAME_ID='t2048', KEY='t2048.v1', SUMKEY='arcade.summary.t2048', ARCKEY='arcade.v1';
+const SHARED=['appearance','motion','sfx','music','haptics','fullscreen','cb','lefty','lang'];
+
+// ---------- levels: Sweep's first 10 steps (50, 100, 150, 225, 300, 400, 500, 650, 800) ----------
+const LV=[0,50,150,300,525,825,1225,1725,2375,3175], MAXL=10;
+const levelOf=xp=>{ let l=1; while(l<MAXL&&xp>=LV[l]) l++; return l; };
+const xpAt=l=>LV[l-1], xpNext=l=>l>=MAXL?null:LV[l];
+
+// ---------- stars by highest tile, per board (set from the bot sims: see HANDOFF.md) ----------
+// ★ ≈ what the corner bot (a casual player) reaches in a small share of games; ★★★ ≈ what the depth-2 expectimax bot
+// (a strong player) reaches most of the time, capped so a ★★★ game stays around 2,000–4,000 moves. Sim tables: HANDOFF.md.
+const STARS={'3':[64,128,256],'4':[512,1024,2048],'5':[1024,2048,4096],'6':[2048,4096,8192],
+  cross:[512,1024,2048],ring:[512,2048,4096],diamond:[1024,2048,4096],swiss:[1024,2048,4096]};
+const starsFor=(board,max)=>(STARS[board]||STARS['4']).reduce((n,t)=>n+(max>=t?1:0),0);
+const XP_STARS=[0,5,12,25], DAILY_XP=20;
+
+// ---------- cosmetics ----------
+// Tile ramps: one colour per power of two (2 … 8192, then the last colour). Our own ramps — none reuse the original 2048's palette.
+// Each ramp steps steadily in brightness, so tiles stay distinguishable without colour.
+const PALETTES=[
+ {id:'warm',name:'Warm',src:'L1',ramp:['#fde7ec','#fbcbd6','#f6a3b8','#ee7a99','#e1527c','#c93a68','#a82f6d','#872b77','#68297e','#4b2a7a','#30286a','#1d1b4c','#120f33']},
+ {id:'forest',name:'Forest',src:'L5',ramp:['#e8f3e4','#cfe7c6','#acd6a0','#86c27a','#5fab58','#3f9146','#2c7a44','#1f6342','#164d3d','#103b35','#0b2c2b','#081f21','#051516']},
+ {id:'dusk',name:'Dusk',src:'L9',ramp:['#eae8f7','#d3cff0','#b5aee6','#958bd9','#7a6bc9','#6450b6','#523d9c','#432f80','#362566','#2a1d50','#20173d','#17112d','#0f0b1e']},
+ {id:'ember',name:'Ember',src:'a2048',ramp:['#fbe9e7','#f6cdc8','#efa79f','#e57d73','#d9564d','#c43a33','#a52a27','#86211f','#681b1a','#4e1616','#391212','#280e0e','#1a0909']},
+ {id:'ocean',name:'Ocean',src:'beyond',ramp:['#e3f3f8','#c4e6f1','#9dd4e8','#73bfdc','#4aa7cd','#2f8cba','#2272a1','#1a5b86','#14466c','#103554','#0c2840','#081c2e','#05121f']},
+ {id:'neon',name:'Neon',src:'bigleague',dark:true,ramp:['#2a2f45','#323a5c','#22d3ee','#38bdf8','#818cf8','#a78bfa','#e879f9','#f472b6','#fb7185','#facc15','#a3e635','#34d399','#ffffff']},
+ {id:'mono',name:'Mono',src:'notakes',ramp:['#f2f2f2','#dedede','#c4c4c4','#a8a8a8','#8c8c8c','#727272','#5a5a5a','#454545','#333333','#242424','#171717','#0d0d0d','#000000']},
+ {id:'pastel',name:'Pastel',src:'shapes',ramp:['#fdf0f3','#fbe3d4','#f6efc4','#dff0c8','#c8ecd9','#c5e6f0','#cfd8f6','#dccff4','#efcdf0','#f2b8cf','#e7a3b0','#d690a6','#b97a9b']}];
+const TSHAPES=[{id:'round',name:'Rounded',src:'L1'},{id:'square',name:'Square',src:'L2'},{id:'circle',name:'Circle',src:'small'}];
+const FONTS=[{id:'inter',name:'Inter',src:'L1',css:'Inter,system-ui,sans-serif'},{id:'mono',name:'JetBrains Mono',src:'L3',css:'"JetBrains Mono",ui-monospace,monospace'},
+  {id:'caveat',name:'Caveat',src:'corner',css:'Caveat,cursive'}];
+// Board themes are the board's own colours; dark mode never changes them (Sweep's rule).
+const BTHEMES=[
+ {id:'clean',name:'Clean',src:'L1',board:'#e6e7ec',cell:'#d4d6de',wall:'transparent',glow:'#e1527c'},
+ {id:'midnight',name:'Midnight',src:'L4',dark:true,board:'#171a2b',cell:'#232842',wall:'transparent',glow:'#818cf8'},
+ {id:'slate',name:'Slate',src:'L8',board:'#3a4250',cell:'#4a5363',wall:'transparent',glow:'#9ec5ff'},
+ {id:'paper',name:'Paper',src:'devotee',board:'#f6f3ec',cell:'#e9e4d8',wall:'transparent',glow:'#a82f6d',lines:true},
+ {id:'gold',name:'Gold',src:'L10',board:'#2a2418',cell:'#3b3322',wall:'transparent',glow:'#f5c542',rim:'#c9a23a'}];
+const FXS=[{id:'none',name:'None',src:'L1'},{id:'confetti',name:'Confetti',src:'L6'},{id:'fireworks',name:'Fireworks',src:'regular'},{id:'starfall',name:'Starfall',src:'L10'}];
+const SOUNDS=[{id:'soft',name:'Soft',src:'L1'},{id:'chip',name:'Chiptune',src:'L7'}];
+const TRACKS=[{id:'day',name:'Daylight',src:'L1'}];
+const KINDS=[['pal',PALETTES,'palette'],['shape',TSHAPES,'tiles'],['font',FONTS,'numbers'],['bt',BTHEMES,'board'],['fx',FXS,'effect'],['sound',SOUNDS,'sounds'],['track',TRACKS,'soundtrack']];
+const ALLC=()=>KINDS.flatMap(([k,list,kind])=>list.map(c=>Object.assign({kind,key:k},c)));
+const REWARDS={}; for(const c of ALLC()) if(/^L\d+$/.test(c.src)&&c.src!=='L1'){ const l=+c.src.slice(1); (REWARDS[l]=REWARDS[l]||[]).push(`${c.name} ${c.kind}`); }
+REWARDS[1]=['Starting kit: Warm palette, Rounded tiles, Inter numbers, Clean board'];
+
+// ---------- achievements ----------
+const ACH=[
+ {id:'first',name:'First Merge',desc:'Finish a game'},
+ {id:'a2048',name:'2048!',desc:'Make a 2048 tile on 4×4'},
+ {id:'beyond',name:'Beyond',desc:'Make a 4096 tile'},
+ {id:'bigleague',name:'Big League',desc:'Make an 8192 tile'},
+ {id:'small',name:'Small Wonder',desc:'Make a 512 tile on 3×3'},
+ {id:'notakes',name:'No Take-Backs',desc:'Make 2048 on 4×4 with no undo'},
+ {id:'corner',name:'Corner Keeper',desc:'Keep your highest tile in one corner for 200 moves in a row'},
+ {id:'shapes',name:'Shape Shifter',desc:'1 star on every shaped board'},
+ {id:'devotee',name:'Daily Devotee',desc:'3 stars on a Daily Board'},
+ {id:'regular',name:'Regular',desc:'Finish 50 games'}];
+const achReward=id=>ALLC().filter(c=>c.src===id).map(c=>`${c.name} ${c.kind}`).join(', ');
+const owned=(S,c)=>{ if(c.src==='L1') return true; if(/^L\d+$/.test(c.src)) return levelOf(S.xp)>=+c.src.slice(1); return !!S.ach[c.src]; };
+const pick=(S,key)=>{ const list=KINDS.find(k=>k[0]===key)[1], it=list.find(x=>x.id===S[key]); return it&&owned(S,it)?it:list[0]; };
+
+// ---------- save ----------
+function defSave(){ return {v:1,xp:0,ach:{},
+  // settings: the shared ones (SHARED) are this game's standalone values; in Arcade, Arcade's are used in memory only
+  appearance:'system',motion:true,sfx:true,music:false,haptics:true,fullscreen:false,cb:false,lefty:false,lang:'auto',name:'',
+  speed:'normal',confirmNew:true,showMoves:true,
+  pal:'warm',shape:'round',font:'inter',bt:'clean',fx:'none',sound:'soft',track:'day',
+  board:'4',undos:3,undoDate:'',games:0,best:{},bestTile:{},bestA:{},bestTileA:{},shapeStars:{},stars:{},
+  game:null,daily:null,dailyBest:null,dailyBestTile:0,dailyCount:0,seenVer:'',bk:{last:0,nudged:0},secs:0}; }
+function loadSave(raw){ let o=null; try{ o=typeof raw==='string'?JSON.parse(raw):raw; }catch(e){ o=null; }
+  const S=Object.assign(defSave(),o&&typeof o==='object'?o:{});
+  for(const k of ['ach','best','bestTile','bestA','bestTileA','shapeStars','stars']) if(!S[k]||typeof S[k]!=='object') S[k]={};
+  S.bk=Object.assign({last:0,nudged:0},S.bk||{}); if(typeof S.xp!=='number'||!(S.xp>=0)) S.xp=0;
+  if(!/^([3-6]|cross|ring|diamond|swiss)$/.test(String(S.board))) S.board='4';
+  return S; }
+
+// ---------- undo economy: daily cap 3, refilled each day; earned extras stack above it up to 99 ----------
+const UNDO_CAP=3;
+function refreshUndos(S,today){ if(S.undoDate!==today){ S.undos=Math.max(S.undos|0,UNDO_CAP); S.undoDate=today; return true; } return false; }
+const earnUndo=(S,n)=>{ S.undos=Math.min(99,(S.undos|0)+n); };
+function spendUndo(S){ if((S.undos|0)<1) return false; S.undos--; return true; }
+
+// ---------- XP and achievements ----------
+function grantXP(S,n){ const before=levelOf(S.xp); S.xp+=n; const ups=[]; for(let l=before+1;l<=levelOf(S.xp);l++) ups.push(l);
+  if(ups.length) earnUndo(S,ups.length); return ups; }
+function award(S,id,got){ if(S.ach[id]) return; S.ach[id]=Date.now(); got.push(id); }
+// Checked after every move (tile achievements) and again when a game ends.
+function checkAch(S,G,ended){ const got=[], sq=G.board==='4';
+  if(sq&&G.max>=2048){ award(S,'a2048',got); if(!G.undos) award(S,'notakes',got); }
+  if(G.max>=4096) award(S,'beyond',got); if(G.max>=8192) award(S,'bigleague',got);
+  if(G.board==='3'&&G.max>=512) award(S,'small',got);
+  if(G.cornerBest>=200) award(S,'corner',got);
+  if(ended){ award(S,'first',got); if(S.games>=50) award(S,'regular',got);
+    if(['cross','ring','diamond','swiss'].every(b=>(S.shapeStars[b]|0)>=1)) award(S,'shapes',got); }
+  return got; }
+// A game has ended (game over, or the player started another / left a Daily for the next day).
+function finishGame(S,G,today){
+  const assisted=G.undos>0, st=starsFor(G.board,G.max), r={stars:st,assisted,xp:0,ups:[],ach:[],newBest:false,newTile:false,daily:!!G.daily,undoEarned:0};
+  S.games++;
+  if(G.daily){ r.xp=DAILY_XP*(G.daily===today?2:1); S.dailyCount++;
+    if(S.dailyBest==null||G.score>S.dailyBest){ r.newBest=S.dailyBest!=null; S.dailyBest=G.score; }
+    if(G.max>S.dailyBestTile) S.dailyBestTile=G.max;
+    if(st===3){ earnUndo(S,1); r.undoEarned=1; award(S,'devotee',r.ach); } }
+  else { r.xp=XP_STARS[st]; const b=G.board, bk=assisted?'bestA':'best', tk=assisted?'bestTileA':'bestTile';
+    if(S[bk][b]==null||G.score>S[bk][b]){ r.newBest=S[bk][b]!=null&&G.score>0; S[bk][b]=G.score; }
+    if(!S[tk][b]||G.max>S[tk][b]){ r.newTile=!!S[tk][b]; S[tk][b]=G.max; }
+    if(st>(S.stars[b]|0)) S.stars[b]=st;
+    if(['cross','ring','diamond','swiss'].includes(b)&&st>(S.shapeStars[b]|0)) S.shapeStars[b]=st; }
+  r.ups=grantXP(S,r.xp); r.undoEarned+=r.ups.length;
+  r.ach.push(...checkAch(S,G,true));
+  return r; }
+
+// ---------- Arcade contract ----------
+// Reads arcade.v1 (never writes it). Returns the shared settings and name to use in memory.
+function applyArcade(arcRaw){ let a=null; try{ a=typeof arcRaw==='string'?JSON.parse(arcRaw):arcRaw; }catch(e){ a=null; }
+  const out={}; if(a&&a.set&&typeof a.set==='object') for(const k of SHARED) if(a.set[k]!==undefined) out[k]=a.set[k];
+  if(a&&typeof a.name==='string') out.name=a.name; return out; }
+const fmtN=n=>Number(n||0).toLocaleString('en-US');
+function bestTileAll(S){ let m=0; for(const o of [S.bestTile,S.bestTileA]) for(const k in o) if(o[k]>m) m=o[k]; return Math.max(m,S.dailyBestTile|0); }
+function summary(S){ const l=levelOf(S.xp);
+  return {v:1,game:GAME_ID,ver:VERSION,level:l,maxLevel:MAXL,xp:S.xp,xpLevel:xpAt(l),xpNext:xpNext(l),
+    ach:ACH.map(a=>[a.name,a.desc,!!S.ach[a.id]]),
+    hi:[['Best tile',bestTileAll(S)?fmtN(bestTileAll(S)):'—'],['Best score (4×4)',S.best['4']!=null?fmtN(S.best['4']):'—'],['Daily best',S.dailyBest!=null?fmtN(S.dailyBest):'—']],
+    last:Date.now()}; }
+
+// ---------- share line ----------
+const BNAME={'3':'3×3','4':'4×4','5':'5×5','6':'6×6',cross:'Cross',ring:'Ring',diamond:'Diamond',swiss:'Swiss Cheese'};
+const starStr=n=>'★'.repeat(n)+'☆'.repeat(3-n);
+const shareLine=G=>`2048 · ${G.daily?'Daily '+G.daily:BNAME[G.board]} · ${fmtN(G.max)} tile · ${fmtN(G.score)} · ${starStr(starsFor(G.board,G.max))}${G.undos?' · assisted':''}`;
+
+if(typeof module!=='undefined') module.exports={VERSION,GAME_ID,KEY,SUMKEY,ARCKEY,SHARED,LV,MAXL,levelOf,xpAt,xpNext,STARS,starsFor,XP_STARS,DAILY_XP,
+  PALETTES,TSHAPES,FONTS,BTHEMES,FXS,SOUNDS,TRACKS,KINDS,ALLC,REWARDS,ACH,achReward,owned,pick,defSave,loadSave,UNDO_CAP,refreshUndos,earnUndo,spendUndo,
+  grantXP,checkAch,finishGame,applyArcade,summary,shareLine,starStr,BNAME,fmtN};
+
+// 2048 translation table: one row per English string, [en, es, fr, de, pt-BR]. {0},{1} are numbers or names.
+// Machine-assisted: native-speaker corrections only need the row edited. Cosmetic names (Warm, Ember, Midnight…) stay English by design, as in Sweep.
+const I18N_LANGS=['en','es','fr','de','pt'];
+const I18N_ROWS=[
+// home
+['Slide, merge, reach 2048.','Desliza, combina, llega a 2048.','Glissez, fusionnez, atteignez 2048.','Schieben, verschmelzen, 2048 erreichen.','Deslize, junte, chegue a 2048.'],
+['New game','Nueva partida','Nouvelle partie','Neues Spiel','Novo jogo'],
+['Daily Board','Tablero diario','Plateau du jour','Tagesbrett','Tabuleiro diário'],
+['Daily','Diario','Du jour','Täglich','Diário'],
+['Your boards','Tus tableros','Vos plateaux','Deine Bretter','Seus tabuleiros'],
+['How to play','Cómo jugar','Comment jouer','Spielanleitung','Como jogar'],
+["What's new",'Novedades','Nouveautés','Was ist neu','Novidades'],
+['Continue','Continuar','Continuer','Weiterspielen','Continuar'],
+['Finish your game','Termina tu partida','Terminez votre partie','Spiel beenden','Termine seu jogo'],
+['No moves left','No quedan movimientos','Plus aucun coup','Keine Züge mehr','Sem jogadas'],
+['Done','Hecho','Terminé','Erledigt','Feito'],
+['Play','Jugar','Jouer','Spielen','Jogar'],
+['In progress · resume where you left off','En curso · sigue donde lo dejaste','En cours · reprenez où vous en étiez','Läuft · mach weiter, wo du warst','Em andamento · continue de onde parou'],
+['Same board for everyone · no undo','El mismo tablero para todos · sin deshacer','Le même plateau pour tous · sans annulation','Gleiches Brett für alle · kein Rückgängig','O mesmo tabuleiro para todos · sem desfazer'],
+['×2 XP today','×2 XP hoy','×2 XP aujourd’hui','×2 XP heute','×2 XP hoje'],
+['New board in {0}','Nuevo tablero en {0}','Nouveau plateau dans {0}','Neues Brett in {0}','Novo tabuleiro em {0}'],
+['Finish a game and your best tile and score for each board show here.','Termina una partida y aquí verás tu mejor ficha y puntuación de cada tablero.','Terminez une partie : votre meilleure tuile et votre meilleur score par plateau s’affichent ici.','Beende ein Spiel, dann siehst du hier deine beste Kachel und Punktzahl für jedes Brett.','Termine um jogo e sua melhor peça e pontuação de cada tabuleiro aparecem aqui.'],
+['Level {0}','Nivel {0}','Niveau {0}','Level {0}','Nível {0}'],
+['Undos','Deshacer','Annulations','Rückgängig','Desfazer'],
+['Max level','Nivel máximo','Niveau max','Höchstes Level','Nível máximo'],
+['Style','Estilo','Style','Stil','Estilo'],
+['Settings','Ajustes','Réglages','Einstellungen','Configurações'],
+['Home','Inicio','Accueil','Start','Início'],
+['Back','Atrás','Retour','Zurück','Voltar'],
+['Pause','Pausa','Pause','Pause','Pausar'],
+// game
+['Score','Puntos','Score','Punkte','Pontos'],
+['Best','Récord','Record','Bestwert','Recorde'],
+['move','movimiento','coup','Zug','jogada'],
+['moves','movimientos','coups','Züge','jogadas'],
+['Moves','Movimientos','Coups','Züge','Jogadas'],
+['Time','Tiempo','Temps','Zeit','Tempo'],
+['Next ★ at {0}','Siguiente ★ en {0}','Prochaine ★ à {0}','Nächster ★ bei {0}','Próxima ★ em {0}'],
+['Undo','Deshacer','Annuler','Rückgängig','Desfazer'],
+['undo','deshacer','annulation','Rückgängig','desfazer'],
+['Paused','En pausa','En pause','Pausiert','Pausado'],
+['The board is hidden while paused.','El tablero se oculta durante la pausa.','Le plateau est masqué pendant la pause.','Das Brett ist während der Pause verdeckt.','O tabuleiro fica oculto durante a pausa.'],
+['Resume','Reanudar','Reprendre','Fortsetzen','Retomar'],
+['No undo on the Daily Board, so every score is comparable.','El tablero diario no permite deshacer, así todas las puntuaciones son comparables.','Pas d’annulation sur le plateau du jour : tous les scores sont comparables.','Auf dem Tagesbrett gibt es kein Rückgängig, damit alle Punktzahlen vergleichbar sind.','Sem desfazer no tabuleiro diário, para que todas as pontuações sejam comparáveis.'],
+['Nothing to undo yet. Undo goes back one move at a time.','Aún no hay nada que deshacer. Deshacer retrocede un movimiento cada vez.','Rien à annuler pour l’instant. L’annulation revient d’un coup à la fois.','Noch nichts rückgängig zu machen. Rückgängig geht immer einen Zug zurück.','Nada para desfazer ainda. Desfazer volta uma jogada por vez.'],
+['No undos left. They refill to 3 tomorrow, and level-ups earn more.','No te quedan deshacer. Mañana vuelven a 3, y subir de nivel da más.','Plus d’annulations. Elles reviennent à 3 demain, et chaque niveau en donne une.','Keine Rückgängig mehr. Morgen wieder 3, und Level-ups bringen mehr.','Sem desfazer restantes. Voltam a 3 amanhã, e subir de nível dá mais.'],
+['You made the 2048 tile. Keep going for a higher score, or end the game here.','Has conseguido la ficha 2048. Sigue para subir la puntuación o termina aquí.','Vous avez fait la tuile 2048. Continuez pour un meilleur score ou terminez ici.','Du hast die 2048-Kachel geschafft. Spiel weiter für mehr Punkte oder beende hier.','Você fez a peça 2048. Continue para pontuar mais ou termine aqui.'],
+['Keep going','Seguir','Continuer','Weiterspielen','Continuar'],
+['End game','Terminar','Terminer','Spiel beenden','Encerrar'],
+['You can undo the last move ({0} left), or finish and see your results.','Puedes deshacer el último movimiento (te quedan {0}) o terminar y ver tus resultados.','Vous pouvez annuler le dernier coup (il en reste {0}) ou terminer et voir vos résultats.','Du kannst den letzten Zug zurücknehmen (noch {0}) oder beenden und dein Ergebnis sehen.','Você pode desfazer a última jogada (restam {0}) ou terminar e ver os resultados.'],
+['Undo last move','Deshacer el último','Annuler le dernier coup','Letzten Zug zurück','Desfazer a última'],
+['See results','Ver resultados','Voir les résultats','Ergebnis ansehen','Ver resultados'],
+['Game over','Fin de la partida','Partie terminée','Spiel vorbei','Fim de jogo'],
+['Game ended','Partida terminada','Partie finie','Spiel beendet','Jogo encerrado'],
+['assisted','asistida','assistée','mit Hilfe','assistido'],
+['{0} assisted','{0} asistida','{0} assistée','{0} mit Hilfe','{0} assistido'],
+['New best','Nuevo récord','Nouveau record','Neuer Bestwert','Novo recorde'],
+['Best tile','Mejor ficha','Meilleure tuile','Beste Kachel','Melhor peça'],
+['(×2 today)','(×2 hoy)','(×2 aujourd’hui)','(×2 heute)','(×2 hoje)'],
+['Share','Compartir','Partager','Teilen','Compartilhar'],
+['Play again','Otra vez','Rejouer','Nochmal','Jogar de novo'],
+['Other board…','Otro tablero…','Autre plateau…','Anderes Brett…','Outro tabuleiro…'],
+['Your Daily Board from {0} was scored: {1}','Se ha puntuado tu tablero diario del {0}: {1}','Votre plateau du jour du {0} a été compté : {1}','Dein Tagesbrett vom {0} wurde gewertet: {1}','Seu tabuleiro diário de {0} foi pontuado: {1}'],
+['unlocked','desbloqueado','débloqué','freigeschaltet','desbloqueado'],
+// boards
+['Cross','Cruz','Croix','Kreuz','Cruz'],['Ring','Anillo','Anneau','Ring','Anel'],['Diamond','Diamante','Losange','Raute','Diamante'],
+['Swiss Cheese','Queso suizo','Gruyère','Schweizer Käse','Queijo suíço'],
+// new game sheet
+['Choose a board. Your choice is remembered.','Elige un tablero. Se recordará tu elección.','Choisissez un plateau. Votre choix est mémorisé.','Wähle ein Brett. Deine Wahl wird gespeichert.','Escolha um tabuleiro. Sua escolha fica salva.'],
+['Size','Tamaño','Taille','Größe','Tamanho'],['Shape','Forma','Forme','Form','Formato'],
+['Start','Empezar','Commencer','Starten','Começar'],['Cancel','Cancelar','Annuler','Abbrechen','Cancelar'],['Close','Cerrar','Fermer','Schließen','Fechar'],
+['Tap again to end your current game','Toca otra vez para terminar la partida actual','Touchez encore pour terminer la partie en cours','Nochmal tippen, um das laufende Spiel zu beenden','Toque de novo para encerrar o jogo atual'],
+// share
+['Your result, ready to paste anywhere.','Tu resultado, listo para pegar donde quieras.','Votre résultat, prêt à coller où vous voulez.','Dein Ergebnis, bereit zum Einfügen.','Seu resultado, pronto para colar onde quiser.'],
+['Copied','Copiado','Copié','Kopiert','Copiado'],
+['Text selected. Copy it from the box.','Texto seleccionado. Cópialo del cuadro.','Texte sélectionné. Copiez-le depuis la zone.','Text markiert. Kopiere ihn aus dem Feld.','Texto selecionado. Copie da caixa.'],
+// how to play
+['Move','Mover','Déplacer','Ziehen','Mover'],['Merge','Combinar','Fusionner','Verschmelzen','Juntar'],['Win','Ganar','Gagner','Gewinnen','Vencer'],
+['Shaped boards','Tableros con forma','Plateaux à forme','Geformte Bretter','Tabuleiros com formato'],['Keys','Teclas','Touches','Tasten','Teclas'],
+['Swipe, or use the arrow keys or WASD, to slide every tile as far as it goes.','Desliza, o usa las flechas o WASD, para mover todas las fichas hasta el final.','Glissez, ou utilisez les flèches ou WASD, pour pousser toutes les tuiles au bout.','Wische oder nutze die Pfeiltasten oder WASD, um alle Kacheln so weit wie möglich zu schieben.','Deslize, ou use as setas ou WASD, para levar todas as peças até o fim.'],
+['Two tiles with the same number merge into one. Each merge adds the new tile to your score.','Dos fichas con el mismo número se combinan en una. Cada combinación suma la nueva ficha a tu puntuación.','Deux tuiles de même valeur fusionnent en une. Chaque fusion ajoute la nouvelle tuile à votre score.','Zwei Kacheln mit derselben Zahl verschmelzen zu einer. Jede Verschmelzung zählt die neue Kachel zu deinen Punkten.','Duas peças com o mesmo número se juntam em uma. Cada junção soma a nova peça à sua pontuação.'],
+['After every move a new 2 or 4 appears. Make a 2048 tile to win, then keep going for more.','Tras cada movimiento aparece un 2 o un 4. Consigue la ficha 2048 para ganar y sigue para más.','Après chaque coup, un 2 ou un 4 apparaît. Faites la tuile 2048 pour gagner, puis continuez.','Nach jedem Zug erscheint eine 2 oder 4. Bau die 2048-Kachel, um zu gewinnen, und spiel dann weiter.','Após cada jogada surge um 2 ou 4. Faça a peça 2048 para vencer e continue para mais.'],
+['Walls split rows and columns. Each piece slides on its own.','Las paredes dividen filas y columnas. Cada tramo se desliza por su cuenta.','Les murs coupent lignes et colonnes. Chaque morceau glisse séparément.','Wände teilen Reihen und Spalten. Jedes Stück rutscht für sich.','Paredes dividem linhas e colunas. Cada trecho desliza sozinho.'],
+['Takes back one move. You get 3 a day, and level-ups earn more. Games with an undo are marked assisted.','Retrocede un movimiento. Tienes 3 al día y subir de nivel da más. Las partidas con deshacer se marcan como asistidas.','Annule un coup. Vous en avez 3 par jour, et chaque niveau en donne plus. Les parties avec annulation sont marquées assistées.','Nimmt einen Zug zurück. Du hast 3 pro Tag, Level-ups bringen mehr. Spiele mit Rückgängig gelten als „mit Hilfe“.','Volta uma jogada. Você tem 3 por dia e subir de nível dá mais. Jogos com desfazer ficam marcados como assistidos.'],
+['The same board for everyone, with no undo. It counts once a day.','El mismo tablero para todos, sin deshacer. Cuenta una vez al día.','Le même plateau pour tous, sans annulation. Il compte une fois par jour.','Das gleiche Brett für alle, ohne Rückgängig. Es zählt einmal am Tag.','O mesmo tabuleiro para todos, sem desfazer. Conta uma vez por dia.'],
+['U or Ctrl+Z to undo, P or Esc to pause.','U o Ctrl+Z para deshacer, P o Esc para pausar.','U ou Ctrl+Z pour annuler, P ou Échap pour la pause.','U oder Strg+Z für Rückgängig, P oder Esc für Pause.','U ou Ctrl+Z para desfazer, P ou Esc para pausar.'],
+['Got it','Entendido','Compris','Verstanden','Entendi'],
+// what's new
+['First playable demo: classic 2048 on 3×3 to 6×6 and four shaped boards (Cross, Ring, Diamond, Swiss Cheese).','Primera demo jugable: 2048 clásico de 3×3 a 6×6 y cuatro tableros con forma (Cruz, Anillo, Diamante, Queso suizo).','Première démo jouable : 2048 classique de 3×3 à 6×6 et quatre plateaux à forme (Croix, Anneau, Losange, Gruyère).','Erste spielbare Demo: klassisches 2048 von 3×3 bis 6×6 und vier geformte Bretter (Kreuz, Ring, Raute, Schweizer Käse).','Primeira demo jogável: 2048 clássico de 3×3 a 6×6 e quatro tabuleiros com formato (Cruz, Anel, Diamante, Queijo suíço).'],
+['Daily Board: the same board and spawns for everyone, once a day.','Tablero diario: el mismo tablero y las mismas fichas nuevas para todos, una vez al día.','Plateau du jour : le même plateau et les mêmes apparitions pour tous, une fois par jour.','Tagesbrett: gleiches Brett und gleiche neue Kacheln für alle, einmal am Tag.','Tabuleiro diário: o mesmo tabuleiro e as mesmas peças novas para todos, uma vez por dia.'],
+['Undo as a limited resource (3 a day, earn more), XP, levels, achievements, stars and cosmetics.','Deshacer limitado (3 al día, gana más), XP, niveles, logros, estrellas y estilos.','Annulation limitée (3 par jour, gagnez-en plus), XP, niveaux, succès, étoiles et styles.','Begrenztes Rückgängig (3 pro Tag, mehr verdienen), XP, Level, Erfolge, Sterne und Stile.','Desfazer limitado (3 por dia, ganhe mais), XP, níveis, conquistas, estrelas e estilos.'],
+// language + backup
+['Language','Idioma','Langue','Sprache','Idioma'],['Automatic','Automático','Automatique','Automatisch','Automático'],
+['2048 restarts in the chosen language. Your progress is kept.','2048 se reinicia en el idioma elegido. Tu progreso se conserva.','2048 redémarre dans la langue choisie. Votre progression est conservée.','2048 startet in der gewählten Sprache neu. Dein Fortschritt bleibt erhalten.','O 2048 reinicia no idioma escolhido. Seu progresso é mantido.'],
+['Translations are machine-assisted. If something reads oddly, tell the developer.','Las traducciones son asistidas por máquina. Si algo suena raro, avisa al desarrollador.','Les traductions sont assistées par machine. Si quelque chose sonne faux, prévenez le développeur.','Die Übersetzungen sind maschinell unterstützt. Wenn etwas seltsam klingt, sag dem Entwickler Bescheid.','As traduções são assistidas por máquina. Se algo soar estranho, avise o desenvolvedor.'],
+['Backup','Copia de seguridad','Sauvegarde','Sicherung','Backup'],['Backup & restore','Copia y restauración','Sauvegarde et restauration','Sichern & wiederherstellen','Backup e restauração'],['2048 backup','Copia de 2048','Sauvegarde 2048','2048-Sicherung','Backup do 2048'],
+['Your 2048 progress is stored on this device only. Keep this code somewhere safe to restore it later or move it to another device.','Tu progreso en 2048 solo se guarda en este dispositivo. Guarda este código en un lugar seguro para restaurarlo o pasarlo a otro dispositivo.','Votre progression 2048 est stockée uniquement sur cet appareil. Gardez ce code en lieu sûr pour la restaurer ou la transférer.','Dein 2048-Fortschritt ist nur auf diesem Gerät gespeichert. Bewahre diesen Code sicher auf, um ihn wiederherzustellen oder auf ein anderes Gerät zu übertragen.','Seu progresso no 2048 fica só neste aparelho. Guarde este código em um lugar seguro para restaurar ou levar a outro aparelho.'],
+['Copy code','Copiar código','Copier le code','Code kopieren','Copiar código'],['Restore','Restaurar','Restaurer','Wiederherstellen','Restaurar'],['Restore from code','Restaurar con código','Restaurer depuis le code','Aus Code wiederherstellen','Restaurar do código'],
+['Paste a backup code here','Pega aquí un código de copia','Collez un code de sauvegarde ici','Sicherungscode hier einfügen','Cole um código de backup aqui'],
+['Backup code copied','Código copiado','Code copié','Code kopiert','Código copiado'],['Code selected. Copy it from the box.','Código seleccionado. Cópialo del cuadro.','Code sélectionné. Copiez-le depuis la zone.','Code markiert. Kopiere ihn aus dem Feld.','Código selecionado. Copie da caixa.'],
+['Paste a backup code first','Primero pega un código','Collez d’abord un code','Füge zuerst einen Code ein','Cole um código primeiro'],
+["That code doesn't look right. Check it was copied in full.",'Ese código no parece correcto. Comprueba que esté completo.','Ce code ne semble pas valide. Vérifiez qu’il est complet.','Der Code sieht nicht richtig aus. Prüfe, ob er vollständig kopiert wurde.','Esse código não parece certo. Confira se foi copiado inteiro.'],
+["Tap again to replace this device's progress with the level {0} backup",'Toca otra vez para reemplazar el progreso de este dispositivo con la copia de nivel {0}','Touchez encore pour remplacer la progression par la sauvegarde niveau {0}','Nochmal tippen, um den Fortschritt durch die Level-{0}-Sicherung zu ersetzen','Toque de novo para substituir o progresso pelo backup de nível {0}'],
+['Progress restored','Progreso restaurado','Progression restaurée','Fortschritt wiederhergestellt','Progresso restaurado'],
+["Storage is off in this browser, so progress won't be saved.",'El almacenamiento está desactivado en este navegador: el progreso no se guardará.','Le stockage est désactivé dans ce navigateur : la progression ne sera pas enregistrée.','Speicher ist in diesem Browser aus, daher wird nichts gespeichert.','O armazenamento está desativado neste navegador, então o progresso não será salvo.'],
+// style
+['Palettes','Paletas','Palettes','Paletten','Paletas'],['Tiles','Fichas','Tuiles','Kacheln','Peças'],['Numbers','Números','Chiffres','Ziffern','Números'],
+['Boards','Tableros','Plateaux','Bretter','Tabuleiros'],['Effects','Efectos','Effets','Effekte','Efeitos'],['Sounds','Sonidos','Sons','Klänge','Sons'],
+['In use','En uso','Utilisé','Aktiv','Em uso'],['Tap to use','Toca para usar','Touchez pour utiliser','Tippen zum Verwenden','Toque para usar'],
+['Rounded','Redondeadas','Arrondies','Abgerundet','Arredondadas'],['Square','Cuadradas','Carrées','Eckig','Quadradas'],['Circle','Círculos','Cercles','Kreise','Círculos'],['None','Ninguno','Aucun','Keiner','Nenhum'],
+// rewards
+['Starting kit: Warm palette, Rounded tiles, Inter numbers, Clean board','Kit inicial: paleta Warm, fichas redondeadas, números Inter, tablero Clean','Kit de départ : palette Warm, tuiles arrondies, chiffres Inter, plateau Clean','Startpaket: Palette Warm, abgerundete Kacheln, Ziffern Inter, Brett Clean','Kit inicial: paleta Warm, peças arredondadas, números Inter, tabuleiro Clean'],
+['Square tiles','Fichas cuadradas','Tuiles carrées','Eckige Kacheln','Peças quadradas'],['Circle tiles','Fichas redondas','Tuiles rondes','Runde Kacheln','Peças redondas'],
+['JetBrains Mono numbers','Números JetBrains Mono','Chiffres JetBrains Mono','Ziffern JetBrains Mono','Números JetBrains Mono'],['Caveat numbers','Números Caveat','Chiffres Caveat','Ziffern Caveat','Números Caveat'],
+['Forest palette','Paleta Forest','Palette Forest','Palette Forest','Paleta Forest'],['Dusk palette','Paleta Dusk','Palette Dusk','Palette Dusk','Paleta Dusk'],['Ember palette','Paleta Ember','Palette Ember','Palette Ember','Paleta Ember'],
+['Ocean palette','Paleta Ocean','Palette Ocean','Palette Ocean','Paleta Ocean'],['Neon palette','Paleta Neon','Palette Neon','Palette Neon','Paleta Neon'],['Mono palette','Paleta Mono','Palette Mono','Palette Mono','Paleta Mono'],['Pastel palette','Paleta Pastel','Palette Pastel','Palette Pastel','Paleta Pastel'],
+['Midnight board','Tablero Midnight','Plateau Midnight','Brett Midnight','Tabuleiro Midnight'],['Slate board','Tablero Slate','Plateau Slate','Brett Slate','Tabuleiro Slate'],['Paper board','Tablero Paper','Plateau Paper','Brett Paper','Tabuleiro Paper'],['Gold board','Tablero Gold','Plateau Gold','Brett Gold','Tabuleiro Gold'],
+['Confetti effect','Efecto Confetti','Effet Confetti','Effekt Confetti','Efeito Confetti'],['Fireworks effect','Efecto Fireworks','Effet Fireworks','Effekt Fireworks','Efeito Fireworks'],['Starfall effect','Efecto Starfall','Effet Starfall','Effekt Starfall','Efeito Starfall'],
+['Chiptune sounds','Sonidos Chiptune','Sons Chiptune','Klänge Chiptune','Sons Chiptune'],
+// progress
+['Progress','Progreso','Progression','Fortschritt','Progresso'],['Levels','Niveles','Niveaux','Level','Níveis'],['Achievements','Logros','Succès','Erfolge','Conquistas'],['Stats','Estadísticas','Stats','Statistik','Estatísticas'],
+['Badge only','Solo insignia','Badge seul','Nur Abzeichen','Só medalha'],
+['First Merge','Primera combinación','Première fusion','Erste Verschmelzung','Primeira junção'],['Finish a game','Termina una partida','Terminez une partie','Beende ein Spiel','Termine um jogo'],
+['Make a 2048 tile on 4×4','Consigue la ficha 2048 en 4×4','Faites la tuile 2048 en 4×4','Bau eine 2048-Kachel auf 4×4','Faça a peça 2048 no 4×4'],
+['Beyond','Más allá','Au-delà','Darüber hinaus','Além'],['Make a 4096 tile','Consigue la ficha 4096','Faites la tuile 4096','Bau eine 4096-Kachel','Faça a peça 4096'],
+['Big League','Primera división','Cour des grands','Oberliga','Primeira divisão'],['Make an 8192 tile','Consigue la ficha 8192','Faites la tuile 8192','Bau eine 8192-Kachel','Faça a peça 8192'],
+['Small Wonder','Pequeña maravilla','Petite merveille','Kleines Wunder','Pequena maravilha'],['Make a 512 tile on 3×3','Consigue la ficha 512 en 3×3','Faites la tuile 512 en 3×3','Bau eine 512-Kachel auf 3×3','Faça a peça 512 no 3×3'],
+['No Take-Backs','Sin vuelta atrás','Sans retour','Ohne Zurück','Sem volta'],['Make 2048 on 4×4 with no undo','Consigue 2048 en 4×4 sin deshacer','Faites 2048 en 4×4 sans annulation','Schaff 2048 auf 4×4 ohne Rückgängig','Faça 2048 no 4×4 sem desfazer'],
+['Corner Keeper','Guardián de la esquina','Gardien du coin','Eckenwächter','Guardião do canto'],['Keep your highest tile in one corner for 200 moves in a row','Mantén tu ficha más alta en una esquina durante 200 movimientos seguidos','Gardez votre plus haute tuile dans un coin pendant 200 coups d’affilée','Halte deine höchste Kachel 200 Züge am Stück in einer Ecke','Mantenha sua maior peça em um canto por 200 jogadas seguidas'],
+['Shape Shifter','Cambiaformas','Métamorphe','Formwandler','Muda-formas'],['1 star on every shaped board','1 estrella en cada tablero con forma','1 étoile sur chaque plateau à forme','1 Stern auf jedem geformten Brett','1 estrela em cada tabuleiro com formato'],
+['Daily Devotee','Fiel diario','Fidèle du jour','Tagesfan','Fiel diário'],['3 stars on a Daily Board','3 estrellas en un tablero diario','3 étoiles sur un plateau du jour','3 Sterne auf einem Tagesbrett','3 estrelas em um tabuleiro diário'],
+['Regular','Habitual','Habitué','Stammgast','Frequentador'],['Finish 50 games','Termina 50 partidas','Terminez 50 parties','Beende 50 Spiele','Termine 50 jogos'],
+['Board','Tablero','Plateau','Brett','Tabuleiro'],['Stars','Estrellas','Étoiles','Sterne','Estrelas'],['Best score','Mejor puntuación','Meilleur score','Bestwert','Melhor pontuação'],
+['{0} played','{0} jugados','{0} jouées','{0} gespielt','{0} jogados'],['Games finished','Partidas terminadas','Parties terminées','Beendete Spiele','Jogos terminados'],
+['Small numbers under each board are its star targets (highest tile). Games with an undo keep separate bests.','Los números pequeños bajo cada tablero son sus metas de estrellas (ficha más alta). Las partidas con deshacer tienen récords aparte.','Les petits nombres sous chaque plateau sont ses objectifs d’étoiles (plus haute tuile). Les parties avec annulation ont leurs propres records.','Die kleinen Zahlen unter jedem Brett sind die Sternziele (höchste Kachel). Spiele mit Rückgängig haben eigene Bestwerte.','Os números pequenos sob cada tabuleiro são as metas de estrelas (maior peça). Jogos com desfazer têm recordes separados.'],
+['Reset progress','Reiniciar progreso','Réinitialiser','Fortschritt zurücksetzen','Reiniciar progresso'],['Tap again to reset','Toca otra vez para reiniciar','Touchez encore pour réinitialiser','Nochmal tippen zum Zurücksetzen','Toque de novo para reiniciar'],
+['Progress reset','Progreso reiniciado','Progression réinitialisée','Fortschritt zurückgesetzt','Progresso reiniciado'],
+// settings
+['Display','Pantalla','Affichage','Anzeige','Tela'],['Appearance','Apariencia','Apparence','Darstellung','Aparência'],['Auto','Auto','Auto','Auto','Auto'],['Light','Claro','Clair','Hell','Claro'],['Dark','Oscuro','Sombre','Dunkel','Escuro'],
+['Animations','Animaciones','Animations','Animationen','Animações'],['Slides, pops and particles','Deslizamientos, rebotes y partículas','Glissements, rebonds et particules','Gleiten, Aufploppen und Partikel','Deslizes, estalos e partículas'],
+['Colourblind-safe numbers','Números para daltonismo','Chiffres adaptés au daltonisme','Farbenblind-sichere Ziffern','Números para daltonismo'],['Heavier numbers with a contrasting outline','Números más gruesos con contorno de contraste','Chiffres plus épais avec un contour contrasté','Kräftigere Ziffern mit Kontrastrand','Números mais grossos com contorno de contraste'],
+['Left-handed controls','Controles para zurdos','Commandes pour gauchers','Linkshänder-Steuerung','Controles para canhotos'],['Mirrors the buttons under the board','Invierte los botones bajo el tablero','Inverse les boutons sous le plateau','Spiegelt die Knöpfe unter dem Brett','Espelha os botões sob o tabuleiro'],
+['Sound','Sonido','Son','Ton','Som'],['Sound effects','Efectos de sonido','Effets sonores','Soundeffekte','Efeitos sonoros'],['Soundtrack','Música','Musique','Musik','Trilha sonora'],['Daylight, synthesized live','Daylight, sintetizada en directo','Daylight, synthétisée en direct','Daylight, live synthetisiert','Daylight, sintetizada ao vivo'],
+['Haptics','Vibración','Vibrations','Vibration','Vibração'],['A pulse on merges','Una vibración al combinar','Une vibration à chaque fusion','Ein Impuls beim Verschmelzen','Uma vibração ao juntar'],
+['Game','Juego','Jeu','Spiel','Jogo'],['Animation speed','Velocidad de animación','Vitesse d’animation','Animationstempo','Velocidade da animação'],['Normal','Normal','Normale','Normal','Normal'],['Fast','Rápida','Rapide','Schnell','Rápida'],
+['Confirm New game','Confirmar nueva partida','Confirmer une nouvelle partie','Neues Spiel bestätigen','Confirmar novo jogo'],['When a game is in progress','Cuando hay una partida en curso','Quand une partie est en cours','Wenn ein Spiel läuft','Quando há um jogo em andamento'],
+['Show move count','Mostrar movimientos','Afficher le nombre de coups','Zugzahl anzeigen','Mostrar jogadas'],['More','Más','Plus','Mehr','Mais'],
+['Arcade settings','Ajustes de Arcade','Réglages d’Arcade','Arcade-Einstellungen','Configurações do Arcade'],['Appearance, sound, language and more','Apariencia, sonido, idioma y más','Apparence, son, langue et plus','Darstellung, Ton, Sprache und mehr','Aparência, som, idioma e mais'],
+['No ads, no tracking. Progress stays on this device.','Sin anuncios ni rastreo. El progreso se queda en este dispositivo.','Sans pub ni pistage. La progression reste sur cet appareil.','Keine Werbung, kein Tracking. Der Fortschritt bleibt auf diesem Gerät.','Sem anúncios nem rastreamento. O progresso fica neste aparelho.'],
+];
+if(typeof module!=='undefined') module.exports={I18N_LANGS,I18N_ROWS};
+
+
+</script>
+<script>
+const ARCADE_HOME='../index.html', ARCADE_PREFS='../index.html#prefs';
+const ARCADE=!!window.__ARCADE__;
+const CHANGES=[['0.1.0',['First playable demo: classic 2048 on 3×3 to 6×6 and four shaped boards (Cross, Ring, Diamond, Swiss Cheese).','Daily Board: the same board and spawns for everyone, once a day.','Undo as a limited resource (3 a day, earn more), XP, levels, achievements, stars and cosmetics.']]];
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const ICON={
+ back:'<svg class="i" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>',
+ pause:'<svg class="i" viewBox="0 0 24 24"><path d="M9 5v14M15 5v14"/></svg>',
+ restart:'<svg class="i" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v5h-5"/></svg>',
+ undo:'<svg class="i" viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg>',
+ gear:'<svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
+ palette:'<svg class="i" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.6-.8 1.6-1.6 0-.9-.6-1.3-.6-2.1 0-.9.7-1.5 1.6-1.5H17a4 4 0 0 0 4-4c0-4.6-4-8.8-9-8.8z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10.5" cy="7" r="1"/><circle cx="15" cy="7.5" r="1"/></svg>',
+ trophy:'<svg class="i" viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8 20h8"/></svg>',
+ lock:'<svg class="i" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>',
+ play:'<svg class="i" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z"/></svg>',
+ share:'<svg class="i" viewBox="0 0 24 24"><path d="M12 15V3M7.5 7.5L12 3l4.5 4.5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>',
+ save:'<svg class="i" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>',
+ cal:'<svg class="i" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>',
+ star:'<svg class="i" viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8L3.5 9.7l5.9-.9z"/></svg>',
+ chev:'<svg class="i" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>',
+ home:'<svg class="i" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg>'};
+
+// ---------- save (this browser only) ----------
+let S=loadSave(null); let STORE=true;
+try{ localStorage.setItem('t2048.probe','1'); localStorage.removeItem('t2048.probe'); S=loadSave(localStorage.getItem(KEY)); }catch(e){ STORE=false; }
+let ARC={}; // Arcade's shared settings, used in memory only
+const readArcade=()=>{ if(!ARCADE) return; try{ ARC=applyArcade(localStorage.getItem(ARCKEY)); }catch(e){ ARC={}; } };
+readArcade();
+const O=k=>(ARCADE&&ARC[k]!==undefined)?ARC[k]:S[k];
+let sumT=0;
+function writeSummary(){ if(!ARCADE||!STORE) return; clearTimeout(sumT); try{ localStorage.setItem(SUMKEY,JSON.stringify(summary(S))); }catch(e){} }
+function persist(){ if(!STORE) return; try{ localStorage.setItem(KEY,JSON.stringify(S)); }catch(e){} if(ARCADE){ clearTimeout(sumT); sumT=setTimeout(writeSummary,300); } }
+
+// ---------- translations (Sweep's watcher: every visible text node is translated as it appears) ----------
+const LANGS=[['auto','Automatic'],['en','English'],['es','Español'],['fr','Français'],['de','Deutsch'],['pt','Português']];
+let LANG='en', DICT=null, PATS=[];
+const escRe=t=>t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+function setLang(){
+  const pref=O('lang')||'auto'; let l=pref==='auto'?String(navigator.language||'en').slice(0,2).toLowerCase():pref;
+  const col=(typeof I18N_LANGS!=='undefined')?I18N_LANGS.indexOf(l):-1; if(col<1) l='en'; LANG=l; DICT=null; PATS=[]; document.documentElement.lang=l;
+  if(l==='en') return; DICT=new Map();
+  for(const row of I18N_ROWS){ const v=row[col]; if(!v) continue; DICT.set(row[0],v);
+    if(row[0].includes('{')){ const parts=row[0].split(/(\{\d\})/), idx=[]; let re='^';
+      for(const pt of parts){ const m=pt.match(/^\{(\d)\}$/); if(m){ re+='(.+?)'; idx.push(+m[1]); } else re+=escRe(pt); }
+      PATS.push({re:new RegExp(re+'$','s'),idx,out:v,lit:parts[0],len:row[0].replace(/\{\d\}/g,'').length}); } }
+  PATS.sort((a,b)=>b.len-a.len);
+}
+function tr(text){ if(!DICT||text==null) return null; const m=/^(\s*)([\s\S]*?)(\s*)$/.exec(text), core=m[2].replace(/\s+/g,' ');
+  if(!core||!/[A-Za-z]/.test(core)) return null;
+  let o=DICT.get(core);
+  if(o==null) for(const P of PATS){ if(P.lit&&!core.startsWith(P.lit)) continue; const mm=P.re.exec(core); if(!mm) continue;
+    const args=[]; P.idx.forEach((n,i)=>args[n]=mm[i+1]); o=P.out.replace(/\{(\d)\}/g,(_,n)=>{ const a=args[n]||''; const t=tr(a); return t!=null?t.trim():a; }); break; }
+  return o==null?null:m[1]+o+m[3]; }
+const T=t=>{ const o=tr(t); return o==null?t:o; };
+const SKIP=new Set(['SCRIPT','STYLE','TEXTAREA','INPUT']), trDone=new WeakMap();
+function trNode(n){ const v=n.nodeValue; if(trDone.get(n)===v) return; const p=n.parentNode; if(p&&(SKIP.has(p.nodeName)||p.closest&&p.closest('[data-raw]'))){ trDone.set(n,v); return; }
+  const t=tr(v); if(t!=null&&t!==v) n.nodeValue=t; else if(window.__i18nMiss&&/[A-Za-z]{2}/.test(v)) window.__i18nMiss.add(v.trim()); trDone.set(n,n.nodeValue); }
+function trAttrs(el){ for(const a of ['placeholder','aria-label','title']){ const v=el.getAttribute&&el.getAttribute(a); if(v){ const t=tr(v); if(t!=null) el.setAttribute(a,t); } } }
+function trTree(root){ if(!DICT) return; if(root.nodeType===3){ trNode(root); return; } if(root.nodeType!==1) return;
+  trAttrs(root); if(SKIP.has(root.nodeName)) return; root.querySelectorAll&&root.querySelectorAll('[placeholder],[aria-label],[title]').forEach(trAttrs);
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT); let n; while((n=w.nextNode())) trNode(n); }
+function startI18n(){ setLang(); if(!DICT) return; trTree(document.body);
+  new MutationObserver(ms=>{ for(const m of ms){ if(m.type==='characterData') trNode(m.target); else m.addedNodes.forEach(trTree); } })
+    .observe(document.body,{subtree:true,childList:true,characterData:true}); }
+const LOCALE=()=>LANG==='en'?'en-US':LANG==='pt'?'pt-BR':LANG;
+const num=n=>Number(n||0).toLocaleString(LOCALE());
+
+// ---------- helpers ----------
+const today=()=>dateStr(Date.now());
+const clock=ms=>{ const t=Math.floor(ms/1000); return t>=3600?`${Math.floor(t/3600)}:${String(Math.floor(t%3600/60)).padStart(2,'0')}:${String(t%60).padStart(2,'0')}`:`${Math.floor(t/60)}:${String(t%60).padStart(2,'0')}`; };
+const buzz=p=>{ if(!O('haptics')) return; try{ navigator.vibrate&&navigator.vibrate(p); }catch(e){} };
+const motionOn=()=>O('motion')!==false;
+const tq=[]; let tBusy=false, tTimer=0, tCur='';
+function toast(m,now){ if(now){ tq.length=0; showToast(m); return; } if((tBusy&&m===tCur)||tq.includes(m)) return; tq.push(m); if(!tBusy) nextToast(); } // the same message is never queued twice
+function nextToast(){ const m=tq.shift(); if(!m){ tBusy=false; tCur=''; return; } showToast(m); }
+function showToast(m){ const el=$('#toast'); tBusy=true; tCur=m; el.textContent=m; el.classList.add('on'); clearTimeout(tTimer);
+  tTimer=setTimeout(()=>{ el.classList.remove('on'); tTimer=setTimeout(nextToast,420); },2400); }
+const achName=id=>(ACH.find(a=>a.id===id)||{}).name||id;
+function toastAch(ids){ for(const id of ids){ const r=achReward(id); toast(`🏆 ${T(achName(id))}${r?' · '+T(r)+' '+T('unlocked'):''}`); } }
+const lvlRewardText=l=>(REWARDS[l]||[]).map(T).join(', ');
+
+// ===================== AUDIO (Web Audio synth from Sweep) =====================
+const AU={};
+function buildAudio(c){
+  AU.ctx=c; AU.master=c.createGain(); AU.master.gain.value=.9; AU.master.connect(c.destination);
+  AU.sfx=c.createGain(); AU.sfx.gain.value=1; AU.sfx.connect(AU.master);
+  AU.mus=c.createGain(); AU.mus.gain.value=0;
+  AU.musLP=c.createBiquadFilter(); AU.musLP.type='lowpass'; AU.musLP.frequency.value=3600;
+  AU.mus.connect(AU.musLP); AU.musLP.connect(AU.master);
+  AU.dly=c.createDelay(1); AU.dly.delayTime.value=3*60/SONG.bpm/4;
+  AU.fb=c.createGain(); AU.fb.gain.value=.33; const dl=c.createBiquadFilter(); dl.type='lowpass'; dl.frequency.value=2000;
+  AU.dly.connect(dl); dl.connect(AU.fb); AU.fb.connect(AU.dly); dl.connect(AU.mus);
+  AU.send=c.createGain(); AU.send.gain.value=.45; AU.send.connect(AU.dly);
+  const len=c.sampleRate, b=c.createBuffer(1,len,c.sampleRate), d=b.getChannelData(0);
+  for(let i=0;i<len;i++) d[i]=Math.random()*2-1; AU.noise=b;
+}
+function audio(){
+  if(!AU.ctx){ const C=window.AudioContext||window.webkitAudioContext; if(!C) return null; try{ buildAudio(new C()); }catch(e){ return null; } }
+  if(AU.ctx.state==='suspended'&&!document.hidden) AU.ctx.resume().catch(()=>{});
+  return AU.ctx;
+}
+const hz=m=>440*Math.pow(2,(m-69)/12);
+function tone(o){
+  const c=AU.ctx, t=(o.at!=null?o.at:c.currentTime)+(o.t||0), d=o.d||.12, v=o.v||.2, a=o.a||.005, h=o.hold||0;
+  const osc=c.createOscillator(), g=c.createGain(); osc.type=o.type||'sine'; osc.frequency.setValueAtTime(o.f,t);
+  if(o.f2) osc.frequency.exponentialRampToValueAtTime(o.f2,t+(o.glide||d)); if(o.det) osc.detune.value=o.det;
+  g.gain.setValueAtTime(.0001,t); g.gain.linearRampToValueAtTime(v,t+a); if(h) g.gain.setValueAtTime(v,t+a+h);
+  g.gain.exponentialRampToValueAtTime(.0001,t+a+h+d);
+  let n=osc; if(o.lp){ const f=c.createBiquadFilter(); f.type='lowpass'; f.frequency.value=o.lp; osc.connect(f); n=f; }
+  n.connect(g); g.connect(o.dest||AU.sfx); if(o.send) g.connect(o.send);
+  osc.start(t); osc.stop(t+a+h+d+.05);
+}
+function noise(o){
+  const c=AU.ctx, t=(o.at!=null?o.at:c.currentTime)+(o.t||0), d=o.d||.1;
+  const s=c.createBufferSource(); s.buffer=AU.noise; const f=c.createBiquadFilter(); f.type=o.ft||'lowpass';
+  f.frequency.setValueAtTime(o.f||1000,t); if(o.f2) f.frequency.exponentialRampToValueAtTime(o.f2,t+d); f.Q.value=o.q||.7;
+  const g=c.createGain(); g.gain.setValueAtTime(o.v||.2,t); g.gain.exponentialRampToValueAtTime(.0001,t+d);
+  s.loop=true; s.connect(f); f.connect(g); g.connect(o.dest||AU.sfx); s.start(t,Math.random()*.5); s.stop(t+d+.02);
+}
+// Merge pitch rises with the tile: one pentatonic step per doubling.
+const SCALE=[60,62,64,67,69,72,74,76,79,81,84,86,88,91,93,96];
+const noteOf=v=>SCALE[Math.min(SCALE.length-1,Math.max(0,Math.round(Math.log2(v))-2))];
+const soundPack=()=>pick(S,'sound').id;
+let sndPrevT=0;
+function sfx(name,arg,force){
+  if(!O('sfx')&&!force) return; const c=audio(); if(!c) return; const chip=(force||soundPack())==='chip', type=chip?'square':'triangle', vm=chip?.35:1;
+  if(name==='click'){ if(chip) tone({f:1760,d:.03,type:'square',v:.035}); else tone({f:1500,d:.025,v:.05}); return; }
+  if(name==='slide'){ if(chip) tone({f:220,f2:330,d:.05,type:'square',v:.02}); else noise({d:.07,v:.03,ft:'bandpass',f:700,f2:1600,q:.8}); return; }
+  if(name==='spawn'){ tone({f:chip?1320:1180,d:.03,v:.018*(chip?.6:1),type:chip?'square':'sine'}); return; }
+  if(name==='merge'){ // arg = list of merged values; several merges in one move play a rising chord
+    const vs=arg.slice().sort((a,b)=>a-b);
+    vs.forEach((v,i)=>{ const m=noteOf(v)+(i&&noteOf(v)<=noteOf(vs[i-1])?[0,4,7,12,16][i%5]:0);
+      tone({f:hz(m),t:i*.045,d:.16+Math.min(.25,v/8192),v:.1*vm,type}); tone({f:hz(m+12),t:i*.045,d:.05,v:.025*vm,type:'sine'}); });
+    if(vs.length>2) noise({t:.04,d:.25,v:.03,ft:'highpass',f:6000});
+    return; }
+  if(name==='undo'){ tone({f:880,f2:440,d:.14,v:.08*vm,type}); return; }
+  if(name==='best'){ [84,88,91].forEach((m,i)=>tone({f:hz(m),t:i*.06,d:.18,v:.07*vm,type:'sine'})); noise({t:.1,d:.4,v:.03,ft:'highpass',f:7000}); return; }
+  if(name==='over'){ [67,64,60,55].forEach((m,i)=>tone({f:hz(m),t:i*.13,d:.4,v:.09*vm,type})); return; }
+  if(name==='win'||name==='level'){ const seq=name==='win'?[72,76,79,84,88]:[79,84,88,91];
+    seq.forEach((m,i)=>tone({f:hz(m),t:i*.09,d:.32,v:.11*vm,type})); noise({t:.3,d:.6,v:.035,ft:'highpass',f:6000}); return; }
+  if(name==='pop'){ noise({d:.2,v:.1,ft:'bandpass',f:1500,f2:300,q:.8}); tone({f:700,f2:200,d:.14,v:.03}); return; }
+}
+// ---------- soundtrack: Sweep's Daylight loop (100 BPM, C major, light swing) ----------
+const SONG={bpm:100,
+ chords:[[60,64,67,71],[57,60,64,67],[53,57,60,64],[55,59,62,64],[60,64,67,71],[52,55,59,62],[53,57,60,64],[55,60,62,67]],
+ bass:[48,45,41,43,48,40,41,43],
+ mel:[[[0,76,2],[3,79,2],[6,81,3],[10,79,2],[12,76,3]],[[2,72,2],[6,76,2],[8,74,3],[12,72,3]],[[0,69,2],[3,72,2],[6,76,4],[12,74,2],[14,72,2]],
+      [[0,74,3],[4,76,2],[8,79,4],[14,74,2]],[[0,76,2],[3,79,2],[6,81,2],[8,84,4],[12,81,3]],[[2,79,2],[6,76,2],[8,74,2],[12,71,3]],
+      [[0,69,2],[3,72,2],[6,76,2],[10,79,3],[14,76,2]],[[0,74,4],[6,76,2],[8,74,2],[10,72,6]]]};
+const MUSVOL=.4, BASSPAT={0:0,6:0,8:7,11:0,14:12};
+function musicStep(step,t,sd){ const bar=step>>4, s=step&15, D=AU.mus, SG=SONG;
+  if(s&1) t+=sd*.14;
+  if(s===0||s===8||(s===10&&bar%2===1)) tone({at:t,f:110,f2:42,glide:.12,d:.22,v:.5,dest:D});
+  if(s===4||s===12) noise({at:t,d:.07,v:.08,ft:'bandpass',f:1900,q:1.2,dest:D});
+  if(s%4===2) noise({at:t,d:.035,v:.055,ft:'highpass',f:7500,dest:D}); else if(s&1) noise({at:t,d:.02,v:.02,ft:'highpass',f:9000,dest:D});
+  if(s in BASSPAT) tone({at:t,f:hz(SG.bass[bar]+BASSPAT[s]),d:.26,v:.2,type:'triangle',lp:900,dest:D});
+  if(s===0) for(const m of SG.chords[bar]) for(const det of [-7,7]) tone({at:t,f:hz(m),det,a:.35,hold:sd*16-.6,d:.6,v:.02,type:'triangle',lp:1400,dest:D});
+  for(const [st,m,len] of SG.mel[bar]) if(st===s){ tone({at:t,f:hz(m),d:Math.max(.18,len*sd*1.2),v:.07,dest:D,send:AU.send}); tone({at:t,f:hz(m+12),d:.06,v:.014,type:'triangle',dest:D}); } }
+const Music={on:false,step:0,next:0,iv:0,
+  start(){ const c=audio(); if(!c||this.on) return; this.on=true; this.step=0; this.next=c.currentTime+.08;
+    const g=AU.mus.gain; g.cancelScheduledValues(c.currentTime); g.setValueAtTime(g.value,c.currentTime); g.linearRampToValueAtTime(MUSVOL,c.currentTime+2.5);
+    clearInterval(this.iv); this.iv=setInterval(()=>this.tick(),30); },
+  stop(){ if(!this.on) return; this.on=false; clearInterval(this.iv); const c=AU.ctx, g=AU.mus.gain; g.cancelScheduledValues(c.currentTime); g.setTargetAtTime(0,c.currentTime,.25); },
+  tick(){ const c=AU.ctx, sd=60/SONG.bpm/4; if(c.state!=='running'){ this.next=c.currentTime+.05; return; }
+    if(this.next<c.currentTime) this.next=c.currentTime+.02;
+    while(this.next<c.currentTime+.2){ musicStep(this.step,this.next,sd); this.next+=sd; this.step=(this.step+1)%128; } } };
+const unlockAudio=()=>{ if(!O('sfx')&&!O('music')) return; audio(); if(O('music')) Music.start(); };
+['pointerdown','touchend','keydown','click'].forEach(ev=>document.addEventListener(ev,unlockAudio,{capture:true,passive:true}));
+document.addEventListener('visibilitychange',()=>{ if(!AU.ctx) return; if(document.hidden) AU.ctx.suspend().catch(()=>{}); else AU.ctx.resume().catch(()=>{}); });
+document.addEventListener('click',e=>{ const b=e.target.closest('button'); if(b&&!b.closest('#stage')) sfx('click'); },true);
+
+// ===================== PARTICLES (Sweep's layer, 1,500-particle cap) =====================
+const FX={P:[],on:false};
+function starPath(c,x,y,r,rot){ c.beginPath(); for(let i=0;i<10;i++){ const a=rot-Math.PI/2+i*Math.PI/5, q=i%2?r*.45:r; c.lineTo(x+Math.cos(a)*q,y+Math.sin(a)*q); } c.closePath(); }
+function fxAdd(arr){ if(FX.P.length>1500) return; for(const p of arr) FX.P.push(p); if(!FX.on){ FX.on=true; requestAnimationFrame(fxFrame); } }
+function fxFrame(now){
+  const cv=$('#fx'), d=Math.min(devicePixelRatio||1,2), W=innerWidth, H=innerHeight;
+  if(cv.width!==Math.round(W*d)||cv.height!==Math.round(H*d)){ cv.width=Math.round(W*d); cv.height=Math.round(H*d); }
+  const c=cv.getContext('2d'); c.setTransform(d,0,0,d,0,0); c.clearRect(0,0,W,H);
+  FX.P=FX.P.filter(p=>now<p.born+p.life);
+  for(const p of FX.P){ if(now<p.born) continue; const k=(now-p.born)/p.life;
+    p.vy+=p.g; p.vx*=p.dr; p.vy*=p.dr; p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr||0;
+    c.globalAlpha=Math.min(1,(1-k)*1.8); c.fillStyle=c.strokeStyle=p.col;
+    if(p.kind==='rect'){ c.save(); c.translate(p.x,p.y); c.rotate(p.rot); c.fillRect(-p.w/2,-p.h/2,p.w,p.h); c.restore(); }
+    else if(p.kind==='spark'){ const tl=p.tl||3; c.lineWidth=p.size; c.lineCap='round'; c.beginPath(); c.moveTo(p.x-p.vx*tl,p.y-p.vy*tl); c.lineTo(p.x,p.y); c.stroke(); }
+    else if(p.kind==='ring'){ c.globalAlpha=(1-k)*.9; c.lineWidth=Math.max(.5,(1-k)*p.size); c.beginPath(); c.arc(p.x,p.y,p.r0+k*p.rg,0,Math.PI*2); c.stroke(); }
+    else { starPath(c,p.x,p.y,p.size*(.75+.25*Math.sin(now/90+(p.ph||0))),p.rot); c.fill(); } }
+  c.globalAlpha=1;
+  if(FX.P.length) requestAnimationFrame(fxFrame); else { FX.on=false; c.clearRect(0,0,W,H); }
+}
+const fxCols=()=>{ const r=pick(S,'pal').ramp; return [r[4],r[6],r[8],r[10],'#ffd166','#ffffff']; };
+function burstAt(x,y,col,n=14){ if(!motionOn()) return; const now=performance.now(), P=[];
+  for(let i=0;i<n;i++){ const a=Math.random()*Math.PI*2, sp=1.6+Math.random()*3; P.push({kind:'spark',x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,g:.04,dr:.93,born:now,life:420+Math.random()*200,size:2.2,col}); }
+  fxAdd(P); }
+function confetti(){ const W=innerWidth,H=innerHeight,now=performance.now(),cols=fxCols();
+  fxAdd(Array.from({length:140},()=>({kind:'rect',x:W/2+(Math.random()-.5)*W*.3,y:H*.38,vx:(Math.random()-.5)*12,vy:-Math.random()*14-5,g:.45,dr:.99,
+    born:now,life:2600,rot:Math.random()*3,vr:(Math.random()-.5)*.4,w:6+Math.random()*6,h:3+Math.random()*4,col:cols[Math.random()*cols.length|0]}))); }
+function fireworks(){ const W=innerWidth,H=innerHeight,now=performance.now(),cols=fxCols(),P=[];
+  for(let b=0;b<5;b++){ const bx=W*(.18+Math.random()*.64), by=H*(.14+Math.random()*.32), t=now+b*280, col=cols[b%cols.length];
+    for(let i=0;i<46;i++){ const a=i/46*Math.PI*2, sp=2.4+Math.random()*3.2;
+      P.push({kind:'spark',x:bx,y:by,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,g:.06,dr:.965,born:t,life:1100+Math.random()*350,size:2.2,col:Math.random()<.2?'#ffffff':col}); }
+    setTimeout(()=>sfx('pop'),b*280); }
+  fxAdd(P); }
+function starfall(){ const W=innerWidth,now=performance.now(),cols=['#ffd166',...fxCols().slice(0,3)],P=[];
+  for(let i=0;i<70;i++) P.push({kind:'star',x:Math.random()*W,y:-20-Math.random()*200,vx:(Math.random()-.5)*1.2,vy:2+Math.random()*3,g:.05,dr:.995,born:now+Math.random()*600,life:2400,size:5+Math.random()*6,rot:Math.random()*6,vr:(Math.random()-.5)*.15,ph:Math.random()*6,col:cols[i%cols.length]});
+  fxAdd(P); }
+function levelBurst(){ if(!motionOn()) return; const W=innerWidth,now=performance.now(),cols=['#ffd166',getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#c93a68'],P=[];
+  for(let i=0;i<40;i++){ const a=Math.random()*Math.PI*2, sp=2+Math.random()*4; P.push({kind:'star',x:W/2,y:110,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-2,g:.12,dr:.97,born:now,life:1300,size:4+Math.random()*4,rot:0,vr:.1,col:cols[i%2]}); }
+  fxAdd(P); }
+const FXRUN={confetti,fireworks,starfall};
+function winFx(){ if(!motionOn()) return; const f=FXRUN[pick(S,'fx').id]; if(f) f(); }
+function bestFx(){ if(!motionOn()) return; const r=$('#scoreBox').getBoundingClientRect(), now=performance.now(), P=[];
+  for(let i=0;i<22;i++){ const a=Math.random()*Math.PI*2, sp=1.5+Math.random()*2.6; P.push({kind:'star',x:r.left+r.width/2,y:r.top+r.height/2,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,g:.05,dr:.95,born:now,life:900,size:3+Math.random()*3,rot:0,vr:.1,col:'#ffd166'}); }
+  fxAdd(P); }
+
+// ===================== THEME (dark mode never changes the board's own colours) =====================
+const darkMQ=window.matchMedia?matchMedia('(prefers-color-scheme: dark)'):null;
+const isDark=()=>O('appearance')==='dark'||(O('appearance')!=='light'&&!!darkMQ&&darkMQ.matches);
+const lum=hex=>{ const c=hex.replace('#',''), n=[0,2,4].map(i=>parseInt(c.substr(i,2),16)/255).map(v=>v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)); return .2126*n[0]+.7152*n[1]+.0722*n[2]; };
+function applyTheme(){
+  const P=pick(S,'pal'), st=document.documentElement.style, dark=isDark();
+  const acc=dark?(lum(P.ramp[4])>.12?P.ramp[4]:P.ramp[3]):(lum(P.ramp[5])<.3?P.ramp[5]:P.ramp[7]);
+  const v=dark?{bg:'#111214',panel:'#1c1d22',ink:'#f2f2f4',sub:'#8d9099',accent:acc,accentInk:lum(acc)>.45?'#111214':'#fff',line:'rgba(255,255,255,.09)'}
+             :{bg:'#f4f4f6',panel:'#ffffff',ink:'#1c1c1e',sub:'#8e8e93',accent:acc,accentInk:lum(acc)>.45?'#1c1c1e':'#fff',line:'rgba(0,0,0,.08)'};
+  for(const k in v) st.setProperty('--'+k,v[k]);
+  st.setProperty('--tfont',pick(S,'font').css); st.setProperty('--glow',pick(S,'bt').glow);
+  const fast=S.speed==='fast'; st.setProperty('--slide',fast?'65ms':'100ms'); st.setProperty('--pop',fast?'90ms':'120ms');
+  document.body.classList.toggle('lefty',!!O('lefty')); document.body.classList.toggle('cb',!!O('cb')); document.body.classList.toggle('arcade',ARCADE);
+  document.querySelector('meta[name=theme-color]').content=v.bg; st.colorScheme=dark?'dark':'light';
+  if(cur==='game') layoutBoard();
+}
+if(darkMQ){ const f=()=>{ if(O('appearance')==='system') applyTheme(); }; darkMQ.addEventListener?darkMQ.addEventListener('change',f):darkMQ.addListener(f); }
+// Tile colour: one ramp step per doubling. Text is dark or light by the tile's brightness.
+function tileCol(v){ const r=pick(S,'pal').ramp, i=Math.min(r.length-1,Math.max(0,Math.round(Math.log2(v))-1)), bg=r[i], L=lum(bg);
+  return {bg,fg:L>.36?'#221a26':'#ffffff',sh:L>.36?'rgba(255,255,255,.85)':'rgba(0,0,0,.7)'}; }
+
+// ===================== GAME =====================
+let cur='home', G=null, GK=null; // GK: 'game' (classic/shaped) or 'daily'
+let tiles=new Map(), LAY={s:0,g:0}, pend=[], lastTick=0, paused=false;
+const ctxBoardName=()=>G.daily?T('Daily'):T(BNAME[G.board]);
+function saveGame(){ if(!G||(G.done&&GK!=='daily')) return; tickClock(); if(GK==='daily'){ if(S.daily&&S.daily.date===G.daily) S.daily.G=G; } else S.game=G; persist(); }
+function tickClock(){ if(G&&lastTick&&cur==='game'&&!paused&&!G.over){ G.ms=(G.ms||0)+Math.min(60000,Date.now()-lastTick); } lastTick=Date.now(); }
+function bestFor(){ if(!G) return 0; if(G.daily) return Math.max(S.dailyBest||0,G.score); const b=G.undos?S.bestA[G.board]:S.best[G.board]; return Math.max(b||0,G.score); }
+
+function layoutBoard(){ if(!G) return; const st=$('#stage'), r=st.getBoundingClientRect(); const W=G.W,H=G.H;
+  const avail=Math.max(160,Math.min(r.width-20,r.height-16,620)), s=Math.floor(avail/(Math.max(W,H)+.13*(Math.max(W,H)+1))), g=Math.max(4,Math.round(s*.13));
+  LAY={s,g,W,H}; const bw=W*s+(W+1)*g, bh=H*s+(H+1)*g, B=$('#board'), th=pick(S,'bt'), shp=pick(S,'shape').id;
+  B.style.width=bw+'px'; B.style.height=bh+'px';
+  const rad=shp==='square'?Math.round(s*.04):shp==='circle'?s/2:Math.round(s*.16);
+  B.style.setProperty('--trad',rad+'px'); B.style.setProperty('--crad',(shp==='circle'?s/2:Math.round(rad*.9))+'px');
+  // board plates: one per playable cell, outer corners rounded only where the shape has an outside corner
+  const on=(x,y)=>x>=0&&y>=0&&x<W&&y<H&&!!G.mask[y*W+x], R=Math.round(g*2.2);
+  let h='';
+  for(let y=0;y<H;y++) for(let x=0;x<W;x++){ if(!on(x,y)) continue;
+    const L=x*(s+g), Tp=y*(s+g), w=s+2*g, ht=s+2*g;
+    const c=[!on(x-1,y)&&!on(x,y-1)&&!on(x-1,y-1),!on(x+1,y)&&!on(x,y-1)&&!on(x+1,y-1),!on(x+1,y)&&!on(x,y+1)&&!on(x+1,y+1),!on(x-1,y)&&!on(x,y+1)&&!on(x-1,y+1)].map(b=>b?R+'px':'0');
+    h+=`<div class="plate" style="left:${L}px;top:${Tp}px;width:${w}px;height:${ht}px;background:${th.board};border-radius:${c.join(' ')}"></div>`; }
+  for(let y=0;y<H;y++) for(let x=0;x<W;x++) if(on(x,y)) h+=`<div class="cell" style="left:${g+x*(s+g)}px;top:${g+y*(s+g)}px;width:${s}px;height:${s}px;background:${th.cell}${th.lines?';box-shadow:inset 0 -1px 0 rgba(0,0,0,.06),inset 0 1px 0 rgba(255,255,255,.6)':''}"></div>`;
+  B.innerHTML=h; tiles=new Map(); pend.forEach(p=>clearTimeout(p.t)); pend=[];
+  for(let i=0;i<G.b.length;i++) if(G.b[i]) addTile(G.ids[i],i,G.b[i],'');
+  B.classList.toggle('still',!motionOn()); B.classList.toggle('dim',!!G.over);
+}
+const posOf=i=>{ const x=i%LAY.W, y=Math.floor(i/LAY.W); return [LAY.g+x*(LAY.s+LAY.g),LAY.g+y*(LAY.s+LAY.g)]; };
+function fontFor(v){ const d=String(v).length, s=LAY.s, k=d<=2?.46:d===3?.38:d===4?.3:d===5?.245:.205; return Math.max(9,Math.round(s*k*(pick(S,'font').id==='caveat'?1.18:1))); }
+function addTile(id,at,v,cls){ const el=document.createElement('div'), c=tileCol(v), [x,y]=posOf(at), tr=`translate(${x}px,${y}px)`;
+  el.className='tile'+(cls?' '+cls:'')+(v>=2048?' hi':''); el.style.cssText=`width:${LAY.s}px;height:${LAY.s}px;background:${c.bg};color:${c.fg};transform:${tr};--at:${tr};--tsh:${c.sh};font-size:${fontFor(v)}px`;
+  el.innerHTML=`<i>${v}</i>`; if(cls) el.addEventListener('animationend',()=>el.classList.remove('new','pop'),{once:true}); $('#board').appendChild(el); tiles.set(id,el); return el; }
+function moveTile(id,to){ const el=tiles.get(id); if(!el) return; const [x,y]=posOf(to), tr=`translate(${x}px,${y}px)`; el.style.transform=tr; el.style.setProperty('--at',tr); }
+// Run every pending animation step now (a new move arrived, or the screen is changing).
+function flush(){ if(!pend.length) return; const B=$('#board'); B.classList.add('snap'); const p=pend; pend=[]; for(const q of p){ clearTimeout(q.t); q.fn(); }
+  void B.offsetWidth; requestAnimationFrame(()=>B.classList.remove('snap')); }
+const later=(ms,fn)=>{ const q={fn}; q.t=setTimeout(()=>{ pend=pend.filter(x=>x!==q); fn(); },ms); pend.push(q); };
+const slideMs=()=>S.speed==='fast'?65:100;
+function animate(r){ const anim=motionOn(), dt=anim?slideMs():0;
+  for(const s of r.slides) moveTile(s.id,s.to);
+  const fin=()=>{ for(const m of r.merges){ for(const id of [m.a,m.b]){ const el=tiles.get(id); if(el){ el.remove(); tiles.delete(id); } }
+      addTile(m.id,m.at,m.v,anim?'pop':''); if(anim&&m.v>=128){ const B=$('#board').getBoundingClientRect(), [x,y]=posOf(m.at); burstAt(B.left+x+LAY.s/2,B.top+y+LAY.s/2,tileCol(m.v).bg,m.v>=1024?24:14); } }
+    if(r.spawn) addTile(r.spawn.id,r.spawn.at,r.spawn.v,anim?'new':''); };
+  if(dt) later(dt,fin); else fin(); }
+
+function hud(){ if(!G) return; $('#score').textContent=num(G.score); $('#best').textContent=num(bestFor());
+  $('#gTag').textContent=G.daily?`${T('Daily')} · ${G.daily}`:T(BNAME[G.board]);
+  $('#gMoves').textContent=S.showMoves?`${num(G.moves)} ${T(G.moves===1?'move':'moves')}`:'';
+  const st=starsFor(G.board,G.max), th=STARS[G.board]; $('#gStars').innerHTML=[0,1,2].map(i=>`<span class="sr${i<st?' on':''}">★</span>`).join('');
+  $('#gNext').textContent=st<3?T('Next ★ at {0}').replace('{0}',num(th[st])):'';
+  const ub=$('#undoBtn'), n=S.undos|0, daily=!!G.daily;
+  ub.innerHTML=`${ICON.undo}<span>${T('Undo')}</span><span class="cnt">${daily?'—':n+'/'+UNDO_CAP}</span>`;
+  ub.classList.toggle('off',daily||n<1||!G.prev); ub.disabled=false;
+  $('#restartBtn').innerHTML=`${ICON.restart}<span>${T('New game')}</span>`; $('#restartBtn').style.display=daily?'none':'';
+}
+function plus(n){ if(!n||!motionOn()) return; const e=document.createElement('div'); e.className='plus'; e.textContent='+'+num(n); $('#scoreBox').appendChild(e); setTimeout(()=>e.remove(),750); }
+
+let bestShown=false;
+function doMove(dir){
+  if(!G||cur!=='game'||paused||G.over||G.done||sheetOpen()) return;
+  flush(); const prevBest=bestFor();
+  const r=move(G,dir,{noUndo:!!G.daily}); if(!r.moved) return;
+  tickClock(); G=r.G; animate(r); sfx('slide');
+  if(r.merges.length){ sfx('merge',r.merges.map(m=>m.v)); const big=r.merges.some(m=>m.v>=512); buzz(big?30:10); }
+  plus(r.gained); hud();
+  if(!bestShown&&prevBest>0&&G.score>prevBest){ bestShown=true; sfx('best'); bestFx(); }
+  const got=checkAch(S,G,false); if(got.length) toastAch(got);
+  saveGame();
+  if(r.newWin&&!G.keep) setTimeout(()=>onWin(),motionOn()?slideMs()+40:0);
+  else if(G.over) setTimeout(onOver,motionOn()?slideMs()+260:0);
+}
+function doUndo(){ if(!G||cur!=='game'||paused) return; flush();
+  if(G.daily){ toast(T('No undo on the Daily Board, so every score is comparable.')); return; }
+  if(!G.prev){ toast(T('Nothing to undo yet. Undo goes back one move at a time.')); return; }
+  if((S.undos|0)<1){ toast(T('No undos left. They refill to 3 tomorrow, and level-ups earn more.')); return; }
+  const U=undo(G); if(!U) return; spendUndo(S); G=U; sfx('undo'); hideOv(); layoutBoard(); hud(); saveGame(); }
+
+// ---------- starting and ending games ----------
+function startGame(board){ endCurrent(); const g=newGame({board}); G=g; GK='game'; S.game=G; S.board=board; bestShown=false; persist(); openGame(); }
+function resumeGame(){ if(!S.game) return; G=S.game; GK='game'; bestShown=false; openGame(); }
+function openGame(){ refreshUndos(S,today()); paused=false; $('#pauseOv').classList.add('hidden'); hideOv(); show('game'); lastTick=Date.now(); hud(); if(G.over) setTimeout(onOver,200); }
+// The classic game in progress is scored when another one starts (it counts only if a move was made).
+function endCurrent(){ const g=S.game; if(!g) return null; S.game=null; if(G===g) G=null; if(!g.moves){ persist(); return null; } const r=finishGame(S,g,today()); persist(); afterResultToasts(r,true); return r; }
+function afterResultToasts(r,quiet){ if(r.ach.length) toastAch(r.ach); if(r.ups.length){ const l=r.ups[r.ups.length-1]; toast(`⭐ ${T('Level {0}').replace('{0}',l)}${lvlRewardText(l)?' · '+lvlRewardText(l):''} · +${r.ups.length} ${T('undo')}`); if(!quiet){ sfx('level'); levelBurst(); } } }
+function onWin(){ if(!G) return; const B=$('#board'); if(motionOn()){ B.classList.remove('glow'); void B.offsetWidth; B.classList.add('glow'); }
+  sfx('win'); buzz([0,40,60,40]);
+  setTimeout(()=>{ winFx(); sheet(`<h2>2048!</h2><div class="sub">${T('You made the 2048 tile. Keep going for a higher score, or end the game here.')}</div>
+    <div class="stats"><div><b>${num(G.score)}</b><span>Score</span></div><div><b>${num(G.moves)}</b><span>Moves</span></div></div>
+    <div class="btns"><button class="primary" id="kgBtn">Keep going</button><button class="ghost" id="endBtn">End game</button></div>`);
+    $('#kgBtn').onclick=()=>{ G.keep=true; saveGame(); hideOv(); };
+    $('#endBtn').onclick=()=>{ G.keep=true; finalize(); }; },motionOn()?650:0); }
+function onOver(){ if(!G||!G.over||G.done) return; $('#board').classList.add('dim');
+  const canU=!G.daily&&G.prev&&(S.undos|0)>0;
+  if(!canU){ finalize(); return; }
+  sheet(`<h2>No moves left</h2><div class="sub">${T('You can undo the last move ({0} left), or finish and see your results.').replace('{0}',S.undos|0)}</div>
+    <div class="btns"><button class="primary" id="ovUndo">Undo last move</button><button class="ghost" id="ovFin">See results</button></div>`);
+  $('#ovUndo').onclick=()=>{ hideOv(); doUndo(); }; $('#ovFin').onclick=finalize; }
+function finalize(){ if(!G||G.done) return; tickClock(); const g=G; g.done=true; const r=finishGame(S,g,today());
+  if(GK==='daily'){ S.daily={date:g.daily,G:g,done:true,res:{score:g.score,max:g.max,stars:r.stars,moves:g.moves,ms:g.ms||0}}; } else S.game=null;
+  persist(); sfx(r.newBest||r.newTile?'best':'over'); if(!G.over) $('#board').classList.add('dim'); results(g,r); }
+function results(g,r){ const l=levelOf(S.xp), nx=xpNext(l), st=r.stars;
+  const unl=[...r.ups.map(u=>`<div class="unl">${ICON.star}<div><b>${T('Level {0}').replace('{0}',u)}</b>${lvlRewardText(u)?' · '+lvlRewardText(u):''}</div></div>`),
+    ...r.ach.map(id=>`<div class="unl">${ICON.trophy}<div><b>${T(achName(id))}</b>${achReward(id)?' · '+T(achReward(id))+' '+T('unlocked'):''}</div></div>`)];
+  const daily=!!g.daily;
+  sheet(`<h2>${daily?T('Daily Board'):T(g.over?'Game over':'Game ended')}</h2><div class="sub">${daily?g.daily:T(BNAME[g.board])}${g.undos?' · '+T('assisted'):''}</div>
+    <div class="bigstars">${[0,1,2].map(i=>`<span class="${i<st?'on':''}" style="animation-delay:${i*.18}s">★</span>`).join('')}</div>
+    <div class="stats"><div class="${r.newBest?'nb':''}"><b>${num(g.score)}</b><span>${r.newBest?T('New best'):T('Score')}</span></div><div class="${r.newTile?'nb':''}"><b>${num(g.max)}</b><span>${T('Best tile')}</span></div>
+      <div><b>${num(g.moves)}</b><span>Moves</span></div><div><b>${clock(g.ms||0)}</b><span>Time</span></div></div>
+    <div class="xpline">+${r.xp} XP ${daily&&g.daily===today()?'<small>(×2 today)</small>':''}<small>${T('Level {0}').replace('{0}',l)} · ${nx?`${num(S.xp)}/${num(nx)}`:T('Max level')}</small></div>
+    ${r.undoEarned?`<div class="unl">${ICON.undo}<div>+${r.undoEarned} ${T('undo')}</div></div>`:''}${unl.join('')}
+    <div class="row-b"><button class="ghost" id="rShare">${ICON.share}Share</button><button class="ghost" id="rHome">${ICON.home}Home</button></div>
+    <div class="btns">${daily?'':`<button class="primary" id="rAgain">Play again</button><button class="ghost" id="rNew">Other board…</button>`}</div>`);
+  if(r.ups.length){ sfx('level'); levelBurst(); }
+  $('#rShare').onclick=()=>openShare(shareLine(g)); $('#rHome').onclick=()=>{ hideOv(); G=null; show('home'); };
+  if(!daily){ $('#rAgain').onclick=()=>startGame(g.board); $('#rNew').onclick=()=>{ hideOv(); G=null; show('home'); openNew(); }; }
+}
+
+// ---------- Daily Board: the same board and spawns for everyone; one scored game ----------
+function rollDaily(){ const d=S.daily; if(d&&d.date!==today()&&!d.done&&d.G&&d.G.moves){ const r=finishGame(S,d.G,today());
+    S.daily={date:d.date,G:d.G,done:true,res:{score:d.G.score,max:d.G.max,stars:r.stars,moves:d.G.moves,ms:d.G.ms||0}}; persist();
+    toast(T('Your Daily Board from {0} was scored: {1}').replace('{0}',d.date).replace('{1}',num(d.G.score))); afterResultToasts(r,true); } }
+function startDaily(){ rollDaily(); const t=today();
+  if(S.daily&&S.daily.date===t&&S.daily.done){ G=S.daily.G; G.done=true; GK='daily'; openGame(); const st=S.daily.res; results(G,{stars:st.stars,xp:0,ups:[],ach:[],newBest:false,newTile:false,undoEarned:0}); $('.xpline').style.display='none'; return; }
+  if(!S.daily||S.daily.date!==t||!S.daily.G) S.daily={date:t,G:newDaily(t),done:false};
+  G=S.daily.G; GK='daily'; bestShown=false; persist(); openGame(); }
+
+// ---------- sheets ----------
+const sheet=h=>{ $('#sheet').innerHTML=h; $('#ov').classList.remove('hidden'); };
+const hideOv=()=>$('#ov').classList.add('hidden');
+const sheet2=h=>{ $('#sheet2').innerHTML=h; $('#ov2').classList.remove('hidden'); };
+const hideOv2=()=>$('#ov2').classList.add('hidden');
+$('#ov2').addEventListener('click',e=>{ if(e.target.id==='ov2'||e.target.closest('[data-close]')) hideOv2(); });
+const sheetOpen=()=>!$('#ov2').classList.contains('hidden')||(cur==='game'&&!$('#ov').classList.contains('hidden'));
+
+function maskIcon(b){ const {W,H,mask}=makeMask(b,'icon'); return `<span class="mk" style="grid-template-columns:repeat(${W},1fr);grid-template-rows:repeat(${H},1fr)">${mask.map(m=>`<i class="${m?'':'w'}"></i>`).join('')}</span>`; }
+let newArm=0;
+function openNew(){ let sel=S.board;
+  const btn=b=>{ const st=S.stars[b]|0; return `<button class="bpick${b===sel?' on':''}" data-b="${b}">${maskIcon(b)}<span>${T(BNAME[b])}</span><small>${st?'★'.repeat(st):''}</small></button>`; };
+  sheet2(`<h2>New game</h2><div class="sub">Choose a board. Your choice is remembered.</div>
+    <div class="slabel">Size</div><div class="bgrid">${['3','4','5','6'].map(btn).join('')}</div>
+    <div class="slabel">Shape</div><div class="bgrid">${SHAPED.map(btn).join('')}</div>
+    <div class="btns"><button class="primary" id="nStart">Start</button><button class="ghost" data-close>Cancel</button></div>`);
+  $$('#sheet2 .bpick').forEach(b=>b.onclick=()=>{ sel=b.dataset.b; $$('#sheet2 .bpick').forEach(x=>x.classList.toggle('on',x===b)); S.board=sel; persist(); });
+  $('#nStart').onclick=e=>{ const g=S.game, live=g&&g.moves>0&&!g.over;
+    if(live&&S.confirmNew&&Date.now()-newArm>3000){ newArm=Date.now(); e.currentTarget.textContent=T('Tap again to end your current game'); e.currentTarget.classList.add('warn'); return; }
+    newArm=0; hideOv2(); startGame(sel); }; }
+function openShare(line){
+  sheet2(`<h2>Share</h2><div class="sub">Your result, ready to paste anywhere.</div><textarea class="code" id="shOut" readonly data-raw>${line}</textarea>
+    <div class="btns" style="margin-top:10px"><button class="primary" id="shGo">Share</button><button class="ghost" data-close>Close</button></div>`);
+  $('#shGo').onclick=async()=>{ try{ if(navigator.share){ await navigator.share({text:line}); return; } }catch(e){ if(e&&e.name==='AbortError') return; }
+    try{ await navigator.clipboard.writeText(line); toast(T('Copied'),true); }catch(e){ const t=$('#shOut'); t.focus(); t.select(); toast(T('Text selected. Copy it from the box.'),true); } }; }
+function openHow(){ sheet2(`<h2>How to play</h2><div class="howto">
+  <p><b>Move</b><br>Swipe, or use the arrow keys or WASD, to slide every tile as far as it goes.</p>
+  <p><b>Merge</b><br>Two tiles with the same number merge into one. Each merge adds the new tile to your score.</p>
+  <p><b>Win</b><br>After every move a new 2 or 4 appears. Make a 2048 tile to win, then keep going for more.</p>
+  <p><b>Shaped boards</b><br>Walls split rows and columns. Each piece slides on its own.</p>
+  <p><b>Undo</b><br>Takes back one move. You get 3 a day, and level-ups earn more. Games with an undo are marked assisted.</p>
+  <p><b>Daily Board</b><br>The same board for everyone, with no undo. It counts once a day.</p>
+  <p><b>Keys</b><br>U or Ctrl+Z to undo, P or Esc to pause.</p></div>
+  <div class="btns"><button class="primary" data-close>Got it</button></div>`); }
+function openNews(){ sheet2(`<h2>What's new</h2><div class="sub" data-raw>2048 v${VERSION}</div>${CHANGES.map(([v,l])=>`<div class="slabel" data-raw>v${v}</div><ul class="news">${l.map(x=>`<li>${x}</li>`).join('')}</ul>`).join('')}
+  <div class="btns"><button class="primary" data-close>Close</button></div>`); }
+function checkNews(){ if(S.seenVer===VERSION) return; const veteran=!!S.seenVer; S.seenVer=VERSION; persist(); if(veteran) setTimeout(openNews,400); }
+function openLang(){ const c=S.lang||'auto';
+  sheet2(`<h2>Language</h2><div class="sub">2048 restarts in the chosen language. Your progress is kept.</div><div class="lb">${LANGS.map(([k,n])=>`<button class="lbr${k===c?' me':''}" data-lang="${k}"><span data-raw>${k===c?'✓ ':''}${k==='auto'?T('Automatic'):n}</span></button>`).join('')}</div>
+  <div class="sub" style="font-size:12px;margin:8px 0 0">Translations are machine-assisted. If something reads oddly, tell the developer.</div><div class="btns"><button class="ghost" data-close>Close</button></div>`);
+  $$('#sheet2 [data-lang]').forEach(b=>b.onclick=()=>{ const v=b.dataset.lang; if(v===c){ hideOv2(); return; } saveGame(); S.lang=v; persist(); location.reload(); }); }
+
+// ---------- backup code (gzip + base64), this game's save only ----------
+const b64e=u=>{ let s=''; for(let i=0;i<u.length;i+=0x8000) s+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000)); return btoa(s); };
+const b64d=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+async function packSave(){ saveGame(); const bytes=new TextEncoder().encode(JSON.stringify({v:1,t:Date.now(),S}));
+  if(window.CompressionStream){ try{ const st=new Blob([bytes]).stream().pipeThrough(new CompressionStream('gzip')); return 'T2048Z.'+b64e(new Uint8Array(await new Response(st).arrayBuffer())); }catch(e){} }
+  return 'T2048.'+b64e(bytes); }
+async function unpackSave(code){ const m=code.replace(/\s+/g,'').match(/^T2048(Z?)\.([A-Za-z0-9+/=]+)$/); if(!m) throw new Error('format');
+  let bytes=b64d(m[2]); if(m[1]){ const st=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip')); bytes=new Uint8Array(await new Response(st).arrayBuffer()); }
+  const o=JSON.parse(new TextDecoder().decode(bytes)); if(!o||!o.S||typeof o.S.xp!=='number') throw new Error('content'); return o; }
+async function openBackup(){ const code=await packSave();
+  sheet2(`<h2>Backup</h2><div class="sub">Your 2048 progress is stored on this device only. Keep this code somewhere safe to restore it later or move it to another device.</div>
+    <textarea class="code" readonly id="bkOut">${code}</textarea>
+    <div class="btns" style="margin-top:8px"><button class="primary" id="bkCopy">Copy code</button></div>
+    <div class="slabel" style="margin-top:14px">Restore</div><textarea class="code" id="bkIn" placeholder="Paste a backup code here"></textarea>
+    <div class="btns" style="margin-top:8px"><button class="ghost" id="bkRestore">Restore from code</button><button class="ghost" data-close>Close</button></div>`);
+  $('#bkCopy').onclick=async()=>{ try{ await navigator.clipboard.writeText(code); toast(T('Backup code copied'),true); }catch(e){ const t=$('#bkOut'); t.focus(); t.select(); toast(T('Code selected. Copy it from the box.'),true); } S.bk.last=Date.now(); persist(); };
+  let arm=0; $('#bkRestore').onclick=async e=>{ const b=e.currentTarget, v=$('#bkIn').value; if(!v.trim()){ toast(T('Paste a backup code first'),true); return; }
+    let o; try{ o=await unpackSave(v); }catch(err){ toast(T("That code doesn't look right. Check it was copied in full."),true); return; }
+    if(Date.now()-arm>3000){ arm=Date.now(); b.textContent=T('Tap again to replace this device\'s progress with the level {0} backup').replace('{0}',levelOf(o.S.xp)); b.classList.add('warn'); return; }
+    S=loadSave(o.S); persist(); hideOv2(); applyTheme(); G=null; show('home'); toast(T('Progress restored'),true); }; }
+
+// ---------- pause ----------
+const canPause=()=>G&&cur==='game'&&!G.over&&$('#ov').classList.contains('hidden');
+function pauseGame(){ if(paused||!canPause()) return; flush(); tickClock(); paused=true; saveGame(); $('#pauseOv').classList.remove('hidden'); }
+function resumePlay(){ if(!paused) return; paused=false; lastTick=Date.now(); $('#pauseOv').classList.add('hidden'); }
+document.addEventListener('visibilitychange',()=>{ if(document.hidden){ if(cur==='game'&&G) pauseGame(); saveGame(); writeSummary(); } });
+addEventListener('pagehide',()=>{ saveGame(); writeSummary(); });
+addEventListener('pageshow',e=>{ if(e.persisted&&ARCADE){ readArcade(); applyTheme(); if(cur==='home') renderHome(); } });
+
+// ---------- screens ----------
+function show(id){ flush(); if(cur==='game'&&id!=='game'){ tickClock(); saveGame(); paused=false; $('#pauseOv').classList.add('hidden'); }
+  cur=id; $$('.screen').forEach(s=>s.classList.toggle('on',s.id===id)); hideOv2();
+  if(id==='game'){ lastTick=Date.now(); requestAnimationFrame(()=>{ layoutBoard(); hud(); }); }
+  if(id==='home') renderHome(); if(id==='style') renderStyle(); if(id==='set') renderSettings(); if(id==='awards') renderAwards();
+  navPush(); }
+document.addEventListener('click',e=>{ const g=e.target.closest('[data-go]'); if(g){ if(g.dataset.pt) progTab=g.dataset.pt; show(g.dataset.go); } });
+function lvlInfo(){ const l=levelOf(S.xp); if(l>=MAXL) return {l,pct:100,txt:`${num(S.xp)} XP · ${T('Max level')}`};
+  const a=xpAt(l), b=xpNext(l); return {l,pct:Math.round((S.xp-a)/(b-a)*100),txt:`${num(S.xp-a)} / ${num(b-a)} XP`}; }
+function renderHome(){ rollDaily(); refreshUndos(S,today()); persist();
+  const li=lvlInfo(); $('#lvlCard').innerHTML=`<div class="badge">${li.l}</div><div class="grow"><div class="t">${T('Level {0}').replace('{0}',li.l)}</div><div class="bar"><i style="width:${li.pct}%"></i></div><div class="s">${li.txt} · ${T('Undos')} ${S.undos|0}/${UNDO_CAP}</div></div><span class="chev">${ICON.chev}</span>`;
+  const g=S.game; $('#contSlot').innerHTML=g&&!g.over?`<button class="card" id="contBtn"><div class="ico mt d${String(g.max).length}" style="background:${tileCol(g.max).bg};color:${tileCol(g.max).fg}">${g.max}</div><div class="grow"><div class="t">${T('Continue')}</div><div class="s">${T(BNAME[g.board])} · ${num(g.moves)} ${T(g.moves===1?'move':'moves')}</div></div><div class="r"><b>${num(g.score)}</b><span>Score</span></div></button>`
+    :g&&g.over?`<button class="card" id="contBtn"><div class="ico">${ICON.play}</div><div class="grow"><div class="t">${T('Finish your game')}</div><div class="s">${T(BNAME[g.board])} · ${T('No moves left')}</div></div></button>`:'';
+  if($('#contBtn')) $('#contBtn').onclick=resumeGame;
+  const d=S.daily&&S.daily.date===today()?S.daily:null, st=d&&d.done?d.res.stars:0;
+  $('#dailySlot').innerHTML=`<button class="card" id="dailyBtn"><div class="ico">${ICON.cal}</div><div class="grow"><div class="t">${today()}</div><div class="s">${d&&d.done?`${T('Done')} · <span class="minis">${[0,1,2].map(i=>`<span class="sr${i<st?' on':''}">★</span>`).join('')}</span>`:d&&d.G&&d.G.moves?T('In progress · resume where you left off'):`${T('Same board for everyone · no undo')} · <span class="dailyx">${T('×2 XP today')}</span>`}</div></div>
+    <div class="r"><b>${d&&d.G?num(d.G.score):'—'}</b><span>${d&&d.done?'Score':'Play'}</span></div></button>`;
+  $('#dailyBtn').onclick=startDaily;
+  const n=new Date(), m=new Date(n.getFullYear(),n.getMonth(),n.getDate()+1)-n; $('#dailyLeft').textContent=T('New board in {0}').replace('{0}',`${Math.floor(m/36e5)}h ${Math.floor(m%36e5/6e4)}m`);
+  $('#boardsSlot').innerHTML=BOARDS.filter(b=>S.bestTile[b]||S.bestTileA[b]).map(b=>{ const bt=Math.max(S.bestTile[b]||0,S.bestTileA[b]||0), sc=S.best[b]!=null?S.best[b]:S.bestA[b], st=S.stars[b]|0;
+    return `<button class="card" data-board="${b}"><div class="ico mt d${String(bt).length}" style="background:${tileCol(bt).bg};color:${tileCol(bt).fg}">${bt}</div><div class="grow"><div class="t">${T(BNAME[b])}</div><div class="s"><span class="minis">${[0,1,2].map(i=>`<span class="sr${i<st?' on':''}">★</span>`).join('')}</span></div></div><div class="r"><b>${num(sc||0)}</b><span>Best</span></div></button>`; }).join('')
+    ||`<div class="card"><div class="s">${T('Finish a game and your best tile and score for each board show here.')}</div></div>`;
+  $$('#boardsSlot [data-board]').forEach(b=>b.onclick=()=>{ S.board=b.dataset.board; persist(); openNew(); });
+  $('#verLbl').textContent='v'+VERSION; }
+
+// ---------- style ----------
+let styleTab='pal';
+const srcText=src=>/^L\d+$/.test(src)?T('Level {0}').replace('{0}',src.slice(1)):T(achName(src));
+function previewHTML(key,c){ const th=pick(S,'bt'), P=key==='pal'?c:pick(S,'pal'), shp=key==='shape'?c.id:pick(S,'shape').id, f=key==='font'?c.css:pick(S,'font').css, B=key==='bt'?c:th;
+  const rad=shp==='square'?'2px':shp==='circle'?'50%':'8px', vals=key==='pal'?[2,16,128,2048]:[2,8,64,1024];
+  if(key==='fx'||key==='sound'||key==='track') return `<div class="pv" style="background:var(--bg);color:var(--accent)">${key==='fx'?ICON.star:ICON.play}</div>`;
+  return `<div class="pv" style="background:${B.board}"><div class="row">${vals.map(v=>{ const i=Math.min(P.ramp.length-1,Math.round(Math.log2(v))-1), bg=P.ramp[i], fg=lum(bg)>.36?'#221a26':'#fff';
+    return `<div class="t" style="background:${bg};color:${fg};border-radius:${rad};font-family:${f};font-size:${String(v).length>3?11:14}px">${v}</div>`; }).join('')}</div></div>`; }
+function renderStyle(){ const tabs=[['pal','Palettes'],['shape','Tiles'],['font','Numbers'],['bt','Boards'],['fx','Effects'],['sound','Sounds']];
+  $('#styleTabs').innerHTML=tabs.map(([k,n])=>`<button data-st="${k}" class="${k===styleTab?'on':''}">${n}</button>`).join('');
+  $$('#styleTabs button').forEach(b=>b.onclick=()=>{ styleTab=b.dataset.st; renderStyle(); });
+  const all=ALLC(); $('#styleCount').textContent=`${all.filter(c=>owned(S,c)).length}/${all.length}`;
+  const list=KINDS.find(k=>k[0]===styleTab)[1], selId=pick(S,styleTab).id;
+  $('#styleGrid').innerHTML=list.map(c=>{ const own=owned(S,c); return `<button class="tcard${c.id===selId?' sel':''}${own?'':' locked'}" data-id="${c.id}">${previewHTML(styleTab,c)}${own?'':`<span class="lock">${ICON.lock}</span>`}
+    <div class="n">${T(c.name)}</div><div class="q">${own?(c.id===selId?T('In use'):T('Tap to use')):srcText(c.src)}</div></button>`; }).join('');
+  $$('#styleGrid .tcard').forEach(b=>b.onclick=()=>{ const c=list.find(x=>x.id===b.dataset.id);
+    if(!owned(S,c)){ toast(`🔒 ${srcText(c.src)}${/^L/.test(c.src)?'':' · '+T((ACH.find(a=>a.id===c.src)||{}).desc||'')}`); return; }
+    S[styleTab]=c.id; persist(); applyTheme(); renderStyle();
+    if(styleTab==='fx'){ const now=Date.now(); if(now-sndPrevT>1500){ sndPrevT=now; winFx(); } }
+    if(styleTab==='sound'){ const now=Date.now(); if(now-sndPrevT>1100){ sndPrevT=now; sfx('merge',[8,16,32],c.id); } } }); }
+
+// ---------- progress ----------
+let progTab='levels';
+function renderAwards(){ $$('#progTabs button').forEach(b=>{ b.classList.toggle('on',b.dataset.pt===progTab); b.onclick=()=>{ progTab=b.dataset.pt; renderAwards(); }; });
+  $$('.ppage').forEach(p=>p.classList.toggle('on',p.id==='pg-'+progTab)); const l=levelOf(S.xp); $('#progLvl').textContent=T('Level {0}').replace('{0}',l);
+  $('#pg-levels').innerHTML=Array.from({length:MAXL},(_,i)=>i+1).map(n=>`<div class="ach${n<=l?' got':''}${n===l?' cur':''}"><div class="ico">${n}</div><div><div class="t">${T('Level {0}').replace('{0}',n)}</div><div class="d">${num(xpAt(n))} XP</div></div><span class="chip">${lvlRewardText(n)||'—'}${n>1?' · +1 '+T('undo'):''}</span></div>`).join('');
+  $('#pg-ach').innerHTML=ACH.map(a=>{ const got=!!S.ach[a.id], r=achReward(a.id); return `<div class="ach${got?' got':''}"><div class="ico">${ICON.trophy}</div><div><div class="t">${T(a.name)}</div><div class="d">${T(a.desc)}</div></div><span class="chip">${r?T(r):T('Badge only')}</span></div>`; }).join('');
+  const rows=BOARDS.map(b=>{ const st=S.stars[b]|0, bt=S.bestTile[b], sc=S.best[b], bta=S.bestTileA[b], sca=S.bestA[b];
+    return `<tr><td>${T(BNAME[b])}<small>${STARS[b].map(num).join(' · ')}</small></td><td><span class="minis">${[0,1,2].map(i=>`<span class="sr${i<st?' on':''}">★</span>`).join('')}</span></td><td>${bt?num(bt):'—'}${bta?`<small>${num(bta)} ${T('assisted')}</small>`:''}</td><td>${sc!=null?num(sc):'—'}${sca!=null?`<small>${num(sca)} ${T('assisted')}</small>`:''}</td></tr>`; }).join('');
+  $('#pg-stats').innerHTML=`<table><tr><th>Board</th><th>Stars</th><th>Best tile</th><th>Best score</th></tr>${rows}
+    <tr><td>${T('Daily Board')}<small>${num(S.dailyCount)} ${T('played')}</small></td><td></td><td>${S.dailyBestTile?num(S.dailyBestTile):'—'}</td><td>${S.dailyBest!=null?num(S.dailyBest):'—'}</td></tr></table>
+    <div class="srow" style="margin-top:12px"><span>${T('Games finished')}</span><b>${num(S.games)}</b></div>
+    <div class="sub" style="color:var(--sub);font-size:12.5px;margin:6px 2px 14px">${T('Small numbers under each board are its star targets (highest tile). Games with an undo keep separate bests.')}</div>
+    <button class="ghost warn" id="reset" style="width:100%">Reset progress</button>`;
+  let arm=0; $('#reset').onclick=e=>{ const b=e.currentTarget; if(Date.now()-arm<3000){ const keep={}; for(const k of [...SHARED,'speed','confirmNew','showMoves','seenVer']) keep[k]=S[k]; S=Object.assign(defSave(),keep); persist(); applyTheme(); toast(T('Progress reset')); renderAwards(); return; }
+    arm=Date.now(); b.textContent=T('Tap again to reset'); }; }
+
+// ---------- settings ----------
+function renderSettings(){ const sw=(k,label,sub)=>`<button class="srow" data-sw="${k}"><span>${label}${sub?`<small>${sub}</small>`:''}</span><span class="sw${S[k]?' on':''}"></span></button>`;
+  const seg=(k,opts)=>`<div class="seg">${opts.map(([v,n])=>`<button data-seg="${k}" data-v="${v}" class="${S[k]===v?'on':''}">${n}</button>`).join('')}</div>`;
+  const row=(id,label,sub)=>`<button class="srow" id="${id}"><span>${label}${sub?`<small>${sub}</small>`:''}</span><span class="chev">${ICON.chev}</span></button>`;
+  const shared=ARCADE?'':`<div class="label">Display</div><div class="card" style="display:block;padding:4px 14px">
+      <div class="srow"><span>Appearance</span>${seg('appearance',[['system','Auto'],['light','Light'],['dark','Dark']])}</div>
+      ${sw('motion','Animations','Slides, pops and particles')}${sw('cb','Colourblind-safe numbers','Heavier numbers with a contrasting outline')}${sw('lefty','Left-handed controls','Mirrors the buttons under the board')}</div>
+    <div class="label">Sound</div><div class="card" style="display:block;padding:4px 14px">${sw('sfx','Sound effects')}${sw('music','Soundtrack','Daylight, synthesized live')}${sw('haptics','Haptics','A pulse on merges')}</div>`;
+  $('#setBody').innerHTML=`${shared}<div class="label">Game</div><div class="card" style="display:block;padding:4px 14px">
+      <div class="srow"><span>Animation speed</span>${seg('speed',[['normal','Normal'],['fast','Fast']])}</div>
+      ${sw('confirmNew','Confirm New game','When a game is in progress')}${sw('showMoves','Show move count')}</div>
+    <div class="label">More</div><div class="card" style="display:block;padding:4px 14px">
+      ${ARCADE?row('arcSet','Arcade settings','Appearance, sound, language and more'):row('langBtn','Language',LANGS.find(l=>l[0]===(S.lang||'auto'))[1])}
+      ${row('howBtn2','How to play')}${row('newsBtn2',"What's new",'v'+VERSION)}${row('bkBtn',ARCADE?'2048 backup':'Backup & restore')}</div>
+    <div class="foot"><span data-raw>2048 v${VERSION} · ${T('No ads, no tracking. Progress stays on this device.')}</span></div>`;
+  $$('#setBody [data-sw]').forEach(b=>b.onclick=()=>{ const k=b.dataset.sw; S[k]=!S[k]; persist(); if(k==='music'){ if(S.music) Music.start(); else Music.stop(); } applyTheme(); renderSettings(); });
+  $$('#setBody [data-seg]').forEach(b=>b.onclick=()=>{ S[b.dataset.seg]=b.dataset.v; persist(); applyTheme(); renderSettings(); });
+  if($('#langBtn')) $('#langBtn').onclick=openLang; if($('#arcSet')) $('#arcSet').onclick=()=>{ saveGame(); writeSummary(); location.replace(ARCADE_PREFS); };
+  $('#howBtn2').onclick=openHow; $('#newsBtn2').onclick=openNews; $('#bkBtn').onclick=openBackup; }
+
+// ---------- input: swipe anywhere on the board area, keys ----------
+let sw0=null;
+$('#stage').addEventListener('pointerdown',e=>{ if(e.button>0) return; sw0={x:e.clientX,y:e.clientY,id:e.pointerId,done:false}; try{ $('#stage').setPointerCapture(e.pointerId); }catch(_){} });
+function swipeCheck(e,end){ if(!sw0||sw0.done||e.pointerId!==sw0.id) return; const dx=e.clientX-sw0.x, dy=e.clientY-sw0.y, ax=Math.abs(dx), ay=Math.abs(dy), m=Math.max(ax,ay);
+  if(m<24) return; if(Math.max(ax,ay)<Math.min(ax,ay)*1.4){ if(end) sw0=null; return; } // diagonal: not clearly one direction
+  sw0.done=true; doMove(ax>ay?(dx>0?1:3):(dy>0?2:0)); }
+$('#stage').addEventListener('pointermove',e=>swipeCheck(e,false));
+$('#stage').addEventListener('pointerup',e=>{ swipeCheck(e,true); sw0=null; });
+$('#stage').addEventListener('pointercancel',()=>{ sw0=null; });
+const KEYDIR={ArrowUp:0,ArrowRight:1,ArrowDown:2,ArrowLeft:3,w:0,d:1,s:2,a:3,W:0,D:1,S:2,A:3};
+addEventListener('keydown',e=>{ if(e.target&&/INPUT|TEXTAREA/.test(e.target.nodeName)) return;
+  if(e.key==='Escape'&&!$('#ov2').classList.contains('hidden')){ hideOv2(); return; }
+  if(cur!=='game') return;
+  if(e.key in KEYDIR&&!e.ctrlKey&&!e.metaKey&&!e.altKey){ e.preventDefault(); if(paused) return; doMove(KEYDIR[e.key]); return; }
+  if((e.key==='z'||e.key==='Z')&&(e.ctrlKey||e.metaKey)||e.key==='u'||e.key==='U'){ e.preventDefault(); doUndo(); return; }
+  if(e.key==='p'||e.key==='P'||e.key==='Escape'){ if(paused) resumePlay(); else pauseGame(); } });
+addEventListener('resize',()=>{ if(cur==='game') layoutBoard(); });
+
+// ---------- navigation: Android back closes a sheet, then returns home, then (in Arcade) goes to Arcade ----------
+let navArmed=false;
+function navPush(){ if(navArmed) return; try{ history.pushState({t2048:1},''); navArmed=true; }catch(e){} }
+addEventListener('popstate',()=>{ navArmed=false;
+  if(!$('#ov2').classList.contains('hidden')){ hideOv2(); navPush(); return; }
+  if(cur==='game'&&paused){ resumePlay(); navPush(); return; }
+  if(cur!=='home'){ show('home'); return; }
+  if(ARCADE){ leaveToArcade(); return; } });
+function leaveToArcade(){ saveGame(); writeSummary(); location.replace(ARCADE_HOME); }
+
+// ---------- wiring ----------
+$('#homeStyle').innerHTML=ICON.palette; $('#homeSet').innerHTML=ICON.gear; $('#gBack').innerHTML=ICON.back; $('#pauseBtn').innerHTML=ICON.pause;
+$$('.topbar .iconbtn').forEach(b=>b.innerHTML=ICON.back);
+$('#homeStyle').onclick=()=>show('style'); $('#homeSet').onclick=()=>show('set'); $('#toArcade').onclick=leaveToArcade;
+$('#newBtn').onclick=openNew; $('#howBtn').onclick=openHow; $('#newsBtn').onclick=openNews;
+$('#gBack').onclick=()=>{ G=null; show('home'); }; $('#pauseBtn').onclick=()=>paused?resumePlay():pauseGame();
+$('#resumeBtn').onclick=resumePlay; $('#pauseHome').onclick=()=>{ G=null; show('home'); };
+$('#undoBtn').onclick=doUndo; $('#restartBtn').onclick=()=>openNew();
+$('#ov').addEventListener('pointerdown',e=>e.stopPropagation());
+if(!STORE) setTimeout(()=>toast(T('Storage is off in this browser, so progress won\'t be saved.')),600);
+startI18n(); applyTheme(); refreshUndos(S,today()); renderHome(); checkNews(); writeSummary();
+try{ history.replaceState({t2048:0},''); }catch(e){} navPush();
+if(document.fonts) document.fonts.ready.then(()=>{ if(cur==='game') layoutBoard(); });
+</script>
+<script>addEventListener('load',()=>{ if(location.hash==='#game-settings'){ try{ history.replaceState(history.state,'',location.pathname+location.search); }catch(e){} const b=document.getElementById('homeSet'); if(b) b.click(); } });</script>
+<script>
+if('serviceWorker' in navigator) addEventListener('load',()=>navigator.serviceWorker.register('../sw.js',{scope:'../'}).then(reg=>{
+  const c=navigator.serviceWorker.controller; if(c&&navigator.onLine) c.postMessage('arcade-repair');
+  // Installed apps can stay open for days: re-check for updates when brought back, at most every 30 min.
+  let last=Date.now(); document.addEventListener('visibilitychange',()=>{ if(!document.hidden&&Date.now()-last>18e5){ last=Date.now(); reg.update().catch(()=>{}); } });
+}).catch(()=>{}));
+if(navigator.storage&&navigator.storage.persist) navigator.storage.persist().catch(()=>{});
+</script>
+</body></html>
