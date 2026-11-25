@@ -1,0 +1,8 @@
+{
+  "name": "solitaire",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Solitaire (Klondike) for the Arcade: every deal winnable.",
+  "scripts": { "test": "node tests/run.js", "layout": "python3 build.py && node tests/layout.js", "build": "python3 build.py" },
+  "devDependencies": { "playwright": "^1.49.0" }
+}

@@ -10,6 +10,8 @@ GAMES=[  # id, name, Arcade button, settings button, settings screen, how to giv
   ('linefall','Linefall','#arcadeBtn','#settingsBtn','#set',"S.xp=200; persist(); writeSummary();"),
   ('drift','Drift','#arcadeBtn','#settingsBtn','#set',"S.xp=200; persist(); writeSummary();"),
   ('tilecraft','Tilecraft','#arcadeBtn','#settingsBtn','#set',"S.xp=200; persist(); writeSummary();"),
+  ('solitaire','Solitaire','#arcadeBtn','#settingsBtn','#set',"S.xp=200; persist(); writeSummary();"),
+  ('mahjong','Mahjong','#arcadeBtn','#settingsBtn','#set',"S.xp=200; persist(); writeSummary();"),
 ]
 ok_all=True
 def check(n,c,x=''):

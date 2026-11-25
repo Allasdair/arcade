@@ -130,7 +130,7 @@ textarea.field{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:12p
 // The Arcade owns: the username, settings shared by every game, the combined backup, and the overview.
 // Each game owns its own save, XP, levels and unlocks. The Arcade only ever reads a game's summary record,
 // `arcade.summary.<id>`, which the game writes. Storage keys are prefixed with the game's id so nothing collides.
-const VERSION='0.8', AKEY='arcade.v1';
+const VERSION='0.9', AKEY='arcade.v1';
 const $=q=>document.querySelector(q), $$=q=>[...document.querySelectorAll(q)];
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
@@ -143,6 +143,8 @@ const GAMES=[
   {id:'linefall',name:'Linefall',desc:'Stack, clear, keep it falling',path:'linefall/index.html',prefix:'linefall.',art:'linefall'},
   {id:'drift',name:'Drift',desc:'Thrust, shoot, clear the field',path:'drift/index.html',prefix:'drift.',art:'drift'},
   {id:'tilecraft',name:'Tilecraft',desc:'Craft words, outscore the rest',path:'tilecraft/index.html',prefix:'tilecraft.',art:'tilecraft'},
+  {id:'solitaire',name:'Solitaire',desc:'Every deal winnable',path:'solitaire/index.html',prefix:'solitaire.',art:'solitaire'},
+  {id:'mahjong',name:'Mahjong',desc:'Match pairs, clear the stack',path:'mahjong/index.html',prefix:'mahjong.',art:'mahjong'},
   {id:'nonogram',name:'Nonograms',desc:'Picture logic puzzles',soon:true,art:'nono'},
 
 ];
@@ -199,6 +201,14 @@ function art(kind){ const a='var(--accent)', s='var(--sub)';
     const T=(x,y,ch,v)=>`<rect x="${x}" y="${y}" width="13" height="13" rx="2.5" fill="${a}"/><text x="${x+6.2}" y="${y+10}" font-size="9" font-weight="800" text-anchor="middle" fill="var(--accentInk)" font-family="Inter,sans-serif">${ch}</text><text x="${x+11.2}" y="${y+11.6}" font-size="3.6" font-weight="700" text-anchor="end" fill="var(--accentInk)" font-family="Inter,sans-serif">${v}</text>`;
     let g=''; for(let y=0;y<4;y++) for(let x=0;x<5;x++) g+=`<rect x="${4+x*14}" y="${2+y*14}" width="13" height="13" rx="2" fill="var(--panel)"/>`;
     return `<svg viewBox="0 0 74 58" width="76" height="60">${g}<rect x="46" y="44" width="13" height="13" rx="2" fill="${s}" opacity=".35"/>${T(4,16,'W',5)}${T(18,16,'O',1)}${T(32,16,'R',1)}${T(46,16,'D',2)}${T(32,2,'A',1)}${T(32,30,'Y',4)}</svg>`; }
+  if(kind==='solitaire'){ // a fanned column of cards
+    const card=(x,y,r,lbl,red)=>`<g transform="rotate(${r} ${x+11} ${y+30})"><rect x="${x}" y="${y}" width="22" height="30" rx="3" fill="var(--panel)" stroke="${s}" stroke-width="1.2"/><text x="${x+4}" y="${y+10}" font-size="8" font-weight="800" fill="${red?'#c8463d':a}" font-family="Inter,sans-serif">${lbl}</text></g>`;
+    return `<svg viewBox="0 0 74 58" width="76" height="60">${card(14,16,-14,'K',0)}${card(26,12,0,'Q',1)}${card(38,16,14,'A',0)}</svg>`; }
+  if(kind==='mahjong'){ // stacked tiles with offset shadows
+    const tile=(x,y,o,m)=>`<rect x="${x+2}" y="${y+2}" width="14" height="18" rx="2.5" fill="${s}" opacity=".35"/><rect x="${x}" y="${y}" width="14" height="18" rx="2.5" fill="var(--panel)" stroke="${s}" stroke-width="1"/>${m}`;
+    const dots=(x,y,n)=>[...Array(n)].map((_,i)=>`<circle cx="${x+4+(i%2)*6}" cy="${y+5+Math.floor(i/2)*4.5}" r="1.6" fill="${a}"/>`).join('');
+    const bars=(x,y)=>`<rect x="${x+4}" y="${y+4}" width="2" height="10" rx="1" fill="${a}"/><rect x="${x+8}" y="${y+4}" width="2" height="10" rx="1" fill="${a}"/>`;
+    return `<svg viewBox="0 0 74 58" width="76" height="60">${tile(8,30,1,dots(8,30,4))}${tile(23,30,1,bars(23,30))}${tile(38,30,1,dots(38,30,2))}${tile(53,30,1,bars(53,30))}${tile(16,10,1,dots(16,10,6))}${tile(31,10,1,bars(31,10))}${tile(46,10,1,dots(46,10,3))}</svg>`; }
   if(kind==='nono'){ let c=''; const g=['01110','11011','11111','01010','01110']; g.forEach((r,y)=>[...r].forEach((v,x)=>{ c+=`<rect x="${10+x*10}" y="${3+y*10}" width="9" height="9" rx="1.5" fill="${v==='1'?s:'var(--panel)'}"/>`; })); return `<svg viewBox="0 0 70 56" width="74" height="58">${c}</svg>`; }
   return `<svg viewBox="0 0 70 50" width="74" height="54"><path d="M10 30h50l-7 10H17z" fill="${s}"/><path d="M26 30V16h16v14M33 16V8" fill="none" stroke="${s}" stroke-width="3"/><path d="M6 44q6-4 12 0t12 0 12 0 12 0 12 0" fill="none" stroke="${s}" stroke-width="2"/></svg>`; }
 

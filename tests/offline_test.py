@@ -41,7 +41,7 @@ async def main():
         # First visit online: the whole app, including games never opened, is saved for offline.
         await pg.goto(U); await pg.evaluate("navigator.serviceWorker.ready"); await pg.reload(); await pg.wait_for_timeout(500)
         check('service worker controls the Arcade', await pg.evaluate("!!navigator.serviceWorker.controller"))
-        first = await caches(pg); check('shell and each game have their own cache', len(first) == 8, ', '.join(first))
+        first = await caches(pg); check('shell and each game have their own cache', len(first) == 10, ', '.join(first))
         await pg.evaluate("localStorage.setItem('sweep.v1', JSON.stringify({xp:500, name:'Tester'})); localStorage.setItem('arcade.v1', JSON.stringify({name:'Tester', askedName:true}))")
 
         # Update: only the changed part downloads, old cache is removed, saves untouched, player is told.
@@ -54,7 +54,7 @@ async def main():
         after = await caches(pg)
         check('update: player sees "Arcade updated · Reload"', told)
         check('update: Sweep cache kept, not re-downloaded', [c for c in after if 'sweep' in c] == [c for c in first if 'sweep' in c] and not any('sweep/index.html' in r for r in reqs()))
-        check('update: old shell cache deleted, new one in place', len(after) == 8 and after != first, ', '.join(after))
+        check('update: old shell cache deleted, new one in place', len(after) == 10 and after != first, ', '.join(after))
         await pg.reload(); await pg.wait_for_timeout(300)
         check('update: new version is served', '9.9' in await pg.evaluate("VERSION"))
         check('update: saves untouched', await pg.evaluate("JSON.parse(localStorage.getItem('sweep.v1')).xp") == 500)
@@ -86,6 +86,8 @@ async def main():
         t = await timed_goto(pg, U + 'linefall/', '#settingsBtn'); check('airplane mode: Linefall opens though it was never opened online', t is not None and t < 3, f'{t:.2f}s' if t else 'failed')
         t = await timed_goto(pg, U + 'drift/', '#settingsBtn'); check('airplane mode: Drift opens though it was never opened online', t is not None and t < 3, f'{t:.2f}s' if t else 'failed')
         t = await timed_goto(pg, U + 'tilecraft/', '#settingsBtn'); check('airplane mode: Tilecraft opens though it was never opened online', t is not None and t < 3, f'{t:.2f}s' if t else 'failed')
+        t = await timed_goto(pg, U + 'solitaire/', '#settingsBtn'); check('airplane mode: Solitaire opens though it was never opened online', t is not None and t < 3, f'{t:.2f}s' if t else 'failed')
+        t = await timed_goto(pg, U + 'mahjong/', '#settingsBtn'); check('airplane mode: Mahjong opens though it was never opened online', t is not None and t < 3, f'{t:.2f}s' if t else 'failed')
         await ctx.set_offline(False)
 
         # Wifi connected, internet down: every request hangs. The app must not wait for it.
@@ -98,6 +100,8 @@ async def main():
         t = await timed_goto(pg, U + 'linefall/', '#settingsBtn'); check('hanging connection: Linefall opens without waiting', t is not None and t < 3, f'{t:.2f}s' if t else 'failed')
         t = await timed_goto(pg, U + 'drift/', '#settingsBtn'); check('hanging connection: Drift opens without waiting', t is not None and t < 3, f'{t:.2f}s' if t else 'failed')
         t = await timed_goto(pg, U + 'tilecraft/', '#settingsBtn'); check('hanging connection: Tilecraft opens without waiting', t is not None and t < 3, f'{t:.2f}s' if t else 'failed')
+        t = await timed_goto(pg, U + 'solitaire/', '#settingsBtn'); check('hanging connection: Solitaire opens without waiting', t is not None and t < 3, f'{t:.2f}s' if t else 'failed')
+        t = await timed_goto(pg, U + 'mahjong/', '#settingsBtn'); check('hanging connection: Mahjong opens without waiting', t is not None and t < 3, f'{t:.2f}s' if t else 'failed')
         mode('up')
 
         check('no page errors', not errors, '; '.join(errors)[:200])
