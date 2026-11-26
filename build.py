@@ -105,7 +105,8 @@ def main():
                                   ('drift', 'drift', 'drift/index.html', 'settingsBtn'),
                                   ('tilecraft', 'tilecraft', 'tilecraft/index.html', 'settingsBtn'),
                                   ('solitaire', 'solitaire', 'solitaire/index.html', 'settingsBtn'),
-                                  ('mahjong', 'mahjong', 'mahjong/index.html', 'settingsBtn')]:
+                                  ('mahjong', 'mahjong', 'mahjong/index.html', 'settingsBtn'),
+                                  ('sudoku', 'sudoku', 'sudoku/index.html', 'settingsBtn')]:
         os.makedirs(os.path.join(out, gid))
         open(os.path.join(out, gid, 'index.html'), 'w', encoding='utf-8').write(build_from_source(gid, folder, rel, btn))
     shutil.copy(os.path.join(sweep, 'web', 'fonts.css'), out)
@@ -116,7 +117,7 @@ def main():
     # One cache per part, named by a hash of its files: an update only re-downloads the parts that changed.
     ls = lambda d, ext: sorted(d + '/' + f for f in os.listdir(os.path.join(out, d)) if f.endswith(ext))
     parts = {'shell': ['index.html', 'fonts.css', 'manifest.webmanifest'] + ls('fonts', '.woff2') + ls('icons', '.png'),
-             'sweep': ['sweep/index.html'], 'shipfight': ['shipfight/index.html'], 'snake': ['snake/index.html'], 't2048': ['t2048/index.html'], 'linefall': ['linefall/index.html'], 'drift': ['drift/index.html'], 'tilecraft': ['tilecraft/index.html'], 'solitaire': ['solitaire/index.html'], 'mahjong': ['mahjong/index.html']}
+             'sweep': ['sweep/index.html'], 'shipfight': ['shipfight/index.html'], 'snake': ['snake/index.html'], 't2048': ['t2048/index.html'], 'linefall': ['linefall/index.html'], 'drift': ['drift/index.html'], 'tilecraft': ['tilecraft/index.html'], 'solitaire': ['solitaire/index.html'], 'mahjong': ['mahjong/index.html'], 'sudoku': ['sudoku/index.html']}
     named = {}
     for part, files in parts.items():
         h = hashlib.sha1(b''.join(open(os.path.join(out, f), 'rb').read() for f in files)).hexdigest()[:10]
@@ -124,7 +125,7 @@ def main():
     build = hashlib.sha1(json.dumps(named, sort_keys=True).encode()).hexdigest()[:8]
     sw = rd(root, 'web', 'sw.template.js').replace('__BUILD__', build).replace('__PARTS__', json.dumps(named, indent=1))
     open(os.path.join(out, 'sw.js'), 'w', encoding='utf-8').write(sw)
-    print(f'built docs/ (Arcade + Sweep + Ship Fight + Snake + 2048 + Linefall + Drift + Tilecraft + Solitaire + Mahjong, build {build})')
+    print(f'built docs/ (Arcade + Sweep + Ship Fight + Snake + 2048 + Linefall + Drift + Tilecraft + Solitaire + Mahjong + Sudoku, build {build})')
     print('\n'.join(IMPORT_LOG))
     for n in named: print('  cache', n)
 

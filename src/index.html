@@ -130,7 +130,7 @@ textarea.field{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:12p
 // The Arcade owns: the username, settings shared by every game, the combined backup, and the overview.
 // Each game owns its own save, XP, levels and unlocks. The Arcade only ever reads a game's summary record,
 // `arcade.summary.<id>`, which the game writes. Storage keys are prefixed with the game's id so nothing collides.
-const VERSION='0.9', AKEY='arcade.v1';
+const VERSION='0.10', AKEY='arcade.v1';
 const $=q=>document.querySelector(q), $$=q=>[...document.querySelectorAll(q)];
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
@@ -145,6 +145,7 @@ const GAMES=[
   {id:'tilecraft',name:'Tilecraft',desc:'Craft words, outscore the rest',path:'tilecraft/index.html',prefix:'tilecraft.',art:'tilecraft'},
   {id:'solitaire',name:'Solitaire',desc:'Every deal winnable',path:'solitaire/index.html',prefix:'solitaire.',art:'solitaire'},
   {id:'mahjong',name:'Mahjong',desc:'Match pairs, clear the stack',path:'mahjong/index.html',prefix:'mahjong.',art:'mahjong'},
+  {id:'sudoku',name:'Sudoku',desc:'Pure logic, never a guess',path:'sudoku/index.html',prefix:'sudoku.',art:'sudoku'},
   {id:'nonogram',name:'Nonograms',desc:'Picture logic puzzles',soon:true,art:'nono'},
 
 ];
@@ -209,6 +210,11 @@ function art(kind){ const a='var(--accent)', s='var(--sub)';
     const dots=(x,y,n)=>[...Array(n)].map((_,i)=>`<circle cx="${x+4+(i%2)*6}" cy="${y+5+Math.floor(i/2)*4.5}" r="1.6" fill="${a}"/>`).join('');
     const bars=(x,y)=>`<rect x="${x+4}" y="${y+4}" width="2" height="10" rx="1" fill="${a}"/><rect x="${x+8}" y="${y+4}" width="2" height="10" rx="1" fill="${a}"/>`;
     return `<svg viewBox="0 0 74 58" width="76" height="60">${tile(8,30,1,dots(8,30,4))}${tile(23,30,1,bars(23,30))}${tile(38,30,1,dots(38,30,2))}${tile(53,30,1,bars(53,30))}${tile(16,10,1,dots(16,10,6))}${tile(31,10,1,bars(31,10))}${tile(46,10,1,dots(46,10,3))}</svg>`; }
+  if(kind==='sudoku'){ // a 3x3 box of a grid, part filled, with heavier box lines
+    const v=['5','','8','','3','','1','','9']; let c='';
+    v.forEach((n,i)=>{ const x=17+(i%3)*13, y=6+Math.floor(i/3)*15; c+=`<rect x="${x}" y="${y}" width="12" height="14" rx="1.5" fill="var(--panel)"/>`;
+      if(n) c+=`<text x="${x+6}" y="${y+10.5}" font-size="9" font-weight="800" text-anchor="middle" fill="${i===4?a:s}" font-family="Inter,sans-serif">${n}</text>`; });
+    return `<svg viewBox="0 0 74 58" width="76" height="60"><rect x="15" y="4" width="43" height="50" rx="3" fill="none" stroke="${a}" stroke-width="1.6"/>${c}</svg>`; }
   if(kind==='nono'){ let c=''; const g=['01110','11011','11111','01010','01110']; g.forEach((r,y)=>[...r].forEach((v,x)=>{ c+=`<rect x="${10+x*10}" y="${3+y*10}" width="9" height="9" rx="1.5" fill="${v==='1'?s:'var(--panel)'}"/>`; })); return `<svg viewBox="0 0 70 56" width="74" height="58">${c}</svg>`; }
   return `<svg viewBox="0 0 70 50" width="74" height="54"><path d="M10 30h50l-7 10H17z" fill="${s}"/><path d="M26 30V16h16v14M33 16V8" fill="none" stroke="${s}" stroke-width="3"/><path d="M6 44q6-4 12 0t12 0 12 0 12 0 12 0" fill="none" stroke="${s}" stroke-width="2"/></svg>`; }
 

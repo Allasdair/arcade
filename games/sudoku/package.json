@@ -1,0 +1,8 @@
+{
+  "name": "sudoku",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Sudoku for the Arcade: pure logic, never a guess.",
+  "scripts": { "test": "node tests/run.js", "layout": "python3 build.py && node tests/layout.js", "build": "python3 build.py", "bank": "node tools/build_bank.js", "levels": "node tools/build_levels.js" },
+  "devDependencies": { "playwright": "^1.49.0" }
+}
