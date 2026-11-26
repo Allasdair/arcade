@@ -3,7 +3,7 @@
 // play-time stats, Arcade milestones and themes, and the overview. Each game owns its own save, XP, levels and unlocks.
 // The Arcade only ever reads a game's summary record, `arcade.summary.<id>`, which the game writes.
 // Storage keys are prefixed with the game's id so nothing collides.
-const VERSION='0.11', AKEY='arcade.v1';
+const VERSION='0.12', AKEY='arcade.v1';
 const GAME_BUILDS=/*GAME_BUILDS*/{}; // filled in by build.py: a hash of each game's page, for "Updated" badges
 const $=q=>document.querySelector(q), $$=q=>[...document.querySelectorAll(q)];
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -26,6 +26,7 @@ const LIVE=GAMES.filter(g=>!g.soon), gameById=id=>GAMES.find(g=>g.id===id);
 
 // What's new in the Arcade itself, newest first. Returning players see the entries since their last visit once.
 const CHANGES=[
+  ['0.12',['Your avatar travels with you: Sweep\'s League and challenges and Tilecraft\'s 2-Player games show every player\'s avatar next to their name']],
   ['0.11',['A profile card with a pixel-art avatar and your achievements across every game','Profile: play time, most played game, games played and Arcade milestones','Arcade milestones unlock themes for the Arcade home','Favourite games, sorting, and New / Updated badges','The Arcade\'s own menus in Español, Français, Deutsch and Português','Install Arcade from Settings, and this What\'s new']],
   ['0.10',['New game: Sudoku']],
   ['0.9',['New games: Solitaire and Mahjong']],
@@ -75,28 +76,12 @@ const P={back:'<path d="M15 18l-6-6 6-6"/>',gear:'<circle cx="12" cy="12" r="3"/
 const icon=n=>`<svg class="i" viewBox="0 0 24 24">${P[n]}</svg>`;
 
 // ---------- pixel-art avatars ----------
-// 10×10 pixel maps; '.' is the background. `game`: unlocked once that game has been played. No game: free.
-const AVATARS=[
-  {id:'pad',name:'Controller',bg:'#cde3ff',pal:{k:'#2b2d42',w:'#ffffff',r:'#ef476f',g:'#06d6a0'},px:['..........','..........','.kkkkkkkk.','kkwkkkkrkk','kwwwkkgkrk','kkwkkkkgkk','kkkkkkkkkk','kkk....kkk','..........','..........']},
-  {id:'heart',name:'Heart',bg:'#ffe1e6',pal:{r:'#e63946',w:'#ffffff'},px:['..........','.rrr..rrr.','rrrrrrrrrr','rwwrrrrrrr','rwrrrrrrrr','rrrrrrrrrr','.rrrrrrrr.','..rrrrrr..','...rrrr...','....rr....']},
-  {id:'mine',game:'sweep',name:'Mine',bg:'#e9ecef',pal:{k:'#1d1d1f',w:'#ffffff'},px:['....k.....','.k..k..k..','..kkkkk...','..kwkkk...','kkkwkkkkk.','..kkkkk...','..kkkkk...','.k..k..k..','....k.....','..........']},
-  {id:'ship',game:'shipfight',name:'Ship',bg:'#bde0fe',pal:{g:'#6c757d',d:'#343a40',w:'#ffffff',b:'#3a86ff',r:'#e63946'},px:['....r.....','....rr....','....d.....','...ggg....','..gwgwg...','.ddddddd..','dddddddddd','.dddddddd.','bbbbbbbbbb','.b..b..b..']},
-  {id:'snake',game:'snake',name:'Snake',bg:'#d8f3dc',pal:{g:'#2d6a4f',l:'#52b788',w:'#ffffff',k:'#1d1d1f',r:'#e63946'},px:['..........','..gggggg..','.gllllllg.','.glwllwlg.','.glkllklg.','.gllllllg.','..gllllg..','...gggg...','....rr....','...r..r...']},
-  {id:'tile2',game:'t2048',name:'Tile',bg:'#fde2a7',pal:{o:'#f4a261',w:'#ffffff'},px:['oooooooooo','oooooooooo','ooowwwwooo','oooooowooo','oooooowooo','ooowwwwooo','ooowoooooo','ooowwwwooo','oooooooooo','oooooooooo']},
-  {id:'blocks',game:'linefall',name:'Blocks',bg:'#e0e1ff',pal:{p:'#7b2cbf',c:'#00b4d8',y:'#ffb703'},px:['..........','...ppp....','....p.....','..........','..........','c.........','cc.....yy.','cc.y...yy.','cccyyy.yyy','cccyyyyyyy']},
-  {id:'rocket',game:'drift',name:'Rocket',bg:'#1b263b',pal:{w:'#e0e1dd',r:'#e63946',o:'#ffb703',b:'#4cc9f0'},px:['....ww....','...wwww...','...wbbw...','...wbbw...','...wwww...','..rwwwwr..','.rrwwwwrr.','....oo....','...o..o...','....oo....']},
-  {id:'letter',game:'tilecraft',name:'Letter',bg:'#f1e3d3',pal:{t:'#c9a27e',k:'#3e2723'},px:['..........','.tttttttt.','.tttkkttt.','.ttkttktt.','.ttkttktt.','.ttkkkktt.','.ttkttktt.','.ttkttktt.','.tttttttt.','..........']},
-  {id:'ace',game:'solitaire',name:'Ace',bg:'#d8f3dc',pal:{w:'#ffffff',k:'#1d1d1f',g:'#adb5bd'},px:['.gggggggg.','.gwwwwwwg.','.gwwkkwwg.','.gwkkkkwg.','.gkkkkkkg.','.gkkkkkkg.','.gwwkkwwg.','.gwkkkkwg.','.gwwwwwwg.','.gggggggg.']},
-  {id:'dots',game:'mahjong',name:'Dots',bg:'#fef3c7',pal:{i:'#fffaf0',e:'#c9b68a',g:'#2a9d8f',r:'#e63946'},px:['.eeeeeeee.','.eiiiiiie.','.eigiigie.','.eiiiiiie.','.eiirriie.','.eiirriie.','.eiiiiiie.','.eigiigie.','.eiiiiiie.','.eeeeeeee.']},
-  {id:'grid',game:'sudoku',name:'Grid',bg:'#dbeafe',pal:{l:'#94a3b8',b:'#2563eb',w:'#ffffff'},px:['llllllllll','lwwlwwlbbl','lwwlwwlbbl','llllllllll','lbblwwlwwl','lbblwwlwwl','llllllllll','lwwlbblwwl','lwwlbblwwl','llllllllll']},
-];
-const avatarById=id=>AVATARS.find(a=>a.id===id)||AVATARS[0];
+// The avatar set lives in web/avatars.js (served as avatars.js), shared with every game.
+const AV=window.ArcadeAvatars, AVATARS=AV.list;
+const avatarById=id=>AV.byId(id)||AVATARS[0];
 const gameAvatar=id=>AVATARS.find(a=>a.game===id)||AVATARS[0];
-const avatarOpen=a=>!a.game||!!summary(a.game);
-function avatarSvg(a,size){ let r='';
-  a.px.forEach((row,y)=>{ let x=0; while(x<10){ const c=row[x]; let n=1; while(x+n<10&&row[x+n]===c) n++;
-    if(c!=='.') r+=`<rect x="${x+1}" y="${y+1}" width="${n}" height="1" fill="${a.pal[c]}"/>`; x+=n; } });
-  return `<span class="av" style="width:${size}px;height:${size}px;border-radius:${Math.round(size*.28)}px"><svg viewBox="0 0 12 12" shape-rendering="crispEdges"><rect width="12" height="12" fill="${a.bg}"/>${r}</svg></span>`; }
+const avatarOpen=AV.open;
+const avatarSvg=(a,size)=>AV.svg(a,size);
 
 /*ART*/
 // ---------- stats: play time, days played ----------

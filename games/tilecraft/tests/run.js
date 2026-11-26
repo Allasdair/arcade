@@ -261,6 +261,19 @@ sec('2-Player codes');
     S.tp.wins=4; L.tpCount(S,{id:'cc',mode:'code',me:win},st); ok(L.checkAch(S,{mode:'tp'}).includes('riv1'),'5 share-code wins: Rivals I');
     eq(L.checkAch(S,{mode:'tp',st}).filter(a=>!/^riv/.test(a)).length,0,'2-Player earns only Rivals achievements'); } }
 
+{ // avatars (Arcade 0.12): carried after the moves, before the checksum; older readers ignore them
+  const id=[1,2,3,4,5,6], cfg=L.twoPlayerCfg({size:'medium',shape:'square',boardSeed:1234,bagSeed:5678,mods:{}},['A','B']), st=L.newGame(cfg);
+  for(let k=0;k<12&&!st.over;k++){ const mv=L.aiChoose(st,st.turn,'hard',L.allMoves(st,st.racks[st.turn])); L.applyMove(st,mv.t==='p'?{t:'p',tiles:mv.tiles}:mv); }
+  const moves=L.codeMoves(st);
+  const c1=L.encodeGame({id,cfg,names:['A','B'],avs:[3,11],moves}), c0=L.encodeGame({id,cfg,names:['A','B'],moves});
+  const g1=L.decodeGame(c1), g0=L.decodeGame(c0);
+  ok(g1.avs[0]===3&&g1.avs[1]===11&&g1.cfg.players[1].av===11,'a 2-Player code carries both avatars');
+  ok(g0.avs[0]===0&&g0.avs[1]===0,'a code without avatars reads as none');
+  ok(JSON.stringify(g1.moves)===JSON.stringify(g0.moves)&&g1.names.join()===g0.names.join(),'moves and names are the same with or without avatars');
+  const b1=Buffer.from(c1.slice(5),'base64url'), b0=Buffer.from(c0.slice(5),'base64url');
+  ok(b1.length===b0.length+3&&b1.slice(0,b0.length-2).equals(b0.slice(0,-2)),'avatars sit after the moves (older Tilecraft ignores them)');
+  ok(L.replay(g1.cfg,g1.moves).moves.length===moves.length,'a code with avatars replays'); }
+
 sec('campaign');
 { eq(L.LEVELS.length,45,'45 levels'); eq(L.CAMPS.map((c,i)=>L.LEVELS.filter(l=>l.camp===i).length),[15,15,15],'15 per campaign');
   const types=i=>L.LEVELS.filter(l=>l.camp===i).map(l=>l.type[0]).join(''); for(let i=0;i<3;i++) eq(types(i),'ddddtdddtpddddd','level mix: score targets at 5 and 9, a puzzle at 10');

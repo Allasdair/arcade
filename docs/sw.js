@@ -9,12 +9,13 @@
 //   service workers can't touch at all.
 // - Self-repair: if a cache goes missing (cleared by the browser or another app on this site), it's
 //   refilled the next time the app is opened online.
-const BUILD='4714c3e3';
+const BUILD='63eafb7a';
 const PARTS={
- "arcade-shell-b3e0b74a9a": [
+ "arcade-shell-c459cd2d89": [
   "index.html",
   "fonts.css",
   "manifest.webmanifest",
+  "avatars.js",
   "fonts/caveat-700.woff2",
   "fonts/inter.woff2",
   "fonts/jetbrains-mono-700.woff2",
@@ -24,34 +25,34 @@ const PARTS={
   "icons/icon-512.png",
   "icons/maskable-512.png"
  ],
- "arcade-sweep-12ff4b7c9d": [
+ "arcade-sweep-034bccbb38": [
   "sweep/index.html"
  ],
- "arcade-shipfight-ed1f6bf53a": [
+ "arcade-shipfight-08e2e00177": [
   "shipfight/index.html"
  ],
- "arcade-snake-2dd850e639": [
+ "arcade-snake-391b505eb6": [
   "snake/index.html"
  ],
- "arcade-t2048-549b74d239": [
+ "arcade-t2048-343cb1224f": [
   "t2048/index.html"
  ],
- "arcade-linefall-85857ef594": [
+ "arcade-linefall-31ac042fc1": [
   "linefall/index.html"
  ],
- "arcade-drift-3624fa13be": [
+ "arcade-drift-65c9045563": [
   "drift/index.html"
  ],
- "arcade-tilecraft-a9c3e8edf9": [
+ "arcade-tilecraft-2527a79f67": [
   "tilecraft/index.html"
  ],
- "arcade-solitaire-390c580553": [
+ "arcade-solitaire-61fa892adf": [
   "solitaire/index.html"
  ],
- "arcade-mahjong-16acb5f907": [
+ "arcade-mahjong-3155dbe268": [
   "mahjong/index.html"
  ],
- "arcade-sudoku-d5d4f85c8a": [
+ "arcade-sudoku-ef2aad49bf": [
   "sudoku/index.html"
  ]
 };            // {cacheName: [files relative to this script]}

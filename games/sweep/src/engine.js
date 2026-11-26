@@ -554,6 +554,7 @@ const lgLen=n=>{ const [y,m]=lgMonth(n); return new Date(y,m,0).getDate(); };
 // Season code: SWL2.<base64url> = version, season, player id, last season's rank, fingerprint of one played round,
 // a bitmask of rounds played, then won+hints, time and % cleared for each played round, then the name.
 // (SWL1 codes from v0.10 had no % cleared: wins read as 100%, losses as 0%.)
+// Since Arcade 0.12 a code may end with 0xA1 + the player's avatar number; older readers ignore the extra bytes.
 function encodeSeason(r){
   const b=[1, r.season&255, r.season>>8, ...r.pid, r.prev|0, r.fpDay|0];
   for(let i=0;i<8;i+=2) b.push(r.fp?parseInt(r.fp.substr(i,2),16):0);
@@ -561,6 +562,7 @@ function encodeSeason(r){
   b.push(mask&255,(mask>>>8)&255,(mask>>>16)&255,(mask>>>24)&255);
   for(const d of days){ const x=r.days[d], t=Math.max(0,Math.min(65535,Math.round(x.t*10))); b.push((x.won?1:0)|(Math.min(127,x.h|0)<<1),t&255,t>>8,Math.max(0,Math.min(100,x.won?100:Math.round(x.p||0)))); }
   const nm=new TextEncoder().encode(cleanName(r.name||'')); b[0]=2; b.push(nm.length,...nm);
+  if(r.av) b.push(0xA1,r.av&255);
   return 'SWL2.'+toB64U(Uint8Array.from(b));
 }
 function decodeSeason(code){
@@ -571,8 +573,9 @@ function decodeSeason(code){
   const mask=(b[p]|(b[p+1]<<8)|(b[p+2]<<16)|(b[p+3]<<24))>>>0; p+=4; const days={};
   for(let d=1;d<=31;d++) if(mask&(1<<(d-1))){ if(p+per>b.length) throw new Error('short'); const st=b[p], won=!!(st&1);
     days[d]={won,h:st>>1,t:(b[p+1]|(b[p+2]<<8))/10,p:won?100:per===4?Math.min(100,b[p+3]):0}; p+=per; }
-  const nl=b[p++]||0, name=cleanName(new TextDecoder().decode(b.slice(p,p+nl)));
-  return {season,pid,prev,fpDay,fp,days,name};
+  const nl=b[p++]||0, name=cleanName(new TextDecoder().decode(b.slice(p,p+nl))); p+=nl;
+  const av=b[p]===0xA1?b[p+1]|0:0;
+  return {season,pid,prev,fpDay,fp,days,name,av};
 }
 const allCodes=(text,re)=>[...String(text).matchAll(re)].map(m=>m[0]);
 function encodeChallenge(g,meta){
@@ -582,6 +585,7 @@ function encodeChallenge(g,meta){
   const bits=[]; if(g.NP<g.N) for(let i=0;i<g.N;i++) bits.push(g.mask[i]);
   for(let i=0;i<g.N;i++){ if(g.dbl){ bits.push(g.mines[i]>>1&1,g.mines[i]&1); } else bits.push(g.mines[i]?1:0); }
   for(let i=0;i<bits.length;i+=8){ let v=0; for(let k=0;k<8;k++) v=(v<<1)|(bits[i+k]||0); b.push(v); }
+  if(meta.av) b.push(0xA1,meta.av&255); // avatar (Arcade 0.12): after the mine bits, so older readers ignore it
   return 'SWC1.'+toB64U(Uint8Array.from(b));
 }
 function decodeChallenge(text){
@@ -595,6 +599,7 @@ function decodeChallenge(text){
   const mask=new Uint8Array(N).fill(1); if(hasMask) for(let i=0;i<N;i++) mask[i]=rd();
   const mines=new Uint8Array(N); for(let i=0;i<N;i++) mines[i]=dbl?(rd()<<1|rd()):rd();
   if(start>=N||!mask[start]||mines[start]) throw new Error('start');
-  return {mode,dbl,hasMask,mask,mines,W,H,diff,start,time,hints,src,lv,name};
+  const end=p+Math.ceil(((hasMask?N:0)+N*(dbl?2:1))/8), av=b[end]===0xA1?b[end+1]|0:0;
+  return {mode,dbl,hasMask,mask,mines,W,H,diff,start,time,hints,src,lv,name,av};
 }
 if(typeof module!=='undefined') module.exports={deduce,genClassic,classicSolve,makeNb,Classic,Endless,K,KX,KY,nbK,classicHint,endlessHint,countNums,shapeMask,SHAPES,SHAPE_FILL,makePuzzle,makeNb,dblSolve,bbbv,analyze,classify,encodeChallenge,decodeChallenge,fdBoard,fdDay,fdDate,encodeResult,decodeResult,seedRng,boardPrint,allCodes,cleanName,lgNo,lgMonth,lgDate,lgLen,encodeSeason,decodeSeason};

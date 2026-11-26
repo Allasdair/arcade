@@ -20,7 +20,7 @@ HEAD = ('<link rel="manifest" href="{r}manifest.webmanifest">\n<link rel="icon" 
         '<link rel="apple-touch-icon" href="{r}icons/apple-touch-icon.png">\n'
         '<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">\n'
         '<meta name="apple-mobile-web-app-title" content="Arcade"><meta name="apple-mobile-web-app-status-bar-style" content="default">\n'
-        '<link rel="stylesheet" href="{r}fonts.css">\n' + CSP)
+        '<link rel="stylesheet" href="{r}fonts.css">\n<script src="{r}avatars.js"></script>\n' + CSP)
 # Every page registers the one Arcade service worker, so opening a game directly still makes the whole app offline-ready.
 REG = """<script>
 if('serviceWorker' in navigator) addEventListener('load',()=>navigator.serviceWorker.register('{r}sw.js',{{scope:'{r}'}}).then(reg=>{{
@@ -48,7 +48,7 @@ def build_sweep():
 HEAD_LINKS = ('<link rel="manifest" href="../manifest.webmanifest">\n<link rel="icon" type="image/png" sizes="32x32" href="../icons/favicon-32.png">\n'
               '<link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">\n'
               '<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">\n'
-              '<meta name="apple-mobile-web-app-title" content="Arcade">\n')
+              '<meta name="apple-mobile-web-app-title" content="Arcade">\n<script src="../avatars.js"></script>\n')
 
 IMPORT_LOG = []
 
@@ -129,11 +129,12 @@ def main():
     shutil.copy(os.path.join(sweep, 'web', 'fonts.css'), out)
     shutil.copytree(os.path.join(sweep, 'web', 'fonts'), os.path.join(out, 'fonts'))
     shutil.copy(os.path.join(root, 'web', 'manifest.webmanifest'), out)
+    shutil.copy(os.path.join(root, 'web', 'avatars.js'), out)
     shutil.copytree(os.path.join(root, 'web', 'icons'), os.path.join(out, 'icons'))
     open(os.path.join(out, '.nojekyll'), 'w').write('')
     # One cache per part, named by a hash of its files: an update only re-downloads the parts that changed.
     ls = lambda d, ext: sorted(d + '/' + f for f in os.listdir(os.path.join(out, d)) if f.endswith(ext))
-    parts = {'shell': ['index.html', 'fonts.css', 'manifest.webmanifest'] + ls('fonts', '.woff2') + ls('icons', '.png'),
+    parts = {'shell': ['index.html', 'fonts.css', 'manifest.webmanifest', 'avatars.js'] + ls('fonts', '.woff2') + ls('icons', '.png'),
              'sweep': ['sweep/index.html'], 'shipfight': ['shipfight/index.html'], 'snake': ['snake/index.html'], 't2048': ['t2048/index.html'], 'linefall': ['linefall/index.html'], 'drift': ['drift/index.html'], 'tilecraft': ['tilecraft/index.html'], 'solitaire': ['solitaire/index.html'], 'mahjong': ['mahjong/index.html'], 'sudoku': ['sudoku/index.html']}
     named = {}
     for part, files in parts.items():

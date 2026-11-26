@@ -352,15 +352,17 @@ function gameFingerprint(st){ let h=2166136261; const add=s=>{ for(let i=0;i<s.l
 // TCF1.<base64url>: version, a random 6-byte game id, the rules (board size, shape, board seed, bag seed, modifiers),
 // both names and the full move list. Every device rebuilds the game by replaying every move from the seeds, so a missed
 // or repeated code can't break it. A 16-bit checksum catches damaged codes; replay catches impossible moves.
+// Since Arcade 0.12 the move bits may be followed by 0xA1 + both players' avatar numbers (before the checksum); older
+// readers stop after the moves and ignore them.
 const B64U='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
 const toB64U=b=>{ let s=''; for(let i=0;i<b.length;i+=3){ const n=(b[i]<<16)|((b[i+1]||0)<<8)|(b[i+2]||0);
   s+=B64U[n>>18&63]+B64U[n>>12&63]+(i+1<b.length?B64U[n>>6&63]:'')+(i+2<b.length?B64U[n&63]:''); } return s; };
 const fromB64U=s=>{ const out=[]; let buf=0,bits=0; for(const ch of s){ const v=B64U.indexOf(ch); if(v<0) throw new Error('char'); buf=(buf<<6)|v; bits+=6; if(bits>=8){ bits-=8; out.push((buf>>bits)&255); } } return Uint8Array.from(out); };
 const cleanName=t=>[...String(t||'').replace(/[\u0000-\u001f\u007f<>&"'`]/g,'')].slice(0,16).join('').trim();
 function bitW(){ const b=[]; let cur=0, n=0; return {put(v,bits){ for(let k=bits-1;k>=0;k--){ cur=(cur<<1)|((v>>k)&1); if(++n===8){ b.push(cur); cur=0; n=0; } } }, bytes(){ return n?b.concat([cur<<(8-n)]):b; }}; }
-function bitR(b,p){ let bi=p*8; return {get(bits){ let v=0; for(let k=0;k<bits;k++){ const by=b[bi>>3]; if(by===undefined) throw new Error('short'); v=(v<<1)|((by>>(7-(bi&7)))&1); bi++; } return v; }}; }
+function bitR(b,p){ let bi=p*8; return {pos(){ return Math.ceil(bi/8); },get(bits){ let v=0; for(let k=0;k<bits;k++){ const by=b[bi>>3]; if(by===undefined) throw new Error('short'); v=(v<<1)|((by>>(7-(bi&7)))&1); bi++; } return v; }}; }
 const fnv16=b=>{ let h=2166136261; for(const v of b){ h^=v; h=Math.imul(h,16777619); } return (h^(h>>>16))&0xffff; };
-function encodeGame(g){ // g: {id:[6 bytes], cfg, names:[a,b], moves}
+function encodeGame(g){ // g: {id:[6 bytes], cfg, names:[a,b], avs:[a,b] (optional), moves}
   const c=g.cfg, m=c.mods, b=[1,...g.id];
   b.push(SIZE_IDS.indexOf(c.size)|(SHAPE_IDS.indexOf(c.shape)<<2)|(m.norepeat?16:0)|(m.swaps===false?32:0)|(m.rare?64:0));
   b.push(((m.minLen||2)-2)|(Math.max(0,MAXLEN_OPTS.indexOf(m.maxLen||0))<<2)|(Math.max(0,BLANK_OPTS.indexOf(m.blanks==null?null:m.blanks))<<4));
@@ -371,7 +373,8 @@ function encodeGame(g){ // g: {id:[6 bytes], cfg, names:[a,b], moves}
       w.put(0,2); w.put(d,1); w.put(t[0][0],9); w.put(t.length-1,3); for(const [,ch,bl] of t){ w.put(ch.charCodeAt(0)-65,5); w.put(bl?1:0,1); } }
     else if(mv.t==='x'){ w.put(1,2); w.put(mv.tiles.length-1,3); for(const ch of mv.tiles) w.put(ch===BLANK?26:ch.charCodeAt(0)-65,5); }
     else w.put(2,2); }
-  b.push(...w.bytes()); const ck=fnv16(b); b.push(ck>>8,ck&255);
+  b.push(...w.bytes()); if(g.avs&&(g.avs[0]||g.avs[1])) b.push(0xA1,g.avs[0]&255,g.avs[1]&255);
+  const ck=fnv16(b); b.push(ck>>8,ck&255);
   return 'TCF1.'+toB64U(Uint8Array.from(b)); }
 const findCode=text=>{ const m=String(text||'').match(/TCF1\.([A-Za-z0-9_-]{20,})/); return m?m[0]:null; };
 function decodeGame(text){ const code=findCode(text); if(!code) throw new Error('nocode');
@@ -390,9 +393,10 @@ function decodeGame(text){ const code=findCode(text); if(!code) throw new Error(
       moves.push({t:'p',d,s,tiles}); }
     else if(t===1){ const cnt=r.get(3)+1, tiles=[]; for(let j=0;j<cnt;j++){ const l=r.get(5); if(l>26) throw new Error('move'); tiles.push(l===26?BLANK:ALPHA[l]); } moves.push({t:'x',tiles}); }
     else if(t===2) moves.push({t:'-'}); else throw new Error('move'); }
-  return {id:id.map(v=>v.toString(16).padStart(2,'0')).join(''),idBytes:id,cfg:twoPlayerCfg({size,shape,boardSeed,bagSeed,mods},names),names,moves}; }
-function twoPlayerCfg(c,names){ return normCfg({size:c.size,shape:c.shape,boardSeed:c.boardSeed,bagSeed:c.bagSeed,mods:Object.assign({},c.mods,{timer:0}),
-  players:[{name:names[0]||'Player 1',ai:null},{name:names[1]||'Player 2',ai:null}],solo:false,first:0}); }
+  const e=r.pos(), avs=b[e]===0xA1?[b[e+1]|0,b[e+2]|0]:[0,0];
+  return {id:id.map(v=>v.toString(16).padStart(2,'0')).join(''),idBytes:id,cfg:twoPlayerCfg({size,shape,boardSeed,bagSeed,mods},names,avs),names,avs,moves}; }
+function twoPlayerCfg(c,names,avs){ avs=avs||[0,0]; return normCfg({size:c.size,shape:c.shape,boardSeed:c.boardSeed,bagSeed:c.bagSeed,mods:Object.assign({},c.mods,{timer:0}),
+  players:[{name:names[0]||'Player 1',ai:null,av:avs[0]|0},{name:names[1]||'Player 2',ai:null,av:avs[1]|0}],solo:false,first:0}); }
 // Rebuild a game from its moves. A play's tiles in a code are laid along the line skipping occupied squares.
 function replay(cfg,moves){ const st=newGame(cfg), n=boardOf(cfg).n;
   for(let k=0;k<moves.length;k++){ const mv=moves[k]; let m=mv;

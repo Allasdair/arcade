@@ -139,7 +139,8 @@ button.card:active{transform:scale(.98)}
 .gcol{width:100%;max-width:560px;height:100%;display:flex;flex-direction:column;justify-content:center;padding:6px 8px 8px;gap:6px}
 .sb{display:flex;align-items:stretch;gap:6px;flex:none}
 .pl{flex:1;min-width:0;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:6px 10px;display:flex;flex-direction:column;justify-content:center;position:relative}
-.pl .nm{font-size:12px;font-weight:700;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pl .nm{font-size:12px;font-weight:700;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:6px}
+.avpick{display:flex;flex-wrap:wrap;gap:6px}.avpick button{border:2px solid transparent;border-radius:12px;padding:2px;line-height:0}.avpick button.on{border-color:var(--accent)}
 .pl .sc{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.1}
 .pl.on{box-shadow:0 0 0 2px var(--accent)}
 .pl.on .nm{color:var(--ink)}
@@ -253,12 +254,16 @@ const store={get:k=>{ try{ return localStorage.getItem(k); }catch(e){ return nul
 let S=loadSave(store.get(KEY),REDUCED);
 // P = settings in effect. Standalone it IS the save; inside Arcade the shared settings come from arcade.v1, in memory only.
 let P=S;
+// Avatars (Arcade 0.12): in the Arcade, 2-Player games show each player's Arcade avatar; codes carry its number.
+const avOn=()=>ARCADE&&!!window.ArcadeAvatars, myAv=()=>avOn()?ArcadeAvatars.mine():0;
+const avH=(n,name,size)=>avOn()?ArcadeAvatars.html(n,name,size||20):'';
+const gAvs=g=>{ const a=(g.avs||[0,0]).slice(); if(g.mode==='code'&&myAv()) a[g.me]=myAv(); else if(g.mode==='local'&&!a[0]) a[0]=myAv(); return a; };
 function refreshShared(){ P=ARCADE?applyShared(S,readArcade(store)):S; }
 refreshShared();
 let sumT=0;
 const writeSummary=()=>{ if(ARCADE) store.set(SUMKEY,JSON.stringify(summary(S))); };
 const persist=()=>{ store.set(KEY,JSON.stringify(S)); if(ARCADE){ clearTimeout(sumT); sumT=setTimeout(writeSummary,300); } };
-const CHANGES=[{v:'0.1.0',d:'2026-11-24',n:['First playable demo: Classic against four computer strengths, a 45-level campaign, the Daily and 2-Player by share code or pass-and-play.','Our own letter values and tile counts, and a fresh board layout every game.','XP levels, hints, records, 30 achievements and 25 cosmetics.','Original soundtracks: Hearth and Inkwell, plus Sweep\'s Daylight.']}];
+const CHANGES=[{v:'0.1.1',d:'2026-11-26',n:['In the Arcade, 2-Player games show each player\'s Arcade avatar on the scoreboard, in the games list and on the pass-and-play screen. In pass-and-play, Player 2 can pick an avatar. Codes from older versions still work.']},{v:'0.1.0',d:'2026-11-24',n:['First playable demo: Classic against four computer strengths, a 45-level campaign, the Daily and 2-Player by share code or pass-and-play.','Our own letter values and tile counts, and a fresh board layout every game.','XP levels, hints, records, 30 achievements and 25 cosmetics.','Original soundtracks: Hearth and Inkwell, plus Sweep\'s Daylight.']}];
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const esc=t=>String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const todayStr=()=>{ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
@@ -591,7 +596,7 @@ function renderTp(){ let h=`<div class="top">${backBtn}<h2>2-Player</h2></div>
   if(!S.tp.games.length) h+=`<div class="sub" style="color:var(--sub);font-size:13.5px;margin:0 4px">No games yet. Start one and send the code to a friend.</div>`;
   for(const g of S.tp.games){ const {st,turn}=tpInfo(g), opp=g.mode==='local'?null:1-g.me, mine=g.mode==='local'||turn===g.me;
     const status=st.over?'Finished':g.mode==='local'?'Pass-and-play':mine?'Your turn':'Waiting';
-    h+=`<div class="card" style="padding:0"><button class="card" style="margin:0;border:0;flex:1" data-g="${g.id}"><div class="grow"><div class="t">${g.mode==='local'?`<span data-raw>${esc(g.names[0])} &amp; ${esc(g.names[1])}</span>`:`<span data-raw>${esc(g.names[opp]||'?')}</span>`}</div>
+    h+=`<div class="card" style="padding:0"><button class="card" style="margin:0;border:0;flex:1" data-g="${g.id}">${avOn()?`<span style="display:flex;gap:2px">${g.mode==='local'?avH(gAvs(g)[0],g.names[0],34)+avH(gAvs(g)[1],g.names[1],34):avH(gAvs(g)[opp],g.names[opp]||'?',40)}</span>`:''}<div class="grow"><div class="t">${g.mode==='local'?`<span data-raw>${esc(g.names[0])} &amp; ${esc(g.names[1])}</span>`:`<span data-raw>${esc(g.names[opp]||'?')}</span>`}</div>
       <div class="s"><b style="color:${!st.over&&mine?'var(--good)':'var(--sub)'}">${status}</b> · ${st.scores.join('–')} · ${esc(ago(g.last))}</div></div></button>
       <button class="iconbtn" style="margin-right:10px" data-del="${g.id}" aria-label="Delete game"><svg class="i" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg></button></div>`; }
   h+=`<div class="sub" style="color:var(--sub);font-size:12px;margin:14px 4px">Share-code games give no XP, but wins count toward the Rivals achievements. Pass-and-play counts nothing.</div>`;
@@ -599,17 +604,19 @@ function renderTp(){ let h=`<div class="top">${backBtn}<h2>2-Player</h2></div>
   $('#tNew').onclick=()=>tpSetup('code'); $('#tLocal').onclick=()=>tpSetup('local'); $('#tPaste').onclick=()=>tpPaste();
   $$('#tpBody [data-g]').forEach(b=>b.onclick=()=>openTpGame(tpFind(S,b.dataset.g)));
   let armed=null; $$('#tpBody [data-del]').forEach(b=>b.onclick=()=>{ const id=b.dataset.del; if(armed!==id){ armed=id; toast('Tap again to delete this game'); return; } tpDelete(S,id); persist(); renderTp(); toast('Game deleted'); }); }
-function tpSetup(mode){ const c=Object.assign({},S.setup); let n1=P.name||'', n2='';
+function tpSetup(mode){ const c=Object.assign({},S.setup); let n1=P.name||'', n2='', av2=0;
   const draw=()=>{ openSheet(`<h2>${mode==='local'?'Pass-and-play':'New 2-Player game'}</h2><div class="sub">${mode==='local'?'Take turns on this device. The rack is hidden between turns.':'You play first, then send the code. Each turn makes a new code to send back. No timer.'}</div>
     <div class="opt"><div class="h">${mode==='local'?'Player 1':'Your name'}</div><input type="text" id="n1" maxlength="16" value="${esc(n1)}" placeholder="Player 1"></div>
-    ${mode==='local'?`<div class="opt"><div class="h">Player 2</div><input type="text" id="n2" maxlength="16" value="${esc(n2)}" placeholder="Player 2"></div>`:''}
+    ${mode==='local'?`<div class="opt"><div class="h">Player 2</div><input type="text" id="n2" maxlength="16" value="${esc(n2)}" placeholder="Player 2"></div>
+      ${avOn()?`<div class="opt"><div class="h">Player 2's avatar</div><div class="avpick"><button data-av2="0" class="${av2?'':'on'}">${ArcadeAvatars.html(0,n2||'2',34)}</button>${ArcadeAvatars.list.map((a,i)=>ArcadeAvatars.open(a)?`<button data-av2="${i+1}" class="${av2===i+1?'on':''}">${ArcadeAvatars.svg(a,34)}</button>`:'').join('')}</div></div>`:''}`:''}
     ${modsHtml(c,false)}
     <div class="btns"><button class="ghost" data-close>Close</button><button class="primary" id="tGo">Start</button></div>`);
     const keep=()=>{ n1=$('#n1').value; if($('#n2')) n2=$('#n2').value; };
-    bindMods(c,()=>{ keep(); draw(); }); $$('#sheet [data-seg] button,#sheet [data-tg]').forEach(b=>b.addEventListener('pointerdown',keep));
+    bindMods(c,()=>{ keep(); draw(); }); $$('#sheet [data-av2]').forEach(b=>b.onclick=()=>{ keep(); av2=+b.dataset.av2; draw(); }); $$('#sheet [data-seg] button,#sheet [data-tg]').forEach(b=>b.addEventListener('pointerdown',keep));
     $('#tGo').onclick=()=>{ keep(); const a=cleanName(n1)||'Player 1', b=cleanName(n2)||'Player 2'; if(mode==='code'&&a!=='Player 1'){ S.name=a; refreshShared(); }
-      const idb=newGameId(), cfg=twoPlayerCfg({size:c.size,shape:c.shape,boardSeed:rnd32(),bagSeed:rnd32(),mods:{norepeat:c.norepeat,minLen:c.minLen,maxLen:c.maxLen,blanks:c.blanks,swaps:c.swaps,rare:c.rare}},mode==='local'?[a,b]:[a,'']);
-      const g={id:idHex(idb),idb,mode,me:mode==='local'?null:0,names:mode==='local'?[a,b]:[a,''],cfg,moves:[],n:0,last:Date.now(),over:false,turn:0};
+      const avs=[myAv(),mode==='local'?av2:0];
+      const idb=newGameId(), cfg=twoPlayerCfg({size:c.size,shape:c.shape,boardSeed:rnd32(),bagSeed:rnd32(),mods:{norepeat:c.norepeat,minLen:c.minLen,maxLen:c.maxLen,blanks:c.blanks,swaps:c.swaps,rare:c.rare}},mode==='local'?[a,b]:[a,''],avs);
+      const g={id:idHex(idb),idb,mode,me:mode==='local'?null:0,names:mode==='local'?[a,b]:[a,''],avs,cfg,moves:[],n:0,last:Date.now(),over:false,turn:0};
       tpSave(S,g); persist(); closeSheet(); openTpGame(g); }; };
   draw(); }
 function tpPaste(){ openSheet(`<h2>Paste code</h2><div class="sub">Paste the whole message your friend sent. The code is found in the text.</div><textarea rows="5" id="pin" placeholder="TCF1.…"></textarea>
@@ -618,16 +625,17 @@ function tpPaste(){ openSheet(`<h2>Paste code</h2><div class="sub">Paste the who
     if(!r.ok){ toast({nocode:'No Tilecraft code found in that text',bad:'That code is damaged. Ask for it again.',deleted:'You deleted that game',invalid:'That code has a move that isn\'t allowed',older:'That code is older than your game',same:'You already have that move',notyours:'It isn\'t your turn in that game yet'}[r.why]||'That code didn\'t work'); return; }
     const g0=r.g; let g=tpFind(S,g0.id);
     const finish=()=>{ g.moves=codeMoves(r.st); g.names=[g0.names[0]||g.names[0],g.names[1]||g0.names[1]];
-      g.n=g.moves.length; g.last=Date.now(); g.over=r.st.over; g.turn=r.st.over?-1:r.st.turn; g.cfg=twoPlayerCfg(g0.cfg,g.names);
+      const had=g.avs||[0,0]; g.avs=[g0.avs[0]||had[0],g0.avs[1]||had[1]]; g.avs=gAvs(g);
+      g.n=g.moves.length; g.last=Date.now(); g.over=r.st.over; g.turn=r.st.over?-1:r.st.turn; g.cfg=twoPlayerCfg(g0.cfg,g.names,g.avs);
       tpSave(S,g); persist(); closeSheet(); openTpGame(g); };
-    if(!g){ openSheet(`<h2 data-raw>${esc(TF('Join {0}\'s game',g0.names[0]||T('Player 1')))}</h2><div class="sub">${esc(setupLabel(Object.assign({size:g0.cfg.size,shape:g0.cfg.shape},g0.cfg.mods)))}</div>
+    if(!g){ openSheet(`<div style="margin-bottom:8px">${avH(g0.avs[0],g0.names[0],44)}</div><h2 data-raw>${esc(TF('Join {0}\'s game',g0.names[0]||T('Player 1')))}</h2><div class="sub">${esc(setupLabel(Object.assign({size:g0.cfg.size,shape:g0.cfg.shape},g0.cfg.mods)))}</div>
         <div class="opt"><div class="h">Your name</div><input type="text" id="n2" maxlength="16" value="${esc(P.name||'')}" placeholder="Player 2"></div>
         <div class="btns"><button class="ghost" data-close>Close</button><button class="primary" id="jGo">Play</button></div>`);
       $('#jGo').onclick=()=>{ const nm=cleanName($('#n2').value)||'Player 2'; S.name=nm==='Player 2'?S.name:nm; refreshShared();
-        g={id:g0.id,idb:g0.idBytes,mode:'code',me:1,names:[g0.names[0]||'Player 1',nm],cfg:g0.cfg,moves:[],n:0,last:Date.now(),over:false,turn:1}; g0.names[1]=nm; finish(); };
+        g={id:g0.id,idb:g0.idBytes,mode:'code',me:1,names:[g0.names[0]||'Player 1',nm],avs:[g0.avs[0],myAv()],cfg:g0.cfg,moves:[],n:0,last:Date.now(),over:false,turn:1}; g0.names[1]=nm; finish(); };
       return; }
     finish(); }; }
-function tpCodeText(g,st){ const code=encodeGame({id:g.idb,cfg:g.cfg,names:g.names,moves:codeMoves(st)}), me=g.me, opp=1-me, sc=st.scores;
+function tpCodeText(g,st){ const code=encodeGame({id:g.idb,cfg:g.cfg,names:g.names,avs:gAvs(g),moves:codeMoves(st)}), me=g.me, opp=1-me, sc=st.scores;
   const head=st.over?`Tilecraft · game over: ${g.names[0]} ${st.result.final[0]} – ${st.result.final[1]} ${g.names[1]||'Player 2'}`:`Tilecraft · your move, ${g.names[opp]||'friend'}! ${g.names[0]} ${sc[0]} – ${sc[1]} ${g.names[1]||'Player 2'}`;
   return `${head}\nPaste this whole message into Tilecraft (2-Player → Paste code):\n${code}`; }
 function openTpGame(g){ const st=cloneState(tpState(g)); startGame({mode:'tp',gid:g.id},st); }
@@ -826,7 +834,7 @@ function render(){ if(!G) return; const st=G.st, B=boardOf(st.cfg), last=st.move
     if(el.innerHTML!==inner) el.innerHTML=inner; el.classList.toggle('tgt',G.sel!=null&&!c&&!pd&&!!B.mask[i]); }
   renderSb(); renderRack(); renderWl(); renderActs(); }
 function renderSb(){ const st=G.st, np=st.racks.length, cfg=st.cfg, tg=G.mode==='tp'?tpGame(G):null;
-  const pl=p=>`<div class="pl${!st.over&&st.turn===p?' on':''}"><div class="nm" data-raw>${esc(cfg.players[p].name||'Player '+(p+1))}${tg&&tg.mode==='code'&&tg.me===p?` (${esc(T('you'))})`:''}</div><div class="sc">${st.result?st.result.final[p]:st.scores[p]}</div>${G.ai&&st.turn===p?'<div class="think">thinking…</div>':''}</div>`;
+  const pl=p=>`<div class="pl${!st.over&&st.turn===p?' on':''}"><div class="nm" data-raw>${tg?avH(p===(tg.me==null?-1:tg.me)?gAvs(tg)[p]:cfg.players[p].av,cfg.players[p].name,18):''}${esc(cfg.players[p].name||'Player '+(p+1))}${tg&&tg.mode==='code'&&tg.me===p?` (${esc(T('you'))})`:''}</div><div class="sc">${st.result?st.result.final[p]:st.scores[p]}</div>${G.ai&&st.turn===p?'<div class="think">thinking…</div>':''}</div>`;
   let mid; const timer=G.timer?`<div class="mid${G.timer.left<=5?' warn':''}"><b>${G.timer.left}</b><span>sec</span></div>`:'';
   if(cfg.solo) mid=`<div class="mid"><b>${Math.min(cfg.turns,st.moves.length+(st.over?0:1))}/${cfg.turns}</b><span>Turn</span></div>`;
   else mid=`<div class="mid"><b>${st.bag.length}</b><span>Bag</span></div>`;
@@ -997,7 +1005,7 @@ function startTimer(sec){ stopTimer(); G.timer={left:sec}; G.timer.iv=setInterva
 function stopTimer(){ if(G&&G.timer){ clearInterval(G.timer.iv); G.timer=null; } }
 // pass-and-play: hide the rack between turns
 let coverIs=false; const coverOn=()=>coverIs;
-function showCover(name){ coverIs=true; recallAll(true); const c=$('#cover'); c.innerHTML=`<h2 data-raw>${esc(TF('Pass to {0}',name))}</h2><p data-raw>${esc(TF('The rack is hidden until {0} is ready.',name))}</p><button class="primary" style="max-width:260px" id="cvGo" data-raw>${esc(TF('I\'m {0}: show my tiles',name))}</button><button class="ghost" style="max-width:260px" id="cvMenu">Menu</button>`;
+function showCover(name){ coverIs=true; recallAll(true); const c=$('#cover'), pl=G.st.cfg.players.find(x=>x.name===name); c.innerHTML=`${pl?avH(pl.av,name,64):''}<h2 data-raw>${esc(TF('Pass to {0}',name))}</h2><p data-raw>${esc(TF('The rack is hidden until {0} is ready.',name))}</p><button class="primary" style="max-width:260px" id="cvGo" data-raw>${esc(TF('I\'m {0}: show my tiles',name))}</button><button class="ghost" style="max-width:260px" id="cvMenu">Menu</button>`;
   c.classList.add('on'); $('#cvGo').onclick=()=>{ hideCover(); syncRack(); render(); if(G.st.cfg.mods.timer) startTimer(G.st.cfg.mods.timer); }; $('#cvMenu').onclick=()=>{ hideCover(); leaveGame(); }; }
 function hideCover(){ coverIs=false; $('#cover').classList.remove('on'); }
 

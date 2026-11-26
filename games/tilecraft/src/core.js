@@ -1,7 +1,7 @@
 // ===================== Tilecraft core =====================
 // Save, XP and levels, hints, records, campaign stars and unlocks, the Daily, achievements, cosmetics, the 2-Player
 // games list, backup and the Arcade contract. No DOM: storage is passed in, so Node tests can run it.
-const VERSION='0.1.0', GAME_ID='tilecraft', KEY='tilecraft.v1', SUMKEY='arcade.summary.tilecraft', ARCADE_KEY='arcade.v1';
+const VERSION='0.1.1', GAME_ID='tilecraft', KEY='tilecraft.v1', SUMKEY='arcade.summary.tilecraft', ARCADE_KEY='arcade.v1';
 const MAXL=10, LVXP=[0,50,150,300,525,825,1225,1725,2375,3175]; // Sweep's first 10 steps: 50,100,150,225,300,400,500,650,800
 const levelOf=xp=>{ let l=1; while(l<MAXL&&xp>=LVXP[l]) l++; return l; };
 const SHARED=['appearance','motion','sfx','music','haptics','fullscreen','cb','lefty','lang'];

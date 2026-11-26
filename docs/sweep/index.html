@@ -11,6 +11,7 @@
 <meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Arcade"><meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="stylesheet" href="../fonts.css">
+<script src="../avatars.js"></script>
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <style>
 :root{--bg:#f4f4f1;--panel:#fff;--ink:#1c1c1e;--sub:#8e8e93;--accent:#1c1c1e;--accentInk:#fff;--line:rgba(0,0,0,.08)}
@@ -161,7 +162,7 @@ button.sm{padding:9px 14px;font-size:13.5px;min-width:0;width:auto;margin:0}
 ul.news{margin:0 0 4px;padding:0 0 0 18px;text-align:left;font-size:14px;line-height:1.45}ul.news li{margin:0 0 7px}ul.news b{font-weight:700}
 .lb{margin:6px 0 12px;display:flex;flex-direction:column;gap:4px}
 .lbr{display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:8px;padding:9px 10px;border-radius:12px;background:var(--bg);text-align:left;font-size:14.5px}
-.lbr.me{box-shadow:inset 0 0 0 2px var(--accent)}.lbk{font-weight:800;text-align:center}.lbn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.lbn small{color:var(--sub)}
+.lbr.me{box-shadow:inset 0 0 0 2px var(--accent)}.lbk{font-weight:800;text-align:center}.lbn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center;gap:8px;min-width:0}.lbn>[data-raw]{overflow:hidden;text-overflow:ellipsis}.lbn small{color:var(--sub)}
 .lbt{font-weight:700;font-variant-numeric:tabular-nums;text-align:right}.lbt small{display:block;font-size:10.5px;color:var(--sub);font-weight:600}
 .fdps{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.fdp{background:var(--bg);border-radius:12px;padding:8px 6px;text-align:center;display:flex;flex-direction:column;gap:2px}
 .fdp b{font-size:13px}.fdp span{font-size:11px;color:var(--sub)}
@@ -870,6 +871,7 @@ const lgLen=n=>{ const [y,m]=lgMonth(n); return new Date(y,m,0).getDate(); };
 // Season code: SWL2.<base64url> = version, season, player id, last season's rank, fingerprint of one played round,
 // a bitmask of rounds played, then won+hints, time and % cleared for each played round, then the name.
 // (SWL1 codes from v0.10 had no % cleared: wins read as 100%, losses as 0%.)
+// Since Arcade 0.12 a code may end with 0xA1 + the player's avatar number; older readers ignore the extra bytes.
 function encodeSeason(r){
   const b=[1, r.season&255, r.season>>8, ...r.pid, r.prev|0, r.fpDay|0];
   for(let i=0;i<8;i+=2) b.push(r.fp?parseInt(r.fp.substr(i,2),16):0);
@@ -877,6 +879,7 @@ function encodeSeason(r){
   b.push(mask&255,(mask>>>8)&255,(mask>>>16)&255,(mask>>>24)&255);
   for(const d of days){ const x=r.days[d], t=Math.max(0,Math.min(65535,Math.round(x.t*10))); b.push((x.won?1:0)|(Math.min(127,x.h|0)<<1),t&255,t>>8,Math.max(0,Math.min(100,x.won?100:Math.round(x.p||0)))); }
   const nm=new TextEncoder().encode(cleanName(r.name||'')); b[0]=2; b.push(nm.length,...nm);
+  if(r.av) b.push(0xA1,r.av&255);
   return 'SWL2.'+toB64U(Uint8Array.from(b));
 }
 function decodeSeason(code){
@@ -887,8 +890,9 @@ function decodeSeason(code){
   const mask=(b[p]|(b[p+1]<<8)|(b[p+2]<<16)|(b[p+3]<<24))>>>0; p+=4; const days={};
   for(let d=1;d<=31;d++) if(mask&(1<<(d-1))){ if(p+per>b.length) throw new Error('short'); const st=b[p], won=!!(st&1);
     days[d]={won,h:st>>1,t:(b[p+1]|(b[p+2]<<8))/10,p:won?100:per===4?Math.min(100,b[p+3]):0}; p+=per; }
-  const nl=b[p++]||0, name=cleanName(new TextDecoder().decode(b.slice(p,p+nl)));
-  return {season,pid,prev,fpDay,fp,days,name};
+  const nl=b[p++]||0, name=cleanName(new TextDecoder().decode(b.slice(p,p+nl))); p+=nl;
+  const av=b[p]===0xA1?b[p+1]|0:0;
+  return {season,pid,prev,fpDay,fp,days,name,av};
 }
 const allCodes=(text,re)=>[...String(text).matchAll(re)].map(m=>m[0]);
 function encodeChallenge(g,meta){
@@ -898,6 +902,7 @@ function encodeChallenge(g,meta){
   const bits=[]; if(g.NP<g.N) for(let i=0;i<g.N;i++) bits.push(g.mask[i]);
   for(let i=0;i<g.N;i++){ if(g.dbl){ bits.push(g.mines[i]>>1&1,g.mines[i]&1); } else bits.push(g.mines[i]?1:0); }
   for(let i=0;i<bits.length;i+=8){ let v=0; for(let k=0;k<8;k++) v=(v<<1)|(bits[i+k]||0); b.push(v); }
+  if(meta.av) b.push(0xA1,meta.av&255); // avatar (Arcade 0.12): after the mine bits, so older readers ignore it
   return 'SWC1.'+toB64U(Uint8Array.from(b));
 }
 function decodeChallenge(text){
@@ -911,7 +916,8 @@ function decodeChallenge(text){
   const mask=new Uint8Array(N).fill(1); if(hasMask) for(let i=0;i<N;i++) mask[i]=rd();
   const mines=new Uint8Array(N); for(let i=0;i<N;i++) mines[i]=dbl?(rd()<<1|rd()):rd();
   if(start>=N||!mask[start]||mines[start]) throw new Error('start');
-  return {mode,dbl,hasMask,mask,mines,W,H,diff,start,time,hints,src,lv,name};
+  const end=p+Math.ceil(((hasMask?N:0)+N*(dbl?2:1))/8), av=b[end]===0xA1?b[end+1]|0:0;
+  return {mode,dbl,hasMask,mask,mines,W,H,diff,start,time,hints,src,lv,name,av};
 }
 if(typeof module!=='undefined') module.exports={deduce,genClassic,classicSolve,makeNb,Classic,Endless,K,KX,KY,nbK,classicHint,endlessHint,countNums,shapeMask,SHAPES,SHAPE_FILL,makePuzzle,makeNb,dblSolve,bbbv,analyze,classify,encodeChallenge,decodeChallenge,fdBoard,fdDay,fdDate,encodeResult,decodeResult,seedRng,boardPrint,allCodes,cleanName,lgNo,lgMonth,lgDate,lgLen,encodeSeason,decodeSeason};
 
@@ -2038,9 +2044,10 @@ const DENS={calm:{name:'Calm',p:.14,per:20},standard:{name:'Standard',p:.17,per:
 const LV=[0,50,150,300,525,825,1225,1725,2375,3175,4075,5075,6175,7375,8675,10075,11575,13175,14875,16675], MAXL=20;
 
 // ---------- save data (this browser only) ----------
-const KEY='sweep.v1', VERSION='1.2.1';
+const KEY='sweep.v1', VERSION='1.2.2';
 // What's new: shown once after an update (newest first). Keep entries short and player-facing.
 const CHANGES=[
+ {v:'1.2.2',items:['In the Arcade, League tables and friend challenges show each player\'s Arcade avatar next to their name. Codes from older versions still work.']},
  {v:'1.2.1',items:['Sweep now opens instantly even when your Wi-Fi is connected but the internet is down. Updates download in the background and are used the next time you open Sweep.']},
  {v:'1.2',items:['Progress is split into tabs: Levels, Achievements, Expeditions and Stats.','Long reward text in Progress now wraps instead of running off the screen.']},
  {v:'1.1.1',items:['Fixed: pop-up messages could get stuck peeking out at the top of the screen.']},
@@ -2129,6 +2136,9 @@ function openLang(){
   $$('#sheet2 [data-lang]').forEach(b=>b.onclick=()=>{ const v=b.dataset.lang; if(v===cur){ hideOv2(); return; } if(cfg&&cfg.kind==='endless') saveRun(); S.lang=v; persist(); location.reload(); }); }
 const persist=()=>{ try{ localStorage.setItem(KEY,JSON.stringify(S)); }catch(e){} if(ARCADE){ clearTimeout(sumT); sumT=setTimeout(writeSummary,300); } };
 let sumT=0;
+// Avatars (Arcade 0.12): in the Arcade, players show their Arcade avatar; codes carry its number. Standalone: none shown.
+const avOn=()=>ARCADE&&!!window.ArcadeAvatars, myAv=()=>avOn()?ArcadeAvatars.mine():0;
+const avH=(n,name,size)=>avOn()?ArcadeAvatars.html(n,name,size||22):'';
 // The one record the Arcade reads for this game: level, achievements and a few highlights. It never reads sweep.v1 itself.
 function writeSummary(){ try{ const l=levelOf(S.xp), nx=l>=MAXL?null:LV[l];
   const sum={v:1,game:'sweep',ver:VERSION,level:l,maxLevel:MAXL,xp:S.xp,xpLevel:LV[l-1]||0,xpNext:nx,
@@ -2993,7 +3003,7 @@ const starStr=b=>[1,2,4].map(m=>b&m?'★':'☆').join('');
 const shareLine=()=>`Sweep · ${cfg.daily?'Daily ':''}${boardName()} · ${clock(G.elapsed())} · ${starStr(winStars())}`;
 function chalCode(){ if(cfg.daily||cfg.tut||cfg.kind!=='classic'||G.rev0) return null;
   const start=(G.log&&G.log.length)?G.log.find(m=>m.a==='r').i:null; if(start==null) return null;
-  return encodeChallenge(G,{diff:Math.max(0,DIDX.indexOf(cfg.d)),start,time:G.elapsed(),hints:G.hintsUsed||0,src:cfg.challenge?cfg.challenge.src:cfg.camp?2:cfg.week?3:0,lv:cfg.challenge?cfg.challenge.lv:cfg.camp?cfg.camp.ci*15+cfg.camp.li:0,name:S.name||''}); }
+  return encodeChallenge(G,{diff:Math.max(0,DIDX.indexOf(cfg.d)),start,time:G.elapsed(),hints:G.hintsUsed||0,src:cfg.challenge?cfg.challenge.src:cfg.camp?2:cfg.week?3:0,lv:cfg.challenge?cfg.challenge.lv:cfg.camp?cfg.camp.ci*15+cfg.camp.li:0,name:S.name||'',av:myAv()}); }
 async function shareText(txt){
   try{ if(navigator.share){ await navigator.share({text:txt}); return; } }catch(e){ if(e&&e.name==='AbortError') return; }
   try{ await navigator.clipboard.writeText(txt); toast('Copied. Paste it to a friend.',true); }catch(e){ const t=$('#shOut'); if(t){ t.focus(); t.select(); } toast('Selected. Copy it from the box.',true); }
@@ -3036,13 +3046,13 @@ function chalAfter(){
     const mo=motionOn(), ws=mo?Math.min(lastRipple,700)*.6+120:0; anWin(ws); setTimeout(()=>sfx('win'),ws); if(beat) setTimeout(winFx,ws+200);
     later(()=>{ const who=ch.name||'Your friend', dt=Math.abs(ch.time-t);
       sheet(`<h2>${beat?'You win!':used?'Cleared':'So close'}</h2><div class="sub">Challenge · ${ch.label}${used?` · ${used} hint${used>1?'s':''}`:''}</div>
-      <div class="stats"><div class="${beat?'win':''}"><b>${fmt(t)}</b><span>You</span></div><div class="${beat?'':'win'}"><b>${fmt(ch.time)}</b><span>${who.replace(/</g,'&lt;')}</span></div></div>
+      <div class="stats"><div class="${beat?'win':''}"><b>${fmt(t)}</b><span>${avH(myAv(),S.name,18)} You</span></div><div class="${beat?'':'win'}"><b>${fmt(ch.time)}</b><span>${avH(ch.av,who,18)} ${who.replace(/</g,'&lt;')}</span></div></div>
       <div class="sub" style="margin:-4px 0 12px">${beat?`Faster by ${fmt(dt)}.`:used?'Hinted runs can\'t beat a challenge, but you cleared it.':`${fmt(dt)} behind. Try again: it's the same board.`}</div>
       ${got.map(unl).join('')}
       <div class="row-b"><button class="ghost" data-a="ana">${ICON.chart||''}Analysis</button><button class="ghost" data-a="share">${ICON.share||''}Send back</button></div>
       <div class="btns"><button class="primary" data-a="again">${beat?'Play it again':'Try again'}</button><button class="ghost" data-a="home">Home</button></div>`); },mo?ws+1250:380);
   } else if(G.state==='lost'&&!recorded){ recorded=true; buzz([40,40,80]);
-    later(()=>sheet(`<h2>Boom</h2><div class="sub">Challenge · ${ch.label}</div><div class="sub" style="margin:-8px 0 14px">${(ch.name||'Your friend').replace(/</g,'&lt;')} cleared it in ${fmt(ch.time)}. It's the same board every try.</div>
+    later(()=>sheet(`<h2>Boom</h2><div class="sub">Challenge · ${ch.label}</div><div class="sub" style="margin:-8px 0 14px">${avH(ch.av,ch.name,22)} ${(ch.name||'Your friend').replace(/</g,'&lt;')} cleared it in ${fmt(ch.time)}. It's the same board every try.</div>
       <div class="btns"><button class="primary" data-a="again">Try again</button><button class="ghost" data-a="view">View board</button><button class="ghost" data-a="home">Home</button></div>`),motionOn()?1350:500); }
 }
 
@@ -3083,14 +3093,14 @@ const myRes=(n,day)=>{ const Z=sea(n), me=Z.m[lgS().pid]; return me&&me.d[day]||
 const better=(a,b)=>a.stars>b.stars||(a.stars===b.stars&&(a.p>b.p||(a.p===b.p&&a.won&&b.won&&a.t<b.t)));
 function roundRows(n,day){ const Z=sea(n), pid=lgS().pid, rows=[];
   for(const [p,M] of Object.entries(Z.m)){ const x=M.d[day]; if(!x) continue; if(p===pid&&!Z.joined) continue;
-    rows.push({pid:p,me:p===pid,name:p===pid?Z.name:M.n||'Anonymous',pr:M.pr||0,won:x.won,t:x.t,h:x.h,p:pctOf(x),stars:rStars(x)}); }
+    rows.push({pid:p,me:p===pid,name:p===pid?Z.name:M.n||'Anonymous',av:p===pid?myAv():M.av||0,pr:M.pr||0,won:x.won,t:x.t,h:x.h,p:pctOf(x),stars:rStars(x)}); }
   rows.sort((a,b)=>(b.stars-a.stars)||(b.p-a.p)||((a.won?a.t:1e9)-(b.won?b.t:1e9))||a.name.localeCompare(b.name));
   rows.forEach(r=>{ r.rank=1+rows.filter(o=>better(o,r)).length; }); return rows; }
 function tableRows(n){ const Z=sea(n), pid=lgS().pid, rows=[];
   for(const [p,M] of Object.entries(Z.m)){ if(p===pid&&!Z.joined) continue; const xs=Object.values(M.d); if(!xs.length&&p!==pid) continue;
-    const won=xs.filter(x=>x.won); rows.push({pid:p,me:p===pid,name:p===pid?Z.name:M.n||'Anonymous',pr:p===pid?myPrev(n):M.pr||0,
+    const won=xs.filter(x=>x.won); rows.push({pid:p,me:p===pid,name:p===pid?Z.name:M.n||'Anonymous',av:p===pid?myAv():M.av||0,pr:p===pid?myPrev(n):M.pr||0,
       stars:xs.reduce((a,x)=>a+rStars(x),0),prog:xs.reduce((a,x)=>a+pctOf(x),0),cleared:won.length,rounds:xs.length,time:won.reduce((a,x)=>a+x.t,0)}); }
-  if(Z.joined&&!rows.some(r=>r.me)) rows.push({pid,me:true,name:Z.name,pr:myPrev(n),stars:0,prog:0,cleared:0,rounds:0,time:0});
+  if(Z.joined&&!rows.some(r=>r.me)) rows.push({pid,me:true,name:Z.name,av:myAv(),pr:myPrev(n),stars:0,prog:0,cleared:0,rounds:0,time:0});
   // ties: more total progress, then the faster total time on cleared rounds
   const ahead=(o,r)=>o.stars>r.stars||(o.stars===r.stars&&(o.prog>r.prog||(o.prog===r.prog&&o.time<r.time)));
   rows.sort((a,b)=>(b.stars-a.stars)||(b.prog-a.prog)||(a.time-b.time)||a.name.localeCompare(b.name));
@@ -3111,7 +3121,7 @@ function lgFinalize(){
       msgs.push(`Round ${day}: ${me.won?ord(me.rank)+' of '+rows.length:'DNF'}`); }
     if(n<cur&&!Z.fin&&(cur>n+1||lgDay()>=2)){
       const rows=tableRows(n), me=rows.find(r=>r.me), beat=me&&rows.some(r=>r!==me&&r.rank>me.rank);
-      Z.fin={rank:me?me.rank:0,n:rows.length,stars:me?me.stars:0,counted:!!(Z.joined&&beat),top:rows.slice(0,5).map(r=>({name:r.name,stars:r.stars,me:r.me}))};
+      Z.fin={rank:me?me.rank:0,n:rows.length,stars:me?me.stars:0,counted:!!(Z.joined&&beat),top:rows.slice(0,5).map(r=>({name:r.name,av:r.av,stars:r.stars,me:r.me}))};
       if(Z.joined&&me){ const xp=beat?LG_XP[me.rank]||0:0, gotS=[];
         if(beat&&me.rank<=3&&award('lgs3',true)) gotS.push('lgs3'); if(beat&&me.rank===1&&award('lgs1',true)) gotS.push('lgs1');
         L.troph.push({season:n,rank:me.rank,n:rows.length,stars:me.stars,counted:!!beat});
@@ -3126,7 +3136,7 @@ function lgRecap(r){
   const {n,me,rows,xp,got,ups}=r;
   sheet2(`<h2>League ${n} is over</h2><div class="sub">${monthName(n)} · ${rows.length} player${rows.length>1?'s':''}</div>
     <div class="stats"><div class="${me.rank===1?'win':''}"><b>${ord(me.rank)}</b><span>Your place</span></div><div><b>${me.stars}★</b><span>Stars</span></div></div>
-    <div class="lb">${rows.slice(0,3).map(x=>`<div class="lbr${x.me?' me':''}"><span class="lbk">${x.rank}</span><span class="lbn"><span data-raw>${esc(x.name)}</span>${x.me?' <small>(you)</small>':''}</span><span class="lbt">${x.stars}★</span></div>`).join('')}</div>
+    <div class="lb">${rows.slice(0,3).map(x=>`<div class="lbr${x.me?' me':''}"><span class="lbk">${x.rank}</span><span class="lbn">${avH(x.av,x.name)}<span data-raw>${esc(x.name)}</span>${x.me?' <small>(you)</small>':''}</span><span class="lbt">${x.stars}★</span></div>`).join('')}</div>
     ${xp?`<div class="xpline">+${xp} XP<small>Season bonus</small></div>`:'<div class="sub" style="margin:0 0 10px">Season rewards need you to finish ahead of at least one player.</div>'}
     ${(ups||[]).map(lvlLine).join('')}${got.map(unl).join('')}
     <div class="btns"><button class="primary" id="lgNext">Join League ${lgCur()}</button><button class="ghost" data-close>Close</button></div>`);
@@ -3135,14 +3145,14 @@ function lgRecap(r){
 }
 function lgImport(text,quiet){
   const L=lgS(), cur=lgCur(), out={add:0,upd:0,self:0,late:0,ver:0,bad:0,old:0,names:[]};
-  const merge=(n,pid,name,pr,days)=>{ const Z=sea(n); if(Z.fin){ out.late++; return; }
+  const merge=(n,pid,name,pr,days,av)=>{ const Z=sea(n); if(Z.fin){ out.late++; return; }
     let M=Z.m[pid]; const fresh=!M; if(!M) M=Z.m[pid]={n:name||'Anonymous',d:{}}; // first name seen is locked for the season
-    if(pr) M.pr=pr; let ch=0; for(const [day,x] of Object.entries(days)){ const o=M.d[day]; if(!o||o.t!==x.t||o.won!==x.won||o.h!==x.h||(o.p||0)!==(x.p||0)){ M.d[day]=x; ch++; } }
+    if(pr) M.pr=pr; if(av) M.av=av; /* the avatar can change: the newest code wins */ let ch=0; for(const [day,x] of Object.entries(days)){ const o=M.d[day]; if(!o||o.t!==x.t||o.won!==x.won||o.h!==x.h||(o.p||0)!==(x.p||0)){ M.d[day]=x; ch++; } }
     if(fresh){ out.add++; out.names.push(M.n); } else if(ch) out.upd++; };
   for(const c of allCodes(text,/SWL[12]\.[A-Za-z0-9_-]+/g)){ let r; try{ r=decodeSeason(c); }catch(e){ out.bad++; continue; }
     if(r.pid===L.pid){ out.self++; continue; } if(r.season<cur-1||r.season>cur+1){ out.old++; continue; }
     if(r.fpDay){ let fp; try{ fp=fdPrint(lgDate(r.season,r.fpDay)); }catch(e){ out.bad++; continue; } if(fp!==r.fp){ out.ver++; continue; } }
-    merge(r.season,r.pid,r.name,r.prev,r.days); }
+    merge(r.season,r.pid,r.name,r.prev,r.days,r.av); }
   for(const c of allCodes(text,/SWR1\.[A-Za-z0-9_-]+/g)){ let r; try{ r=decodeResult(c); }catch(e){ out.bad++; continue; } // v0.9 single-day links
     if(r.pid===L.pid){ out.self++; continue; } const n=lgNo(r.date); if(n<cur-1||n>cur+1){ out.old++; continue; }
     let fp; try{ fp=fdPrint(r.date); }catch(e){ out.bad++; continue; } if(fp!==r.fp){ out.ver++; continue; }
@@ -3157,7 +3167,7 @@ function lgImport(text,quiet){
 }
 function myCode(){ const L=lgS(), n=lgCur(), Z=sea(n), me=Z.m[L.pid], days=me?me.d:{}, ds=Object.keys(days).map(Number);
   const fpDay=ds.length?Math.max(...ds):0;
-  return encodeSeason({season:n,pid:L.pid.match(/../g).map(h=>parseInt(h,16)),prev:myPrev(n),fpDay,fp:fpDay?fdPrint(lgDate(n,fpDay)):'',days,name:Z.name}); }
+  return encodeSeason({season:n,pid:L.pid.match(/../g).map(h=>parseInt(h,16)),prev:myPrev(n),fpDay,fp:fpDay?fdPrint(lgDate(n,fpDay)):'',days,name:Z.name,av:myAv()}); }
 function lgShareText(){ const n=lgCur(), day=lgDay(), x=myRes(n,day), me=tableRows(n).find(r=>r.me);
   const head=x?`Sweep League ${n} · Round ${day} · ${x.won?clock(x.t):`💥 ${pctOf(x)}%`} ${starStr(STARBITS[rStars(x)])}`:`Sweep League ${n}`;
   return `${head}\nSeason: ${me?me.stars:0}★ from ${me?me.rounds:0} round${me&&me.rounds===1?'':'s'}\nTap to update my results in your league: ${APP_URL}#l=${myCode()}`; }
@@ -3220,14 +3230,14 @@ let lgTab='table';
 function openLeague(tab){
   lgFinalize(); const n=lgCur(), Z=sea(n), day=lgDay(), L=lgS(); tab=tab||lgTab; lgTab=tab;
   const played=!!myRes(n,day), P=sea(n-1), hasPrev=!!(P.fin&&P.joined)||Object.keys(P.m).length>0;
-  const row=(r,val,sub)=>`<div class="lbr${r.me?' me':''}"><span class="lbk">${r.rank}</span><span class="lbn"><span data-raw>${esc(r.name)}${crown(r.pr)}</span>${r.me?' <small>(you)</small>':''}</span><span class="lbt">${val}${sub?`<small>${sub}</small>`:''}</span></div>`;
+  const row=(r,val,sub)=>`<div class="lbr${r.me?' me':''}"><span class="lbk">${r.rank}</span><span class="lbn">${avH(r.av,r.name)}<span data-raw>${esc(r.name)}${crown(r.pr)}</span>${r.me?' <small>(you)</small>':''}</span><span class="lbt">${val}${sub?`<small>${sub}</small>`:''}</span></div>`;
   let body='';
   if(tab==='table'){ const rows=tableRows(n);
     body=rows.length?`<div class="lb">${rows.map(r=>row(r,r.stars+'★',`${r.rounds} round${r.rounds===1?'':'s'}`)).join('')}</div>`:'<div class="sub" style="margin:8px 0 12px">No players yet. Join and share your code to start the table.</div>'; }
   else if(tab==='round'){ const rows=roundRows(n,day), others=rows.filter(r=>!r.me).length;
     body=!played&&Z.joined?`<div class="sub" style="margin:8px 0 12px">${others} player${others===1?' has':'s have'} played Round ${day}. Play to see their results.</div>`
       :rows.length?`<div class="lb">${rows.map(r=>row(r,starStr(STARBITS[r.stars]),r.won?fmt(r.t):`💥 at ${r.p}%`)).join('')}</div>`:'<div class="sub" style="margin:8px 0 12px">No results for this round yet.</div>'; }
-  else { const f=P.fin; body=f?`<div class="sub" style="margin:0 0 8px">Final table · ${P.joined?`you finished ${ord(f.rank)} of ${f.n}`:'you didn\'t play'}</div><div class="lb">${f.top.map((r,i)=>`<div class="lbr${r.me?' me':''}"><span class="lbk">${i+1}</span><span class="lbn"><span data-raw>${esc(r.name)}</span>${r.me?' <small>(you)</small>':''}</span><span class="lbt">${r.stars}★</span></div>`).join('')}</div>`
+  else { const f=P.fin; body=f?`<div class="sub" style="margin:0 0 8px">Final table · ${P.joined?`you finished ${ord(f.rank)} of ${f.n}`:'you didn\'t play'}</div><div class="lb">${f.top.map((r,i)=>`<div class="lbr${r.me?' me':''}"><span class="lbk">${i+1}</span><span class="lbn">${avH(r.av,r.name)}<span data-raw>${esc(r.name)}</span>${r.me?' <small>(you)</small>':''}</span><span class="lbt">${r.stars}★</span></div>`).join('')}</div>`
       :`<div class="lb">${tableRows(n-1).map(r=>row(r,r.stars+'★','')).join('')}</div><div class="sub" style="font-size:12px;margin:-6px 0 10px">Final results lock at the end of the 1st. Late codes still count until then.</div>`; }
   const T=L.tiers, live=k=>T[k].last===prevDay(today())||T[k].last===today()?T[k].st:0;
   sheet2(`<h2>League ${n}</h2><div class="sub">${monthName(n)} · Round ${day} of ${lgLen(n)} · ${lgLeft()}</div>

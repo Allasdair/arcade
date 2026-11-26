@@ -26,3 +26,17 @@ section('Challenge and result codes round-trip; names are cleaned',()=>{
   ok(ch.mode==='hex'&&ch.mines.every((v,i)=>v===g.mines[i])&&ch.time===71.2&&!/[<>]/.test(ch.name),'challenge code');
   const r=E.decodeResult(E.encodeResult({day:1055,pid:[9,9,9,9,9,9],won:true,hints:1,time:-5,fp:'01020304',name:'Pat'}));
   ok(r.time===0&&r.won&&r.hints===1&&r.name==='Pat','result code (negative time clamps to 0)'); });
+section('Avatars in codes (Arcade 0.12): round trip, absent on old codes, ignored by older readers',()=>{
+  const r={season:1,pid:[1,2,3,4,5,6],prev:0,fpDay:0,fp:'',days:{2:{won:true,h:0,t:50,p:100},5:{won:false,h:1,t:20,p:62}},name:'Ally'};
+  const a=E.decodeSeason(E.encodeSeason(Object.assign({av:7},r))), b=E.decodeSeason(E.encodeSeason(r));
+  ok(a.av===7&&b.av===0,'season code carries the avatar; no avatar reads as 0');
+  ok(JSON.stringify(Object.assign({},a,{av:0}))===JSON.stringify(b),'everything else is identical with or without an avatar');
+  // an older reader stops after the name: the extra bytes must sit after it
+  const raw=Buffer.from(E.encodeSeason(Object.assign({av:7},r)).slice(5),'base64url'), plain=Buffer.from(E.encodeSeason(r).slice(5),'base64url');
+  ok(raw.length===plain.length+2&&raw.slice(0,plain.length).equals(plain),'season avatar is appended after the name (older Sweep ignores it)');
+  for(const mode of ['sq','hex']) for(const dbl of [false,true]){ const g=new E.Classic(16,16,40,null,{mode,dbl}); g.click(8,8);
+    const meta={diff:1,start:8*16+8,time:71.2,hints:0,name:'Pat'}, c1=E.encodeChallenge(g,Object.assign({av:3},meta)), c0=E.encodeChallenge(g,meta);
+    const x=E.decodeChallenge(c1), y=E.decodeChallenge(c0);
+    ok(x.av===3&&y.av===0&&x.mines.every((v,i)=>v===y.mines[i])&&x.name===y.name,`challenge code carries the avatar (${mode}${dbl?', double':''})`);
+    const rb=Buffer.from(c1.slice(5),'base64url'), pb=Buffer.from(c0.slice(5),'base64url');
+    ok(rb.length===pb.length+2&&rb.slice(0,pb.length).equals(pb),`challenge avatar is appended at the end (${mode}${dbl?', double':''})`); } });
