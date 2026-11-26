@@ -32,7 +32,7 @@ async def main():
         first=await pg.evaluate("document.querySelector('.game').dataset.g"); check('favourite pins Sudoku to the top', first=='sudoku', first)
         await pg.click('[data-sort=az]'); await pg.wait_for_timeout(200)
         order=await pg.evaluate("[...document.querySelectorAll('.game')].map(g=>g.dataset.g)")
-        check('A–Z keeps favourites first, then alphabetical', order[0]=='sudoku' and order[1]=='t2048' and order[2]=='drift', ','.join(order[:4]))
+        check('A–Z keeps favourites first, then alphabetical', order[0]=='sudoku' and order[1]=='t2048' and order[2]=='chess', ','.join(order[:4]))
         check('tapping the star did not open the game', 'sudoku' not in pg.url)
         # play a game: session counted, then profile
         await pg.click('.game[data-g=snake]'); await pg.wait_for_selector('#toArcade',timeout=8000); await pg.wait_for_timeout(1500)

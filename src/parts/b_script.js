@@ -3,7 +3,7 @@
 // play-time stats, Arcade milestones and themes, and the overview. Each game owns its own save, XP, levels and unlocks.
 // The Arcade only ever reads a game's summary record, `arcade.summary.<id>`, which the game writes.
 // Storage keys are prefixed with the game's id so nothing collides.
-const VERSION='0.12', AKEY='arcade.v1';
+const VERSION='0.13', AKEY='arcade.v1';
 const GAME_BUILDS=/*GAME_BUILDS*/{}; // filled in by build.py: a hash of each game's page, for "Updated" badges
 const $=q=>document.querySelector(q), $$=q=>[...document.querySelectorAll(q)];
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -20,12 +20,14 @@ const GAMES=[
   {id:'solitaire',name:'Solitaire',desc:'Every deal winnable',path:'solitaire/index.html',prefix:'solitaire.',art:'solitaire'},
   {id:'mahjong',name:'Mahjong',desc:'Match pairs, clear the stack',path:'mahjong/index.html',prefix:'mahjong.',art:'mahjong'},
   {id:'sudoku',name:'Sudoku',desc:'Pure logic, never a guess',path:'sudoku/index.html',prefix:'sudoku.',art:'sudoku'},
+  {id:'chess',name:'Chess',desc:'Play, solve, improve',path:'chess/index.html',prefix:'chess.',art:'chess'},
   {id:'nonogram',name:'Nonograms',desc:'Picture logic puzzles',soon:true,art:'nono'},
 ];
 const LIVE=GAMES.filter(g=>!g.soon), gameById=id=>GAMES.find(g=>g.id===id);
 
 // What's new in the Arcade itself, newest first. Returning players see the entries since their last visit once.
 const CHANGES=[
+  ['0.13',['New game: Chess']],
   ['0.12',['Your avatar travels with you: Sweep\'s League and challenges and Tilecraft\'s 2-Player games show every player\'s avatar next to their name']],
   ['0.11',['A profile card with a pixel-art avatar and your achievements across every game','Profile: play time, most played game, games played and Arcade milestones','Arcade milestones unlock themes for the Arcade home','Favourite games, sorting, and New / Updated badges','The Arcade\'s own menus in Español, Français, Deutsch and Português','Install Arcade from Settings, and this What\'s new']],
   ['0.10',['New game: Sudoku']],
@@ -310,6 +312,7 @@ function openAbout(){ sheet(`<h2>${t('About Arcade')}</h2><div class="sub">${t('
   <div class="slabel" style="margin-top:14px">${t('Credits')}</div>
   <div class="note" style="margin:4px 2px 0">${t('Fonts: Inter, JetBrains Mono and Caveat, under the SIL Open Font License.')}<br>
   ${t('Tilecraft\'s words: the ENABLE word list (public domain). Its filter of offensive words started from the "List of Dirty, Naughty, Obscene and Otherwise Bad Words" by its contributors, under CC BY 4.0.')}<br>
+  ${t('Chess puzzles: the Lichess puzzle database (database.lichess.org), public domain (CC0). Thank you, Lichess.')}<br>
   ${t('Arcade and its games are open source under the MIT licence.')}</div>
   <div class="btns"><button class="ghost" data-close>${t('Close')}</button></div>`); }
 // What's new: everything after `since` (returning players, once), or the full history from Settings.

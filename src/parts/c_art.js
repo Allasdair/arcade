@@ -42,6 +42,9 @@ function art(kind){ const a='var(--accent)', s='var(--sub)';
     v.forEach((n,i)=>{ const x=17+(i%3)*13, y=6+Math.floor(i/3)*15; c+=`<rect x="${x}" y="${y}" width="12" height="14" rx="1.5" fill="var(--panel)"/>`;
       if(n) c+=`<text x="${x+6}" y="${y+10.5}" font-size="9" font-weight="800" text-anchor="middle" fill="${i===4?a:s}" font-family="Inter,sans-serif">${n}</text>`; });
     return `<svg viewBox="0 0 74 58" width="76" height="60"><rect x="15" y="4" width="43" height="50" rx="3" fill="none" stroke="${a}" stroke-width="1.6"/>${c}</svg>`; }
+  if(kind==='chess'){ // a corner of the board with a knight standing on it
+    let c=''; for(let y=0;y<4;y++) for(let x=0;x<5;x++) c+=`<rect x="${4+x*13}" y="${4+y*12.5}" width="13" height="12.5" fill="${(x+y)%2?s:'var(--panel)'}" opacity="${(x+y)%2?.35:1}"/>`;
+    return `<svg viewBox="0 0 74 58" width="76" height="60"><g>${c}</g><path d="M30 50h22l-1.5-5h-2.5c-1-6 1-10 4-15l-1-9c-1-3-4-6-9-7l-1.5-3-2 3.5-1.5-2-1 3.5c-4 3-6 7-7 12l3 2.5 3-2.5 4-1c-2 4-6 7-8 11v3h-2z" fill="${a}" stroke="var(--bg)" stroke-width="1.4" stroke-linejoin="round"/><circle cx="37" cy="21" r="1.3" fill="var(--accentInk)"/></svg>`; }
   if(kind==='nono'){ let c=''; const g=['01110','11011','11111','01010','01110']; g.forEach((r,y)=>[...r].forEach((v,x)=>{ c+=`<rect x="${10+x*10}" y="${3+y*10}" width="9" height="9" rx="1.5" fill="${v==='1'?s:'var(--panel)'}"/>`; })); return `<svg viewBox="0 0 70 56" width="74" height="58">${c}</svg>`; }
   return `<svg viewBox="0 0 70 50" width="74" height="54"><path d="M10 30h50l-7 10H17z" fill="${s}"/><path d="M26 30V16h16v14M33 16V8" fill="none" stroke="${s}" stroke-width="3"/><path d="M6 44q6-4 12 0t12 0 12 0 12 0 12 0" fill="none" stroke="${s}" stroke-width="2"/></svg>`; }
 

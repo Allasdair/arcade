@@ -1,0 +1,8 @@
+{
+  "name": "chess",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Chess for the Arcade: play, solve, improve.",
+  "scripts": { "test": "node tests/run.js", "layout": "python3 build.py && node tests/layout.js", "build": "python3 build.py", "puzzles": "node tools/build_puzzles.js", "levels": "node tools/build_levels.js", "calibrate": "node tools/calibrate.js" },
+  "devDependencies": { "playwright": "^1.49.0" }
+}

@@ -1,0 +1,35 @@
+{
+ "classic": 4000,
+ "daily": [
+  288,
+  288,
+  288,
+  288,
+  288,
+  288,
+  288
+ ],
+ "kb": 480,
+ "bands": [
+  916,
+  800,
+  800,
+  788,
+  696
+ ],
+ "themes": {
+  "mateIn1": 387,
+  "mateIn2": 561,
+  "mateIn3": 329,
+  "fork": 553,
+  "pin": 276,
+  "skewer": 184,
+  "discoveredAttack": 266,
+  "backRankMate": 251,
+  "promotion": 201,
+  "endgame": 1938,
+  "deflection": 255
+ },
+ "read": 40001,
+ "passed": 35506
+}

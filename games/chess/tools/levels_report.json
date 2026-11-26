@@ -1,0 +1,61 @@
+{
+ "relaxed": [],
+ "par": {
+  "p4": {
+   "engineMoves": 13,
+   "par": 24
+  },
+  "p8": {
+   "engineMoves": 10,
+   "par": 19
+  },
+  "p11": {
+   "engineWins": [
+    17,
+    19,
+    20
+   ],
+   "par": 35
+  },
+  "p12": {
+   "engineMoves": 5,
+   "par": 12
+  },
+  "n4": {
+   "engineMoves": 11,
+   "par": 21
+  },
+  "n8": {
+   "engineMoves": 10,
+   "par": 19
+  },
+  "n11": {
+   "engineWins": [
+    19,
+    29,
+    30
+   ],
+   "par": 50
+  },
+  "n12": {
+   "engineMoves": 8,
+   "par": 16
+  },
+  "q4": {
+   "engineMoves": 38,
+   "par": 48
+  },
+  "q8": {
+   "engineMoves": 18,
+   "par": 31
+  },
+  "q11": {
+   "engineWins": [
+    38,
+    44,
+    46
+   ],
+   "par": 72
+  }
+ }
+}

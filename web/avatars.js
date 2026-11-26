@@ -15,6 +15,7 @@ const LIST=[
   {id:'ace',game:'solitaire',name:'Ace',bg:'#d8f3dc',pal:{w:'#ffffff',k:'#1d1d1f',g:'#adb5bd'},px:['.gggggggg.','.gwwwwwwg.','.gwwkkwwg.','.gwkkkkwg.','.gkkkkkkg.','.gkkkkkkg.','.gwwkkwwg.','.gwkkkkwg.','.gwwwwwwg.','.gggggggg.']},
   {id:'dots',game:'mahjong',name:'Dots',bg:'#fef3c7',pal:{i:'#fffaf0',e:'#c9b68a',g:'#2a9d8f',r:'#e63946'},px:['.eeeeeeee.','.eiiiiiie.','.eigiigie.','.eiiiiiie.','.eiirriie.','.eiirriie.','.eiiiiiie.','.eigiigie.','.eiiiiiie.','.eeeeeeee.']},
   {id:'grid',game:'sudoku',name:'Grid',bg:'#dbeafe',pal:{l:'#94a3b8',b:'#2563eb',w:'#ffffff'},px:['llllllllll','lwwlwwlbbl','lwwlwwlbbl','llllllllll','lbblwwlwwl','lbblwwlwwl','llllllllll','lwwlbblwwl','lwwlbblwwl','llllllllll']},
+  {id:'knight',game:'chess',name:'Knight',bg:'#e9dcc9',pal:{k:'#3b2a1a',w:'#ffffff',m:'#a06e3c'},px:['..........','....k.k...','...kkkkm..','..kkwkkmm.','.kkkkkkkm.','kkkkkkkkm.','kk..kkkkm.','....kkkk..','..kkkkkkk.','.kkkkkkkkk']},
 ];
 const byId=id=>LIST.find(a=>a.id===id)||null;
 const byIdx=n=>LIST[(n|0)-1]||null;
