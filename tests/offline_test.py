@@ -12,7 +12,7 @@ from playwright.async_api import async_playwright
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 U = 'http://localhost:8771/arcade/'
-SRC = os.path.join(ROOT, 'src', 'index.html')
+SRC = os.path.join(ROOT, 'src', 'parts', 'b_script.js')
 ok_all = True
 
 def mode(m): open('/tmp/mode', 'w').write(m)

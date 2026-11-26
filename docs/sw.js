@@ -9,9 +9,9 @@
 //   service workers can't touch at all.
 // - Self-repair: if a cache goes missing (cleared by the browser or another app on this site), it's
 //   refilled the next time the app is opened online.
-const BUILD='ae83221f';
+const BUILD='4714c3e3';
 const PARTS={
- "arcade-shell-8414fde730": [
+ "arcade-shell-b3e0b74a9a": [
   "index.html",
   "fonts.css",
   "manifest.webmanifest",

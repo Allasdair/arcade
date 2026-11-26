@@ -30,32 +30,72 @@ svg.i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke
 .topbar{display:flex;align-items:center;gap:12px;padding:12px 16px 0;max-width:560px;width:100%;margin:0 auto}
 .topbar h2{font-size:24px;font-weight:800;letter-spacing:-.03em}
 .topbar .c{margin-left:auto;color:var(--sub);font-weight:700;font-variant-numeric:tabular-nums}
-.label{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--sub);margin:24px 4px 10px;display:flex;justify-content:space-between}
-.label span{letter-spacing:.02em;text-transform:none;font-weight:600}
+.label{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--sub);margin:24px 4px 10px;display:flex;justify-content:space-between;align-items:center;gap:10px}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:15px 16px;display:flex;align-items:center;gap:14px;width:100%;margin-bottom:10px;transition:transform .12s}
 button.card:active{transform:scale(.98)}
 .card .t{font-weight:700;font-size:17px;letter-spacing:-.01em}
 .card .s{color:var(--sub);font-size:13px;margin-top:2px;line-height:1.3}
-.card .r{margin-left:auto;text-align:right;font-variant-numeric:tabular-nums;flex:none}
-.card .r b{display:block;font-size:15px}
-.card .r span{font-size:10.5px;color:var(--sub);text-transform:uppercase;letter-spacing:.07em;font-weight:600}
 .grow{flex:1;min-width:0}
-.badge{width:54px;height:54px;border-radius:16px;background:var(--accent);color:var(--accentInk);display:grid;place-items:center;font-weight:800;font-size:23px;flex:none;font-variant-numeric:tabular-nums}
 .bar{height:8px;border-radius:99px;background:var(--bg);overflow:hidden;margin:8px 0 6px}
 .bar i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .6s}
-.hello{display:flex;align-items:center;gap:8px;margin:-6px 0 16px;color:var(--sub);font-weight:600;font-size:14px}
-.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:99px;background:var(--panel);border:1px solid var(--line);font-weight:700;font-size:13px;color:var(--ink)}
+/* identity card */
+.idc .t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.idc .chev{color:var(--sub)}
+.av{flex:none;border-radius:16px;overflow:hidden;display:block}
+.av svg{display:block;width:100%;height:100%}
+/* games */
 .games{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.game{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:10px;min-height:172px;transition:transform .12s;position:relative}
-button.game:active{transform:scale(.97)}
+.game{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:10px;min-height:172px;transition:transform .12s;position:relative;cursor:pointer}
+.game:active{transform:scale(.97)}
 .game .art{height:64px;border-radius:14px;background:var(--bg);display:grid;place-items:center;overflow:hidden}
-.game .nm{font-weight:800;font-size:18px;letter-spacing:-.02em}
+.game .nm{font-weight:800;font-size:18px;letter-spacing:-.02em;padding-right:26px}
 .game .ds{color:var(--sub);font-size:12.5px;line-height:1.3;margin-top:-6px}
 .game .ft{margin-top:auto;display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:var(--sub);font-variant-numeric:tabular-nums}
 .game .ft .lv{background:var(--accent);color:var(--accentInk);border-radius:8px;padding:3px 7px}
 .game .ft .bar{flex:1;margin:0;height:6px}
-.game.soon{opacity:.5}
-.game.soon .ft{color:var(--sub)}
+.game .fav{position:absolute;right:8px;top:8px;width:34px;height:34px;display:grid;place-items:center;color:var(--sub);border-radius:10px}
+.game .fav.on{color:var(--accent)}
+.game .fav svg{width:19px;height:19px}
+.game .fav.on svg{fill:currentColor}
+.tag{position:absolute;left:10px;top:10px;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:3px 7px;border-radius:7px;background:var(--accent);color:var(--accentInk)}
+.soon{display:flex;gap:10px;align-items:center;margin-top:16px;color:var(--sub);font-size:13px;font-weight:600}
+.soon .chip{opacity:.8}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:99px;background:var(--panel);border:1px solid var(--line);font-weight:700;font-size:13px;color:var(--ink)}
+/* profile */
+.phead{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;margin:6px 0 18px}
+.phead .nmr{display:flex;align-items:center;gap:6px;font-size:24px;font-weight:800;letter-spacing:-.03em;margin-top:6px}
+.phead .s{color:var(--sub);font-size:13px}
+.linkbtn{color:var(--sub);font-weight:700;font-size:13px;padding:6px 10px;border-radius:10px;background:var(--panel);border:1px solid var(--line)}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:13px 14px}
+.tile b{display:block;font-size:21px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.tile span{font-size:11px;color:var(--sub);text-transform:uppercase;letter-spacing:.07em;font-weight:700}
+.prow{display:flex;align-items:center;gap:12px;padding:11px 0;width:100%}
+.prow+.prow{border-top:1px solid var(--line)}
+.prow .mini{width:44px;height:36px;border-radius:10px;background:var(--bg);display:grid;place-items:center;overflow:hidden;flex:none}
+.prow .mini svg{transform:scale(.55)}
+.prow .n{font-weight:700;font-size:15px}
+.prow .d{color:var(--sub);font-size:12.5px;line-height:1.3}
+.prow .bar{height:5px;margin:5px 0 0}
+.ms{display:flex;align-items:center;gap:12px;padding:10px 0}
+.ms+.ms{border-top:1px solid var(--line)}
+.ms .sw2{width:30px;height:30px;border-radius:10px;flex:none;display:grid;place-items:center;color:#fff}
+.ms .sw2 svg{width:16px;height:16px}
+.ms.off .sw2{opacity:.35}
+/* pickers */
+.avgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.avgrid button{border:2px solid transparent;border-radius:18px;padding:4px;position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;font-weight:700;color:var(--sub)}
+.avgrid button.on{border-color:var(--accent)}
+.avgrid button.lock .av{opacity:.3;filter:grayscale(1)}
+.avgrid .lk{position:absolute;top:8px;right:8px;width:20px;height:20px;border-radius:7px;background:var(--panel);display:grid;place-items:center;color:var(--sub)}
+.avgrid .lk svg{width:13px;height:13px}
+.thgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.thgrid button{border:1.5px solid var(--line);border-radius:14px;padding:11px 12px;display:flex;align-items:center;gap:10px;font-weight:700;font-size:14px}
+.thgrid button.on{border-color:var(--accent)}
+.thgrid button.lock{opacity:.5}
+.thgrid .dot{width:22px;height:22px;border-radius:50%;flex:none}
+.thgrid small{display:block;font-weight:600;font-size:11.5px;color:var(--sub)}
+/* settings etc. */
 .sw{width:46px;height:28px;border-radius:99px;background:var(--bg);position:relative;transition:background .2s;flex:none}
 .sw::after{content:'';position:absolute;top:4px;left:4px;width:20px;height:20px;border-radius:50%;background:var(--sub);transition:left .2s,background .2s}
 .sw.on{background:var(--accent)}.sw.on::after{left:22px;background:var(--accentInk)}
@@ -64,8 +104,10 @@ button.game:active{transform:scale(.97)}
 .srow .v{color:var(--sub);font-weight:600;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:60%}
 .slabel{font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--sub);margin:14px 2px 2px}
 .slabel:first-child{margin-top:6px}
-.seg{display:flex;background:var(--bg);border-radius:12px;padding:3px;gap:3px}
+.seg{display:flex;background:var(--bg);border-radius:12px;padding:3px;gap:3px;flex:none}
 .seg button{padding:7px 12px;border-radius:9px;font-size:13px;font-weight:600;color:var(--sub);text-align:center}
+.label .seg{letter-spacing:0;text-transform:none}
+.label .seg button{padding:5px 10px;font-size:12px}
 .seg button.on{background:var(--panel);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.14)}
 .note{color:var(--sub);font-size:12.5px;line-height:1.4;margin:6px 4px 0}
 .ach{flex-direction:column;align-items:stretch;gap:0;padding:0;overflow:hidden}
@@ -92,15 +134,17 @@ button.game:active{transform:scale(.97)}
 .sheet h2{font-size:22px;font-weight:800;letter-spacing:-.03em;margin-bottom:6px}
 .sheet .sub{color:var(--sub);font-size:14px;line-height:1.4;margin-bottom:14px}
 .sheet .btns{display:flex;flex-direction:column;gap:6px;margin-top:14px}
+.sheet ul{margin:0 0 12px 18px;font-size:14px;line-height:1.45}
+.sheet h3{font-size:14px;font-weight:800;margin:10px 0 6px}
 .field{width:100%;border:1.5px solid var(--line);background:var(--bg);border-radius:14px;padding:13px 14px;font-size:17px;font-weight:600;outline:none}
 .field:focus{border-color:var(--accent)}
 textarea.field{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:12px;height:96px;resize:none;word-break:break-all}
 .pick{display:flex;flex-direction:column;gap:6px}
 .pick button{border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;font-weight:600;display:flex;justify-content:space-between;align-items:center}
 .pick button.on{border-color:var(--accent)}
-.kv{display:flex;justify-content:space-between;padding:8px 2px;font-size:14px;font-weight:600}
+.kv{display:flex;justify-content:space-between;gap:10px;padding:8px 2px;font-size:14px;font-weight:600}
 .kv+.kv{border-top:1px solid var(--line)}
-.kv span{color:var(--sub)}
+.kv span{color:var(--sub);text-align:right}
 .toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 14px);transform:translate(-50%,calc(-100% - env(safe-area-inset-top) - 24px));opacity:0;background:var(--accent);color:var(--accentInk);padding:11px 16px;border-radius:14px;font-weight:600;font-size:14px;z-index:40;transition:transform .3s,opacity .3s;max-width:calc(100% - 32px);text-align:center}
 .toast.on{transform:translate(-50%,0);opacity:1}
 .nomotion *{transition:none!important}
@@ -108,35 +152,42 @@ textarea.field{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:12p
 </head><body>
 
 <section id="home" class="screen on"><div class="scroll">
-  <div class="brand"><div><h1>Arcade</h1><p>Ad-free games. Nothing to buy, nothing tracked.</p></div>
+  <div class="brand"><div><h1>Arcade</h1><p data-t>Ad-free games. Nothing to buy, nothing tracked.</p></div>
     <div class="acts"><button class="iconbtn" data-go="ach" aria-label="Achievements" id="icoA"></button><button class="iconbtn" data-go="set" aria-label="Settings" id="icoS"></button></div></div>
-  <div class="hello" id="hello"></div>
-  <button class="card" id="lvlCard" data-go="ach"></button>
+  <button class="card idc" id="idCard"></button>
   <div id="nudge"></div>
-  <div class="label">Games <span id="gCount"></span></div>
+  <div class="label"><span data-t>Games</span><div class="seg" id="sortSeg"></div></div>
   <div class="games" id="games"></div>
+  <div class="soon" id="soon"></div>
 </div></section>
 
+<section id="prof" class="screen">
+  <div class="topbar"><button class="iconbtn" data-go="home" aria-label="Back"></button><h2 data-t>Profile</h2></div>
+  <div class="scroll" id="profBody"></div>
+</section>
+
 <section id="ach" class="screen">
-  <div class="topbar"><button class="iconbtn" data-go="home" aria-label="Back"></button><h2>Achievements</h2><span class="c" id="achCount"></span></div>
+  <div class="topbar"><button class="iconbtn" data-go="home" aria-label="Back"></button><h2 data-t>Achievements</h2><span class="c" id="achCount"></span></div>
   <div class="scroll" id="achBody"></div>
 </section>
 
 <section id="set" class="screen">
-  <div class="topbar"><button class="iconbtn" data-go="home" aria-label="Back"></button><h2>Settings</h2></div>
+  <div class="topbar"><button class="iconbtn" data-go="home" aria-label="Back"></button><h2 data-t>Settings</h2></div>
   <div class="scroll"><div class="card set" id="settings" style="margin-top:8px"></div>
-    <p class="note">These settings apply to every game. Each game's own options are under Game settings.</p></div>
+    <p class="note" data-t>These settings apply to every game. Each game's own options are under Game settings.</p></div>
 </section>
 
 <div class="ov" id="ov"><div class="sheet" id="sheet"></div></div>
 <div class="toast" id="toast"></div>
-
 <script>
+const TR={"es":{"{0} min":"{0} min","{0} h {1} min":"{0} h {1} min","{0} h":"{0} h","just now":"ahora mismo","{0} min ago":"hace {0} min","{0} h ago":"hace {0} h","yesterday":"ayer","{0} days ago":"hace {0} días","Milestone: {0}":"Hito: {0}","{0} theme unlocked":"tema {0} desbloqueado","Arcade updated":"Arcade actualizado","Reload":"Recargar","Arcade installed":"Arcade instalado","Pick a username":"Elige un nombre de usuario","{0} of {1} achievements":"{0} de {1} logros","Your achievements from every game add up here.":"Aquí se suman los logros de todos los juegos.","Back up your progress":"Haz una copia de tu progreso","Your last backup was {0}.":"Tu última copia fue {0}.","You haven't made a backup yet.":"Aún no has hecho ninguna copia.","Everything lives only on this device. One file covers every game.":"Todo se guarda solo en este dispositivo. Un archivo cubre todos los juegos.","Back up":"Hacer copia","Later":"Más tarde","Lv {0}":"Nv {0}","Open once to sync":"Ábrelo una vez para sincronizar","Not played yet":"Sin jugar todavía","Played {0}":"Jugado {0}","Favourite":"Favorito","Coming soon":"Próximamente","Change avatar":"Cambiar avatar","No username yet":"Aún sin nombre de usuario","Edit":"Editar","Pick":"Elegir","Playing since {0}":"Jugando desde {0}","Play time":"Tiempo de juego","Games played":"Juegos jugados","Achievements":"Logros","Days played":"Días jugados","Most played":"Más jugado","Your games":"Tus juegos","Level {0}/{1}":"Nivel {0}/{1}","Play a game and it shows up here.":"Juega a un juego y aparecerá aquí.","Play time counts time spent in a game opened from the Arcade, from version 0.11 on.":"El tiempo de juego cuenta el tiempo en juegos abiertos desde el Arcade, a partir de la versión 0.11.","Arcade milestones":"Hitos del Arcade","{0} theme":"tema {0}","All achievements":"Todos los logros","Avatar":"Avatar","Each game's avatar unlocks once you've played that game.":"El avatar de cada juego se desbloquea al jugarlo.","Close":"Cerrar","Play {0} to unlock it.":"Juega a {0} para desbloquearlo.","Play it once to see its achievements here.":"Juégalo una vez para ver aquí sus logros.","{0} of {1}":"{0} de {1}","Highlights":"Destacados","Open {0}":"Abrir {0}","Profile":"Perfil","Username":"Nombre de usuario","Not set":"Sin definir","Look & sound":"Aspecto y sonido","Appearance":"Apariencia","Arcade theme":"Tema del Arcade","Accessibility":"Accesibilidad","Language":"Idioma","Automatic":"Automático","Game settings":"Ajustes de los juegos","Gameplay, tutorial":"Juego, tutorial","Your data":"Tus datos","Backup & restore":"Copia y restauración","All games":"Todos los juegos","Privacy":"Privacidad","Arcade":"Arcade","Install Arcade":"Instalar Arcade","Play like an app":"Juega como una app","What's new":"Novedades","About Arcade":"Acerca de Arcade","Colours for the Arcade's own screens. Arcade milestones unlock more.":"Colores para las pantallas del Arcade. Los hitos del Arcade desbloquean más.","Unlock it with the {0} milestone.":"Desbloquéalo con el hito {0}.","Change username":"Cambiar nombre de usuario","One name for every game: on challenges you send and when you join a League. It stays on this device unless you share a code.":"Un nombre para todos los juegos: en los retos que envíes y al unirte a una Liga. Se queda en este dispositivo salvo que compartas un código.","Your name":"Tu nombre","Up to 16 letters, numbers, spaces, dots, dashes or underscores. A League name already locked for this season doesn't change until the season ends.":"Hasta 16 letras, números, espacios, puntos, guiones o guiones bajos. Un nombre de Liga ya fijado para esta temporada no cambia hasta que termine.","Save":"Guardar","Continue":"Continuar","Cancel":"Cancelar","Pick a name first.":"Elige primero un nombre.","Welcome, {0}!":"¡Bienvenido, {0}!","Used by the Arcade and every game.":"Lo usan el Arcade y todos los juegos.","The Arcade and its games collect nothing. There are no ads, analytics, trackers or accounts, and the only network requests are loading the app itself.":"El Arcade y sus juegos no recogen nada. No hay anuncios, analíticas, rastreadores ni cuentas, y lo único que se descarga de la red es la propia app.","Your progress, settings, username and play-time stats are stored only on this device. Codes you choose to share (challenges, League results, backups) contain only what they say.":"Tu progreso, ajustes, nombre de usuario y estadísticas de juego se guardan solo en este dispositivo. Los códigos que decides compartir (retos, resultados de Liga, copias) contienen solo lo que indican.","A home for ad-free games. Each game keeps its own levels and unlocks; the Arcade holds your profile and the settings they share, and backs everything up in one file.":"Un hogar para juegos sin anuncios. Cada juego tiene sus propios niveles y desbloqueos; el Arcade guarda tu perfil y los ajustes comunes, y lo copia todo en un solo archivo.","Version":"Versión","Credits":"Créditos","Fonts: Inter, JetBrains Mono and Caveat, under the SIL Open Font License.":"Fuentes: Inter, JetBrains Mono y Caveat, con la licencia SIL Open Font License.","Tilecraft's words: the ENABLE word list (public domain). Its filter of offensive words started from the \"List of Dirty, Naughty, Obscene and Otherwise Bad Words\" by its contributors, under CC BY 4.0.":"Palabras de Tilecraft: la lista ENABLE (dominio público). Su filtro de palabras ofensivas partió de la \"List of Dirty, Naughty, Obscene and Otherwise Bad Words\" de sus colaboradores, con licencia CC BY 4.0.","Arcade and its games are open source under the MIT licence.":"El Arcade y sus juegos son de código abierto con licencia MIT.","Version {0}":"Versión {0}","Got it":"Entendido","{0} bytes":"{0} bytes","{0} KB":"{0} KB","One file with your profile, settings and every game's progress. Keep it somewhere safe, or use it to move to another device.":"Un archivo con tu perfil, tus ajustes y el progreso de cada juego. Guárdalo en un lugar seguro o úsalo para pasar a otro dispositivo.","Level {0}":"Nivel {0}","No progress yet":"Sin progreso aún","Save to file · {0}":"Guardar en archivo · {0}","Copy backup code":"Copiar código de copia","Restore":"Restaurar","Paste a backup code, or load a file":"Pega un código de copia o carga un archivo","Load from file…":"Cargar desde archivo…","Check backup":"Comprobar copia","Backup saved":"Copia guardada","Backup code copied":"Código de copia copiado","Select and copy the code below":"Selecciona y copia el código de abajo","That's a Sweep-only backup. Restore it in Sweep → Settings.":"Es una copia solo de Sweep. Restáurala en Sweep → Ajustes.","That doesn't look like an Arcade backup.":"Eso no parece una copia del Arcade.","Restore backup":"Restaurar copia","From {0}. This replaces what's on this device for what you pick.":"Del {0}. Reemplaza lo que hay en este dispositivo para lo que elijas.","Everything":"Todo","Profile, settings and all games":"Perfil, ajustes y todos los juegos","Only {0}":"Solo {0}","{0} achievements":"{0} logros","Progress inside":"Contiene progreso","Tap again to replace":"Toca de nuevo para reemplazar","Everything restored":"Todo restaurado","{0} restored":"{0} restaurado","Your Sweep progress is here":"Tu progreso de Sweep está aquí","{0} session":"{0} sesión","{0} sessions":"{0} sesiones","No-guess minesweeper":"Buscaminas sin adivinar","Naval battle vs AI":"Batalla naval contra la IA","Classic snake, 7 arenas":"Serpiente clásica, 7 arenas","Slide, merge, reach 2048":"Desliza, une, llega a 2048","Stack, clear, keep it falling":"Apila, limpia, que siga cayendo","Thrust, shoot, clear the field":"Acelera, dispara, despeja el campo","Craft words, outscore the rest":"Forma palabras, supera a los demás","Every deal winnable":"Todas las partidas tienen solución","Match pairs, clear the stack":"Empareja fichas, vacía la pila","Pure logic, never a guess":"Pura lógica, nunca adivinar","Picture logic puzzles":"Rompecabezas lógicos de imágenes","Play 3 different games":"Juega a 3 juegos distintos","Earn 25 achievements":"Consigue 25 logros","Play on 7 different days":"Juega en 7 días distintos","Reach level 5 in 3 games":"Llega al nivel 5 en 3 juegos","Play every game":"Juega a todos los juegos","Earn 100 achievements":"Consigue 100 logros","Controller":"Mando","Heart":"Corazón","Mine":"Mina","Ship":"Barco","Snake":"Serpiente","Tile":"Ficha","Blocks":"Bloques","Rocket":"Cohete","Letter":"Letra","Ace":"As","Dots":"Puntos","Grid":"Cuadrícula","Classic":"Clásico","Mint":"Menta","Ocean":"Océano","Sunset":"Atardecer","Grape":"Uva","Gold":"Oro","Rose":"Rosa","Explorer":"Explorador","Collector":"Coleccionista","Regular":"Habitual","All-rounder":"Polivalente","Globetrotter":"Trotamundos","Completionist":"Completista","A profile card with a pixel-art avatar and your achievements across every game":"Una tarjeta de perfil con avatar pixel art y tus logros de todos los juegos","Profile: play time, most played game, games played and Arcade milestones":"Perfil: tiempo de juego, juego más jugado, juegos jugados e hitos del Arcade","Arcade milestones unlock themes for the Arcade home":"Los hitos del Arcade desbloquean temas para su pantalla de inicio","Favourite games, sorting, and New / Updated badges":"Juegos favoritos, orden y etiquetas Nuevo / Actualizado","The Arcade's own menus in Español, Français, Deutsch and Português":"Los menús del Arcade en español, francés, alemán y portugués","Install Arcade from Settings, and this What's new":"Instalar Arcade desde Ajustes, y estas novedades","New game: Sudoku":"Nuevo juego: Sudoku","New games: Solitaire and Mahjong":"Nuevos juegos: Solitaire y Mahjong","New game: Tilecraft":"Nuevo juego: Tilecraft","New game: Drift":"Nuevo juego: Drift","New game: Linefall":"Nuevo juego: Linefall","New game: 2048":"Nuevo juego: 2048","New game: Snake":"Nuevo juego: Snake","New game: Ship Fight":"Nuevo juego: Ship Fight","Works offline, with safe background updates":"Funciona sin conexión, con actualizaciones seguras en segundo plano","The Arcade: one home for every game, with shared settings and one backup":"El Arcade: un hogar para todos los juegos, con ajustes comunes y una sola copia","New":"Nuevo","Updated":"Actualizado","Recent":"Recientes","A–Z":"A–Z","Auto":"Auto","Light":"Claro","Dark":"Oscuro","Animations":"Animaciones","Sound effects":"Efectos de sonido","Music":"Música","Vibration":"Vibración","Full screen (hide phone bars)":"Pantalla completa (ocultar barras)","Colourblind-safe colours":"Colores aptos para daltonismo","Left-handed controls":"Controles para zurdos","Ad-free games. Nothing to buy, nothing tracked.":"Juegos sin anuncios. Nada que comprar, nada de rastreo.","Games":"Juegos","Settings":"Ajustes","These settings apply to every game. Each game's own options are under Game settings.":"Estos ajustes se aplican a todos los juegos. Las opciones de cada juego están en Ajustes de los juegos."},"fr":{"{0} min":"{0} min","{0} h {1} min":"{0} h {1} min","{0} h":"{0} h","just now":"à l'instant","{0} min ago":"il y a {0} min","{0} h ago":"il y a {0} h","yesterday":"hier","{0} days ago":"il y a {0} jours","Milestone: {0}":"Étape : {0}","{0} theme unlocked":"thème {0} débloqué","Arcade updated":"Arcade mis à jour","Reload":"Recharger","Arcade installed":"Arcade installé","Pick a username":"Choisis un nom d'utilisateur","{0} of {1} achievements":"{0} succès sur {1}","Your achievements from every game add up here.":"Les succès de tous les jeux s'additionnent ici.","Back up your progress":"Sauvegarde ta progression","Your last backup was {0}.":"Ta dernière sauvegarde date de {0}.","You haven't made a backup yet.":"Tu n'as pas encore fait de sauvegarde.","Everything lives only on this device. One file covers every game.":"Tout est stocké uniquement sur cet appareil. Un seul fichier couvre tous les jeux.","Back up":"Sauvegarder","Later":"Plus tard","Lv {0}":"Niv {0}","Open once to sync":"Ouvre-le une fois pour synchroniser","Not played yet":"Pas encore joué","Played {0}":"Joué {0}","Favourite":"Favori","Coming soon":"Bientôt","Change avatar":"Changer d'avatar","No username yet":"Pas encore de nom d'utilisateur","Edit":"Modifier","Pick":"Choisir","Playing since {0}":"Joue depuis {0}","Play time":"Temps de jeu","Games played":"Jeux joués","Achievements":"Succès","Days played":"Jours joués","Most played":"Le plus joué","Your games":"Tes jeux","Level {0}/{1}":"Niveau {0}/{1}","Play a game and it shows up here.":"Joue à un jeu et il apparaîtra ici.","Play time counts time spent in a game opened from the Arcade, from version 0.11 on.":"Le temps de jeu compte le temps passé dans un jeu ouvert depuis l'Arcade, à partir de la version 0.11.","Arcade milestones":"Étapes de l'Arcade","{0} theme":"thème {0}","All achievements":"Tous les succès","Avatar":"Avatar","Each game's avatar unlocks once you've played that game.":"L'avatar de chaque jeu se débloque une fois que tu y as joué.","Close":"Fermer","Play {0} to unlock it.":"Joue à {0} pour le débloquer.","Play it once to see its achievements here.":"Joue une fois pour voir ses succès ici.","{0} of {1}":"{0} sur {1}","Highlights":"Points forts","Open {0}":"Ouvrir {0}","Profile":"Profil","Username":"Nom d'utilisateur","Not set":"Non défini","Look & sound":"Apparence et son","Appearance":"Apparence","Arcade theme":"Thème de l'Arcade","Accessibility":"Accessibilité","Language":"Langue","Automatic":"Automatique","Game settings":"Réglages des jeux","Gameplay, tutorial":"Jeu, tutoriel","Your data":"Tes données","Backup & restore":"Sauvegarde et restauration","All games":"Tous les jeux","Privacy":"Confidentialité","Arcade":"Arcade","Install Arcade":"Installer l'Arcade","Play like an app":"Jouer comme une appli","What's new":"Nouveautés","About Arcade":"À propos de l'Arcade","Colours for the Arcade's own screens. Arcade milestones unlock more.":"Couleurs des écrans de l'Arcade. Les étapes de l'Arcade en débloquent d'autres.","Unlock it with the {0} milestone.":"Débloque-le avec l'étape {0}.","Change username":"Changer de nom d'utilisateur","One name for every game: on challenges you send and when you join a League. It stays on this device unless you share a code.":"Un seul nom pour tous les jeux : sur les défis que tu envoies et quand tu rejoins une Ligue. Il reste sur cet appareil sauf si tu partages un code.","Your name":"Ton nom","Up to 16 letters, numbers, spaces, dots, dashes or underscores. A League name already locked for this season doesn't change until the season ends.":"Jusqu'à 16 lettres, chiffres, espaces, points, tirets ou tirets bas. Un nom de Ligue déjà fixé pour cette saison ne change qu'à la fin de la saison.","Save":"Enregistrer","Continue":"Continuer","Cancel":"Annuler","Pick a name first.":"Choisis d'abord un nom.","Welcome, {0}!":"Bienvenue, {0} !","Used by the Arcade and every game.":"Utilisée par l'Arcade et tous les jeux.","The Arcade and its games collect nothing. There are no ads, analytics, trackers or accounts, and the only network requests are loading the app itself.":"L'Arcade et ses jeux ne collectent rien. Pas de publicités, de statistiques, de traqueurs ni de comptes, et les seules requêtes réseau servent à charger l'appli.","Your progress, settings, username and play-time stats are stored only on this device. Codes you choose to share (challenges, League results, backups) contain only what they say.":"Ta progression, tes réglages, ton nom et tes statistiques de jeu restent uniquement sur cet appareil. Les codes que tu choisis de partager (défis, résultats de Ligue, sauvegardes) ne contiennent que ce qu'ils indiquent.","A home for ad-free games. Each game keeps its own levels and unlocks; the Arcade holds your profile and the settings they share, and backs everything up in one file.":"Un foyer pour des jeux sans publicité. Chaque jeu garde ses niveaux et déblocages ; l'Arcade conserve ton profil et les réglages communs, et sauvegarde tout dans un seul fichier.","Version":"Version","Credits":"Crédits","Fonts: Inter, JetBrains Mono and Caveat, under the SIL Open Font License.":"Polices : Inter, JetBrains Mono et Caveat, sous licence SIL Open Font License.","Tilecraft's words: the ENABLE word list (public domain). Its filter of offensive words started from the \"List of Dirty, Naughty, Obscene and Otherwise Bad Words\" by its contributors, under CC BY 4.0.":"Mots de Tilecraft : la liste ENABLE (domaine public). Son filtre de mots offensants part de la « List of Dirty, Naughty, Obscene and Otherwise Bad Words » de ses contributeurs, sous CC BY 4.0.","Arcade and its games are open source under the MIT licence.":"L'Arcade et ses jeux sont open source sous licence MIT.","Version {0}":"Version {0}","Got it":"Compris","{0} bytes":"{0} octets","{0} KB":"{0} Ko","One file with your profile, settings and every game's progress. Keep it somewhere safe, or use it to move to another device.":"Un fichier avec ton profil, tes réglages et la progression de chaque jeu. Garde-le en lieu sûr ou utilise-le pour changer d'appareil.","Level {0}":"Niveau {0}","No progress yet":"Pas encore de progression","Save to file · {0}":"Enregistrer dans un fichier · {0}","Copy backup code":"Copier le code de sauvegarde","Restore":"Restaurer","Paste a backup code, or load a file":"Colle un code de sauvegarde ou charge un fichier","Load from file…":"Charger un fichier…","Check backup":"Vérifier la sauvegarde","Backup saved":"Sauvegarde enregistrée","Backup code copied":"Code de sauvegarde copié","Select and copy the code below":"Sélectionne et copie le code ci-dessous","That's a Sweep-only backup. Restore it in Sweep → Settings.":"C'est une sauvegarde de Sweep uniquement. Restaure-la dans Sweep → Réglages.","That doesn't look like an Arcade backup.":"Ça ne ressemble pas à une sauvegarde de l'Arcade.","Restore backup":"Restaurer la sauvegarde","From {0}. This replaces what's on this device for what you pick.":"Du {0}. Cela remplace ce qui est sur cet appareil pour ce que tu choisis.","Everything":"Tout","Profile, settings and all games":"Profil, réglages et tous les jeux","Only {0}":"{0} seulement","{0} achievements":"{0} succès","Progress inside":"Progression incluse","Tap again to replace":"Touche encore pour remplacer","Everything restored":"Tout est restauré","{0} restored":"{0} restauré","Your Sweep progress is here":"Ta progression Sweep est là","{0} session":"{0} session","{0} sessions":"{0} sessions","No-guess minesweeper":"Démineur sans hasard","Naval battle vs AI":"Bataille navale contre l'IA","Classic snake, 7 arenas":"Serpent classique, 7 arènes","Slide, merge, reach 2048":"Glisse, fusionne, atteins 2048","Stack, clear, keep it falling":"Empile, efface, que ça tombe","Thrust, shoot, clear the field":"Propulse, tire, nettoie le terrain","Craft words, outscore the rest":"Forme des mots, bats les autres","Every deal winnable":"Chaque donne est gagnable","Match pairs, clear the stack":"Associe les paires, vide la pile","Pure logic, never a guess":"Logique pure, jamais de hasard","Picture logic puzzles":"Énigmes logiques d'images","Play 3 different games":"Joue à 3 jeux différents","Earn 25 achievements":"Obtiens 25 succès","Play on 7 different days":"Joue 7 jours différents","Reach level 5 in 3 games":"Atteins le niveau 5 dans 3 jeux","Play every game":"Joue à tous les jeux","Earn 100 achievements":"Obtiens 100 succès","Controller":"Manette","Heart":"Cœur","Mine":"Mine","Ship":"Navire","Snake":"Serpent","Tile":"Tuile","Blocks":"Blocs","Rocket":"Fusée","Letter":"Lettre","Ace":"As","Dots":"Points","Grid":"Grille","Classic":"Classique","Mint":"Menthe","Ocean":"Océan","Sunset":"Coucher de soleil","Grape":"Raisin","Gold":"Or","Rose":"Rose","Explorer":"Explorateur","Collector":"Collectionneur","Regular":"Habitué","All-rounder":"Polyvalent","Globetrotter":"Globe-trotter","Completionist":"Complétiste","A profile card with a pixel-art avatar and your achievements across every game":"Une carte de profil avec un avatar en pixel art et tes succès de tous les jeux","Profile: play time, most played game, games played and Arcade milestones":"Profil : temps de jeu, jeu le plus joué, jeux joués et étapes de l'Arcade","Arcade milestones unlock themes for the Arcade home":"Les étapes de l'Arcade débloquent des thèmes pour son accueil","Favourite games, sorting, and New / Updated badges":"Jeux favoris, tri et badges Nouveau / Mis à jour","The Arcade's own menus in Español, Français, Deutsch and Português":"Les menus de l'Arcade en espagnol, français, allemand et portugais","Install Arcade from Settings, and this What's new":"Installer l'Arcade depuis les Réglages, et ces nouveautés","New game: Sudoku":"Nouveau jeu : Sudoku","New games: Solitaire and Mahjong":"Nouveaux jeux : Solitaire et Mahjong","New game: Tilecraft":"Nouveau jeu : Tilecraft","New game: Drift":"Nouveau jeu : Drift","New game: Linefall":"Nouveau jeu : Linefall","New game: 2048":"Nouveau jeu : 2048","New game: Snake":"Nouveau jeu : Snake","New game: Ship Fight":"Nouveau jeu : Ship Fight","Works offline, with safe background updates":"Fonctionne hors ligne, avec des mises à jour sûres en arrière-plan","The Arcade: one home for every game, with shared settings and one backup":"L'Arcade : un foyer pour tous les jeux, avec des réglages communs et une seule sauvegarde","New":"Nouveau","Updated":"Mis à jour","Recent":"Récents","A–Z":"A–Z","Auto":"Auto","Light":"Clair","Dark":"Sombre","Animations":"Animations","Sound effects":"Effets sonores","Music":"Musique","Vibration":"Vibration","Full screen (hide phone bars)":"Plein écran (masquer les barres)","Colourblind-safe colours":"Couleurs adaptées au daltonisme","Left-handed controls":"Commandes pour gauchers","Ad-free games. Nothing to buy, nothing tracked.":"Des jeux sans pub. Rien à acheter, aucun suivi.","Games":"Jeux","Settings":"Réglages","These settings apply to every game. Each game's own options are under Game settings.":"Ces réglages valent pour tous les jeux. Les options propres à chaque jeu sont dans Réglages des jeux."},"de":{"{0} min":"{0} Min.","{0} h {1} min":"{0} Std. {1} Min.","{0} h":"{0} Std.","just now":"gerade eben","{0} min ago":"vor {0} Min.","{0} h ago":"vor {0} Std.","yesterday":"gestern","{0} days ago":"vor {0} Tagen","Milestone: {0}":"Meilenstein: {0}","{0} theme unlocked":"Design {0} freigeschaltet","Arcade updated":"Arcade aktualisiert","Reload":"Neu laden","Arcade installed":"Arcade installiert","Pick a username":"Wähle einen Benutzernamen","{0} of {1} achievements":"{0} von {1} Erfolgen","Your achievements from every game add up here.":"Hier zählen die Erfolge aus allen Spielen zusammen.","Back up your progress":"Sichere deinen Fortschritt","Your last backup was {0}.":"Deine letzte Sicherung war {0}.","You haven't made a backup yet.":"Du hast noch keine Sicherung erstellt.","Everything lives only on this device. One file covers every game.":"Alles liegt nur auf diesem Gerät. Eine Datei deckt alle Spiele ab.","Back up":"Sichern","Later":"Später","Lv {0}":"Lv {0}","Open once to sync":"Einmal öffnen zum Abgleichen","Not played yet":"Noch nicht gespielt","Played {0}":"Gespielt {0}","Favourite":"Favorit","Coming soon":"Demnächst","Change avatar":"Avatar ändern","No username yet":"Noch kein Benutzername","Edit":"Bearbeiten","Pick":"Wählen","Playing since {0}":"Spielt seit {0}","Play time":"Spielzeit","Games played":"Gespielte Spiele","Achievements":"Erfolge","Days played":"Spieltage","Most played":"Am meisten gespielt","Your games":"Deine Spiele","Level {0}/{1}":"Level {0}/{1}","Play a game and it shows up here.":"Spiel ein Spiel, dann erscheint es hier.","Play time counts time spent in a game opened from the Arcade, from version 0.11 on.":"Die Spielzeit zählt Zeit in Spielen, die über das Arcade geöffnet wurden, ab Version 0.11.","Arcade milestones":"Arcade-Meilensteine","{0} theme":"Design {0}","All achievements":"Alle Erfolge","Avatar":"Avatar","Each game's avatar unlocks once you've played that game.":"Der Avatar eines Spiels wird freigeschaltet, sobald du es gespielt hast.","Close":"Schließen","Play {0} to unlock it.":"Spiel {0}, um es freizuschalten.","Play it once to see its achievements here.":"Einmal spielen, um die Erfolge hier zu sehen.","{0} of {1}":"{0} von {1}","Highlights":"Highlights","Open {0}":"{0} öffnen","Profile":"Profil","Username":"Benutzername","Not set":"Nicht festgelegt","Look & sound":"Aussehen & Ton","Appearance":"Darstellung","Arcade theme":"Arcade-Design","Accessibility":"Bedienungshilfen","Language":"Sprache","Automatic":"Automatisch","Game settings":"Spieleinstellungen","Gameplay, tutorial":"Spiel, Tutorial","Your data":"Deine Daten","Backup & restore":"Sichern & Wiederherstellen","All games":"Alle Spiele","Privacy":"Datenschutz","Arcade":"Arcade","Install Arcade":"Arcade installieren","Play like an app":"Wie eine App spielen","What's new":"Neuigkeiten","About Arcade":"Über Arcade","Colours for the Arcade's own screens. Arcade milestones unlock more.":"Farben für die Arcade-Bildschirme. Arcade-Meilensteine schalten weitere frei.","Unlock it with the {0} milestone.":"Mit dem Meilenstein {0} freischalten.","Change username":"Benutzernamen ändern","One name for every game: on challenges you send and when you join a League. It stays on this device unless you share a code.":"Ein Name für alle Spiele: bei Herausforderungen, die du sendest, und wenn du einer Liga beitrittst. Er bleibt auf diesem Gerät, außer du teilst einen Code.","Your name":"Dein Name","Up to 16 letters, numbers, spaces, dots, dashes or underscores. A League name already locked for this season doesn't change until the season ends.":"Bis zu 16 Buchstaben, Ziffern, Leerzeichen, Punkte, Binde- oder Unterstriche. Ein für diese Saison festgelegter Liganame ändert sich erst nach Saisonende.","Save":"Speichern","Continue":"Weiter","Cancel":"Abbrechen","Pick a name first.":"Wähle zuerst einen Namen.","Welcome, {0}!":"Willkommen, {0}!","Used by the Arcade and every game.":"Gilt für das Arcade und alle Spiele.","The Arcade and its games collect nothing. There are no ads, analytics, trackers or accounts, and the only network requests are loading the app itself.":"Das Arcade und seine Spiele sammeln nichts. Keine Werbung, keine Analysen, keine Tracker, keine Konten; Netzwerkanfragen laden nur die App selbst.","Your progress, settings, username and play-time stats are stored only on this device. Codes you choose to share (challenges, League results, backups) contain only what they say.":"Fortschritt, Einstellungen, Benutzername und Spielzeit-Statistiken liegen nur auf diesem Gerät. Codes, die du teilst (Herausforderungen, Liga-Ergebnisse, Sicherungen), enthalten nur, was sie angeben.","A home for ad-free games. Each game keeps its own levels and unlocks; the Arcade holds your profile and the settings they share, and backs everything up in one file.":"Ein Zuhause für werbefreie Spiele. Jedes Spiel hat eigene Level und Freischaltungen; das Arcade verwaltet dein Profil und die gemeinsamen Einstellungen und sichert alles in einer Datei.","Version":"Version","Credits":"Mitwirkende","Fonts: Inter, JetBrains Mono and Caveat, under the SIL Open Font License.":"Schriften: Inter, JetBrains Mono und Caveat, unter der SIL Open Font License.","Tilecraft's words: the ENABLE word list (public domain). Its filter of offensive words started from the \"List of Dirty, Naughty, Obscene and Otherwise Bad Words\" by its contributors, under CC BY 4.0.":"Wörter in Tilecraft: die ENABLE-Wortliste (gemeinfrei). Der Filter für anstößige Wörter basiert auf der „List of Dirty, Naughty, Obscene and Otherwise Bad Words“ ihrer Mitwirkenden, unter CC BY 4.0.","Arcade and its games are open source under the MIT licence.":"Das Arcade und seine Spiele sind Open Source unter der MIT-Lizenz.","Version {0}":"Version {0}","Got it":"Verstanden","{0} bytes":"{0} Bytes","{0} KB":"{0} KB","One file with your profile, settings and every game's progress. Keep it somewhere safe, or use it to move to another device.":"Eine Datei mit Profil, Einstellungen und dem Fortschritt aller Spiele. Bewahre sie sicher auf oder nutze sie für ein anderes Gerät.","Level {0}":"Level {0}","No progress yet":"Noch kein Fortschritt","Save to file · {0}":"Als Datei speichern · {0}","Copy backup code":"Sicherungscode kopieren","Restore":"Wiederherstellen","Paste a backup code, or load a file":"Sicherungscode einfügen oder Datei laden","Load from file…":"Aus Datei laden…","Check backup":"Sicherung prüfen","Backup saved":"Sicherung gespeichert","Backup code copied":"Sicherungscode kopiert","Select and copy the code below":"Code unten markieren und kopieren","That's a Sweep-only backup. Restore it in Sweep → Settings.":"Das ist eine reine Sweep-Sicherung. Stelle sie in Sweep → Einstellungen wieder her.","That doesn't look like an Arcade backup.":"Das sieht nicht nach einer Arcade-Sicherung aus.","Restore backup":"Sicherung wiederherstellen","From {0}. This replaces what's on this device for what you pick.":"Vom {0}. Ersetzt für deine Auswahl, was auf diesem Gerät ist.","Everything":"Alles","Profile, settings and all games":"Profil, Einstellungen und alle Spiele","Only {0}":"Nur {0}","{0} achievements":"{0} Erfolge","Progress inside":"Fortschritt enthalten","Tap again to replace":"Zum Ersetzen erneut tippen","Everything restored":"Alles wiederhergestellt","{0} restored":"{0} wiederhergestellt","Your Sweep progress is here":"Dein Sweep-Fortschritt ist hier","{0} session":"{0} Sitzung","{0} sessions":"{0} Sitzungen","No-guess minesweeper":"Minensuche ohne Raten","Naval battle vs AI":"Seeschlacht gegen die KI","Classic snake, 7 arenas":"Klassische Schlange, 7 Arenen","Slide, merge, reach 2048":"Schieben, verbinden, 2048 erreichen","Stack, clear, keep it falling":"Stapeln, abräumen, weiterfallen","Thrust, shoot, clear the field":"Schub, schießen, Feld räumen","Craft words, outscore the rest":"Wörter bilden, alle überbieten","Every deal winnable":"Jedes Spiel lösbar","Match pairs, clear the stack":"Paare finden, Stapel abräumen","Pure logic, never a guess":"Reine Logik, nie raten","Picture logic puzzles":"Logikrätsel mit Bildern","Play 3 different games":"Spiele 3 verschiedene Spiele","Earn 25 achievements":"Verdiene 25 Erfolge","Play on 7 different days":"Spiele an 7 verschiedenen Tagen","Reach level 5 in 3 games":"Erreiche Level 5 in 3 Spielen","Play every game":"Spiele jedes Spiel","Earn 100 achievements":"Verdiene 100 Erfolge","Controller":"Controller","Heart":"Herz","Mine":"Mine","Ship":"Schiff","Snake":"Schlange","Tile":"Kachel","Blocks":"Blöcke","Rocket":"Rakete","Letter":"Buchstabe","Ace":"Ass","Dots":"Punkte","Grid":"Gitter","Classic":"Klassisch","Mint":"Minze","Ocean":"Ozean","Sunset":"Sonnenuntergang","Grape":"Traube","Gold":"Gold","Rose":"Rosé","Explorer":"Entdecker","Collector":"Sammler","Regular":"Stammgast","All-rounder":"Allrounder","Globetrotter":"Weltenbummler","Completionist":"Komplettierer","A profile card with a pixel-art avatar and your achievements across every game":"Eine Profilkarte mit Pixel-Avatar und deinen Erfolgen aus allen Spielen","Profile: play time, most played game, games played and Arcade milestones":"Profil: Spielzeit, meistgespieltes Spiel, gespielte Spiele und Arcade-Meilensteine","Arcade milestones unlock themes for the Arcade home":"Arcade-Meilensteine schalten Designs für den Startbildschirm frei","Favourite games, sorting, and New / Updated badges":"Lieblingsspiele, Sortierung und Neu-/Aktualisiert-Abzeichen","The Arcade's own menus in Español, Français, Deutsch and Português":"Die Arcade-Menüs auf Spanisch, Französisch, Deutsch und Portugiesisch","Install Arcade from Settings, and this What's new":"Arcade in den Einstellungen installieren, und diese Neuigkeiten","New game: Sudoku":"Neues Spiel: Sudoku","New games: Solitaire and Mahjong":"Neue Spiele: Solitaire und Mahjong","New game: Tilecraft":"Neues Spiel: Tilecraft","New game: Drift":"Neues Spiel: Drift","New game: Linefall":"Neues Spiel: Linefall","New game: 2048":"Neues Spiel: 2048","New game: Snake":"Neues Spiel: Snake","New game: Ship Fight":"Neues Spiel: Ship Fight","Works offline, with safe background updates":"Funktioniert offline, mit sicheren Updates im Hintergrund","The Arcade: one home for every game, with shared settings and one backup":"Das Arcade: ein Zuhause für alle Spiele, mit gemeinsamen Einstellungen und einer Sicherung","New":"Neu","Updated":"Aktualisiert","Recent":"Zuletzt","A–Z":"A–Z","Auto":"Auto","Light":"Hell","Dark":"Dunkel","Animations":"Animationen","Sound effects":"Soundeffekte","Music":"Musik","Vibration":"Vibration","Full screen (hide phone bars)":"Vollbild (Leisten ausblenden)","Colourblind-safe colours":"Farbenblind-freundliche Farben","Left-handed controls":"Linkshänder-Steuerung","Ad-free games. Nothing to buy, nothing tracked.":"Werbefreie Spiele. Nichts zu kaufen, kein Tracking.","Games":"Spiele","Settings":"Einstellungen","These settings apply to every game. Each game's own options are under Game settings.":"Diese Einstellungen gelten für alle Spiele. Die Optionen der einzelnen Spiele findest du unter Spieleinstellungen."},"pt":{"{0} min":"{0} min","{0} h {1} min":"{0} h {1} min","{0} h":"{0} h","just now":"agora mesmo","{0} min ago":"há {0} min","{0} h ago":"há {0} h","yesterday":"ontem","{0} days ago":"há {0} dias","Milestone: {0}":"Marco: {0}","{0} theme unlocked":"tema {0} desbloqueado","Arcade updated":"Arcade atualizado","Reload":"Recarregar","Arcade installed":"Arcade instalado","Pick a username":"Escolha um nome de usuário","{0} of {1} achievements":"{0} de {1} conquistas","Your achievements from every game add up here.":"Aqui se somam as conquistas de todos os jogos.","Back up your progress":"Faça backup do seu progresso","Your last backup was {0}.":"Seu último backup foi {0}.","You haven't made a backup yet.":"Você ainda não fez nenhum backup.","Everything lives only on this device. One file covers every game.":"Tudo fica só neste aparelho. Um arquivo cobre todos os jogos.","Back up":"Fazer backup","Later":"Mais tarde","Lv {0}":"Nv {0}","Open once to sync":"Abra uma vez para sincronizar","Not played yet":"Ainda não jogado","Played {0}":"Jogado {0}","Favourite":"Favorito","Coming soon":"Em breve","Change avatar":"Mudar avatar","No username yet":"Ainda sem nome de usuário","Edit":"Editar","Pick":"Escolher","Playing since {0}":"Jogando desde {0}","Play time":"Tempo de jogo","Games played":"Jogos jogados","Achievements":"Conquistas","Days played":"Dias jogados","Most played":"Mais jogado","Your games":"Seus jogos","Level {0}/{1}":"Nível {0}/{1}","Play a game and it shows up here.":"Jogue um jogo e ele aparece aqui.","Play time counts time spent in a game opened from the Arcade, from version 0.11 on.":"O tempo de jogo conta o tempo em jogos abertos pelo Arcade, a partir da versão 0.11.","Arcade milestones":"Marcos do Arcade","{0} theme":"tema {0}","All achievements":"Todas as conquistas","Avatar":"Avatar","Each game's avatar unlocks once you've played that game.":"O avatar de cada jogo é desbloqueado depois que você o joga.","Close":"Fechar","Play {0} to unlock it.":"Jogue {0} para desbloquear.","Play it once to see its achievements here.":"Jogue uma vez para ver as conquistas aqui.","{0} of {1}":"{0} de {1}","Highlights":"Destaques","Open {0}":"Abrir {0}","Profile":"Perfil","Username":"Nome de usuário","Not set":"Não definido","Look & sound":"Visual e som","Appearance":"Aparência","Arcade theme":"Tema do Arcade","Accessibility":"Acessibilidade","Language":"Idioma","Automatic":"Automático","Game settings":"Ajustes dos jogos","Gameplay, tutorial":"Jogabilidade, tutorial","Your data":"Seus dados","Backup & restore":"Backup e restauração","All games":"Todos os jogos","Privacy":"Privacidade","Arcade":"Arcade","Install Arcade":"Instalar Arcade","Play like an app":"Jogue como um app","What's new":"Novidades","About Arcade":"Sobre o Arcade","Colours for the Arcade's own screens. Arcade milestones unlock more.":"Cores para as telas do Arcade. Os marcos do Arcade desbloqueiam mais.","Unlock it with the {0} milestone.":"Desbloqueie com o marco {0}.","Change username":"Mudar nome de usuário","One name for every game: on challenges you send and when you join a League. It stays on this device unless you share a code.":"Um nome para todos os jogos: nos desafios que você envia e ao entrar numa Liga. Fica neste aparelho, a menos que você compartilhe um código.","Your name":"Seu nome","Up to 16 letters, numbers, spaces, dots, dashes or underscores. A League name already locked for this season doesn't change until the season ends.":"Até 16 letras, números, espaços, pontos, hífens ou sublinhados. Um nome de Liga já fixado nesta temporada só muda quando ela termina.","Save":"Salvar","Continue":"Continuar","Cancel":"Cancelar","Pick a name first.":"Escolha um nome primeiro.","Welcome, {0}!":"Bem-vindo, {0}!","Used by the Arcade and every game.":"Usado pelo Arcade e por todos os jogos.","The Arcade and its games collect nothing. There are no ads, analytics, trackers or accounts, and the only network requests are loading the app itself.":"O Arcade e seus jogos não coletam nada. Não há anúncios, análises, rastreadores nem contas, e as únicas solicitações de rede carregam o próprio app.","Your progress, settings, username and play-time stats are stored only on this device. Codes you choose to share (challenges, League results, backups) contain only what they say.":"Seu progresso, ajustes, nome de usuário e estatísticas de jogo ficam só neste aparelho. Os códigos que você decide compartilhar (desafios, resultados da Liga, backups) contêm só o que dizem.","A home for ad-free games. Each game keeps its own levels and unlocks; the Arcade holds your profile and the settings they share, and backs everything up in one file.":"Um lar para jogos sem anúncios. Cada jogo tem seus próprios níveis e desbloqueios; o Arcade guarda seu perfil e os ajustes comuns, e faz backup de tudo num só arquivo.","Version":"Versão","Credits":"Créditos","Fonts: Inter, JetBrains Mono and Caveat, under the SIL Open Font License.":"Fontes: Inter, JetBrains Mono e Caveat, sob a licença SIL Open Font License.","Tilecraft's words: the ENABLE word list (public domain). Its filter of offensive words started from the \"List of Dirty, Naughty, Obscene and Otherwise Bad Words\" by its contributors, under CC BY 4.0.":"Palavras do Tilecraft: a lista ENABLE (domínio público). Seu filtro de palavras ofensivas partiu da \"List of Dirty, Naughty, Obscene and Otherwise Bad Words\" de seus colaboradores, sob CC BY 4.0.","Arcade and its games are open source under the MIT licence.":"O Arcade e seus jogos são de código aberto sob a licença MIT.","Version {0}":"Versão {0}","Got it":"Entendi","{0} bytes":"{0} bytes","{0} KB":"{0} KB","One file with your profile, settings and every game's progress. Keep it somewhere safe, or use it to move to another device.":"Um arquivo com seu perfil, ajustes e o progresso de cada jogo. Guarde em lugar seguro ou use para mudar de aparelho.","Level {0}":"Nível {0}","No progress yet":"Sem progresso ainda","Save to file · {0}":"Salvar em arquivo · {0}","Copy backup code":"Copiar código de backup","Restore":"Restaurar","Paste a backup code, or load a file":"Cole um código de backup ou carregue um arquivo","Load from file…":"Carregar de arquivo…","Check backup":"Verificar backup","Backup saved":"Backup salvo","Backup code copied":"Código de backup copiado","Select and copy the code below":"Selecione e copie o código abaixo","That's a Sweep-only backup. Restore it in Sweep → Settings.":"É um backup só do Sweep. Restaure em Sweep → Ajustes.","That doesn't look like an Arcade backup.":"Isso não parece um backup do Arcade.","Restore backup":"Restaurar backup","From {0}. This replaces what's on this device for what you pick.":"De {0}. Isso substitui o que está neste aparelho para o que você escolher.","Everything":"Tudo","Profile, settings and all games":"Perfil, ajustes e todos os jogos","Only {0}":"Só {0}","{0} achievements":"{0} conquistas","Progress inside":"Progresso incluído","Tap again to replace":"Toque de novo para substituir","Everything restored":"Tudo restaurado","{0} restored":"{0} restaurado","Your Sweep progress is here":"Seu progresso no Sweep está aqui","{0} session":"{0} sessão","{0} sessions":"{0} sessões","No-guess minesweeper":"Campo minado sem chute","Naval battle vs AI":"Batalha naval contra a IA","Classic snake, 7 arenas":"Cobrinha clássica, 7 arenas","Slide, merge, reach 2048":"Deslize, junte, chegue a 2048","Stack, clear, keep it falling":"Empilhe, limpe, continue caindo","Thrust, shoot, clear the field":"Acelere, atire, limpe o campo","Craft words, outscore the rest":"Forme palavras, supere os outros","Every deal winnable":"Toda partida tem solução","Match pairs, clear the stack":"Junte pares, limpe a pilha","Pure logic, never a guess":"Lógica pura, nunca chute","Picture logic puzzles":"Quebra-cabeças lógicos de imagens","Play 3 different games":"Jogue 3 jogos diferentes","Earn 25 achievements":"Ganhe 25 conquistas","Play on 7 different days":"Jogue em 7 dias diferentes","Reach level 5 in 3 games":"Chegue ao nível 5 em 3 jogos","Play every game":"Jogue todos os jogos","Earn 100 achievements":"Ganhe 100 conquistas","Controller":"Controle","Heart":"Coração","Mine":"Mina","Ship":"Navio","Snake":"Cobra","Tile":"Peça","Blocks":"Blocos","Rocket":"Foguete","Letter":"Letra","Ace":"Ás","Dots":"Pontos","Grid":"Grade","Classic":"Clássico","Mint":"Menta","Ocean":"Oceano","Sunset":"Pôr do sol","Grape":"Uva","Gold":"Ouro","Rose":"Rosa","Explorer":"Explorador","Collector":"Colecionador","Regular":"Frequentador","All-rounder":"Versátil","Globetrotter":"Viajante","Completionist":"Completista","A profile card with a pixel-art avatar and your achievements across every game":"Um cartão de perfil com avatar em pixel art e suas conquistas de todos os jogos","Profile: play time, most played game, games played and Arcade milestones":"Perfil: tempo de jogo, jogo mais jogado, jogos jogados e marcos do Arcade","Arcade milestones unlock themes for the Arcade home":"Os marcos do Arcade desbloqueiam temas para a tela inicial","Favourite games, sorting, and New / Updated badges":"Jogos favoritos, ordenação e selos Novo / Atualizado","The Arcade's own menus in Español, Français, Deutsch and Português":"Os menus do Arcade em espanhol, francês, alemão e português","Install Arcade from Settings, and this What's new":"Instalar o Arcade pelos Ajustes, e estas novidades","New game: Sudoku":"Novo jogo: Sudoku","New games: Solitaire and Mahjong":"Novos jogos: Solitaire e Mahjong","New game: Tilecraft":"Novo jogo: Tilecraft","New game: Drift":"Novo jogo: Drift","New game: Linefall":"Novo jogo: Linefall","New game: 2048":"Novo jogo: 2048","New game: Snake":"Novo jogo: Snake","New game: Ship Fight":"Novo jogo: Ship Fight","Works offline, with safe background updates":"Funciona offline, com atualizações seguras em segundo plano","The Arcade: one home for every game, with shared settings and one backup":"O Arcade: um lar para todos os jogos, com ajustes comuns e um só backup","New":"Novo","Updated":"Atualizado","Recent":"Recentes","A–Z":"A–Z","Auto":"Auto","Light":"Claro","Dark":"Escuro","Animations":"Animações","Sound effects":"Efeitos sonoros","Music":"Música","Vibration":"Vibração","Full screen (hide phone bars)":"Tela cheia (ocultar barras)","Colourblind-safe colours":"Cores para daltonismo","Left-handed controls":"Controles para canhotos","Ad-free games. Nothing to buy, nothing tracked.":"Jogos sem anúncios. Nada para comprar, nada rastreado.","Games":"Jogos","Settings":"Ajustes","These settings apply to every game. Each game's own options are under Game settings.":"Estes ajustes valem para todos os jogos. As opções de cada jogo ficam em Ajustes dos jogos."}};
 // ===================== Arcade shell =====================
-// The Arcade owns: the username, settings shared by every game, the combined backup, and the overview.
-// Each game owns its own save, XP, levels and unlocks. The Arcade only ever reads a game's summary record,
-// `arcade.summary.<id>`, which the game writes. Storage keys are prefixed with the game's id so nothing collides.
-const VERSION='0.10', AKEY='arcade.v1';
+// The Arcade owns: the player's identity (username, avatar), settings shared by every game, the combined backup,
+// play-time stats, Arcade milestones and themes, and the overview. Each game owns its own save, XP, levels and unlocks.
+// The Arcade only ever reads a game's summary record, `arcade.summary.<id>`, which the game writes.
+// Storage keys are prefixed with the game's id so nothing collides.
+const VERSION='0.11', AKEY='arcade.v1';
+const GAME_BUILDS={"sweep": "12ff4b7c9d", "shipfight": "ed1f6bf53a", "snake": "2dd850e639", "t2048": "549b74d239", "linefall": "85857ef594", "drift": "3624fa13be", "tilecraft": "a9c3e8edf9", "solitaire": "390c580553", "mahjong": "16acb5f907", "sudoku": "d5d4f85c8a"}; // filled in by build.py: a hash of each game's page, for "Updated" badges
 const $=q=>document.querySelector(q), $$=q=>[...document.querySelectorAll(q)];
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
@@ -153,30 +204,83 @@ const GAMES=[
   {id:'mahjong',name:'Mahjong',desc:'Match pairs, clear the stack',path:'mahjong/index.html',prefix:'mahjong.',art:'mahjong'},
   {id:'sudoku',name:'Sudoku',desc:'Pure logic, never a guess',path:'sudoku/index.html',prefix:'sudoku.',art:'sudoku'},
   {id:'nonogram',name:'Nonograms',desc:'Picture logic puzzles',soon:true,art:'nono'},
-
 ];
-const LIVE=GAMES.filter(g=>!g.soon);
+const LIVE=GAMES.filter(g=>!g.soon), gameById=id=>GAMES.find(g=>g.id===id);
+
+// What's new in the Arcade itself, newest first. Returning players see the entries since their last visit once.
+const CHANGES=[
+  ['0.11',['A profile card with a pixel-art avatar and your achievements across every game','Profile: play time, most played game, games played and Arcade milestones','Arcade milestones unlock themes for the Arcade home','Favourite games, sorting, and New / Updated badges','The Arcade\'s own menus in Español, Français, Deutsch and Português','Install Arcade from Settings, and this What\'s new']],
+  ['0.10',['New game: Sudoku']],
+  ['0.9',['New games: Solitaire and Mahjong']],
+  ['0.8',['New game: Tilecraft']],
+  ['0.7',['New game: Drift']],
+  ['0.6',['New game: Linefall']],
+  ['0.5',['New game: 2048']],
+  ['0.4',['New game: Snake']],
+  ['0.3',['New game: Ship Fight']],
+  ['0.2',['Works offline, with safe background updates']],
+  ['0.1',['The Arcade: one home for every game, with shared settings and one backup']],
+];
 
 const REDUCED=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches);
 const defSet=()=>({appearance:'system',motion:!REDUCED,sfx:true,music:true,haptics:true,fullscreen:false,cb:false,lefty:false,lang:'auto'});
-const defA=()=>({v:1,name:'',askedName:false,set:defSet(),created:Date.now(),bk:{last:0,later:0}});
+const defA=()=>({v:1,name:'',askedName:false,set:defSet(),created:Date.now(),bk:{last:0,later:0},
+  avatar:'pad',theme:'classic',fav:[],sort:'recent',known:null,seenBuild:{},seenVer:null,stats:{},days:0,lastDay:'',ms:[],open:null});
 const read=k=>{ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } };
 
 // ---------- load, or migrate from an existing Sweep save ----------
-let A=read(AKEY), migrated=false;
+let A=read(AKEY), migrated=false, fresh=!A;
 if(!A){ A=defA(); const old=read('sweep.v1');
   if(old){ migrated=true; for(const k in A.set) if(k in old) A.set[k]=old[k]; if(old.name) A.name=old.name; } }
 A=Object.assign(defA(),A); A.set=Object.assign(defSet(),A.set);
+// Games that exist when a player first sees this version aren't "New" to them.
+if(!A.known) A.known=LIVE.map(g=>g.id);
+if(fresh) A.seenVer=VERSION;
 const persist=()=>{ try{ localStorage.setItem(AKEY,JSON.stringify(A)); }catch(e){} };
 persist();
 const summary=id=>read('arcade.summary.'+id);
 const hasSave=g=>{ for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k&&k.startsWith(g.prefix)) return true; } return false; };
 
+// ---------- language ----------
+const LANGS=[['auto','Automatic'],['en','English'],['es','Español'],['fr','Français'],['de','Deutsch'],['pt','Português (Brasil)']];
+const lang=()=>{ let l=A.set.lang; if(!l||l==='auto') l=(navigator.language||'en').slice(0,2).toLowerCase(); return TR[l]?l:'en'; };
+// t(english, ...args): the English text is the key; {0}, {1} are filled in. Missing rows fall back to English.
+function t(s,...a){ const d=TR[lang()]; let r=(d&&d[s])||s; a.forEach((v,i)=>{ r=r.split('{'+i+'}').join(v); }); return r; }
+const plural=(n,one,many)=>t(n===1?one:many,n.toLocaleString(lang()));
+function translateStatic(){ $$('[data-t]').forEach(el=>{ if(!el.dataset.en) el.dataset.en=el.textContent; el.textContent=t(el.dataset.en); });
+  document.documentElement.lang=lang(); }
+
 // ---------- icons ----------
 const P={back:'<path d="M15 18l-6-6 6-6"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
   trophy:'<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4zM7 6H4v2a3 3 0 0 0 3 3M17 6h3v2a3 3 0 0 1-3 3"/>',
-  check:'<path d="M20 6L9 17l-5-5"/>',lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',chev:'<path d="M9 18l6-6-6-6"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>'};
+  check:'<path d="M20 6L9 17l-5-5"/>',lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',chev:'<path d="M9 18l6-6-6-6"/>',
+  star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',pen:'<path d="M4 20h4L19 9l-4-4L4 16v4zM14 6l4 4"/>'};
 const icon=n=>`<svg class="i" viewBox="0 0 24 24">${P[n]}</svg>`;
+
+// ---------- pixel-art avatars ----------
+// 10×10 pixel maps; '.' is the background. `game`: unlocked once that game has been played. No game: free.
+const AVATARS=[
+  {id:'pad',name:'Controller',bg:'#cde3ff',pal:{k:'#2b2d42',w:'#ffffff',r:'#ef476f',g:'#06d6a0'},px:['..........','..........','.kkkkkkkk.','kkwkkkkrkk','kwwwkkgkrk','kkwkkkkgkk','kkkkkkkkkk','kkk....kkk','..........','..........']},
+  {id:'heart',name:'Heart',bg:'#ffe1e6',pal:{r:'#e63946',w:'#ffffff'},px:['..........','.rrr..rrr.','rrrrrrrrrr','rwwrrrrrrr','rwrrrrrrrr','rrrrrrrrrr','.rrrrrrrr.','..rrrrrr..','...rrrr...','....rr....']},
+  {id:'mine',game:'sweep',name:'Mine',bg:'#e9ecef',pal:{k:'#1d1d1f',w:'#ffffff'},px:['....k.....','.k..k..k..','..kkkkk...','..kwkkk...','kkkwkkkkk.','..kkkkk...','..kkkkk...','.k..k..k..','....k.....','..........']},
+  {id:'ship',game:'shipfight',name:'Ship',bg:'#bde0fe',pal:{g:'#6c757d',d:'#343a40',w:'#ffffff',b:'#3a86ff',r:'#e63946'},px:['....r.....','....rr....','....d.....','...ggg....','..gwgwg...','.ddddddd..','dddddddddd','.dddddddd.','bbbbbbbbbb','.b..b..b..']},
+  {id:'snake',game:'snake',name:'Snake',bg:'#d8f3dc',pal:{g:'#2d6a4f',l:'#52b788',w:'#ffffff',k:'#1d1d1f',r:'#e63946'},px:['..........','..gggggg..','.gllllllg.','.glwllwlg.','.glkllklg.','.gllllllg.','..gllllg..','...gggg...','....rr....','...r..r...']},
+  {id:'tile2',game:'t2048',name:'Tile',bg:'#fde2a7',pal:{o:'#f4a261',w:'#ffffff'},px:['oooooooooo','oooooooooo','ooowwwwooo','oooooowooo','oooooowooo','ooowwwwooo','ooowoooooo','ooowwwwooo','oooooooooo','oooooooooo']},
+  {id:'blocks',game:'linefall',name:'Blocks',bg:'#e0e1ff',pal:{p:'#7b2cbf',c:'#00b4d8',y:'#ffb703'},px:['..........','...ppp....','....p.....','..........','..........','c.........','cc.....yy.','cc.y...yy.','cccyyy.yyy','cccyyyyyyy']},
+  {id:'rocket',game:'drift',name:'Rocket',bg:'#1b263b',pal:{w:'#e0e1dd',r:'#e63946',o:'#ffb703',b:'#4cc9f0'},px:['....ww....','...wwww...','...wbbw...','...wbbw...','...wwww...','..rwwwwr..','.rrwwwwrr.','....oo....','...o..o...','....oo....']},
+  {id:'letter',game:'tilecraft',name:'Letter',bg:'#f1e3d3',pal:{t:'#c9a27e',k:'#3e2723'},px:['..........','.tttttttt.','.tttkkttt.','.ttkttktt.','.ttkttktt.','.ttkkkktt.','.ttkttktt.','.ttkttktt.','.tttttttt.','..........']},
+  {id:'ace',game:'solitaire',name:'Ace',bg:'#d8f3dc',pal:{w:'#ffffff',k:'#1d1d1f',g:'#adb5bd'},px:['.gggggggg.','.gwwwwwwg.','.gwwkkwwg.','.gwkkkkwg.','.gkkkkkkg.','.gkkkkkkg.','.gwwkkwwg.','.gwkkkkwg.','.gwwwwwwg.','.gggggggg.']},
+  {id:'dots',game:'mahjong',name:'Dots',bg:'#fef3c7',pal:{i:'#fffaf0',e:'#c9b68a',g:'#2a9d8f',r:'#e63946'},px:['.eeeeeeee.','.eiiiiiie.','.eigiigie.','.eiiiiiie.','.eiirriie.','.eiirriie.','.eiiiiiie.','.eigiigie.','.eiiiiiie.','.eeeeeeee.']},
+  {id:'grid',game:'sudoku',name:'Grid',bg:'#dbeafe',pal:{l:'#94a3b8',b:'#2563eb',w:'#ffffff'},px:['llllllllll','lwwlwwlbbl','lwwlwwlbbl','llllllllll','lbblwwlwwl','lbblwwlwwl','llllllllll','lwwlbblwwl','lwwlbblwwl','llllllllll']},
+];
+const avatarById=id=>AVATARS.find(a=>a.id===id)||AVATARS[0];
+const gameAvatar=id=>AVATARS.find(a=>a.game===id)||AVATARS[0];
+const avatarOpen=a=>!a.game||!!summary(a.game);
+function avatarSvg(a,size){ let r='';
+  a.px.forEach((row,y)=>{ let x=0; while(x<10){ const c=row[x]; let n=1; while(x+n<10&&row[x+n]===c) n++;
+    if(c!=='.') r+=`<rect x="${x+1}" y="${y+1}" width="${n}" height="1" fill="${a.pal[c]}"/>`; x+=n; } });
+  return `<span class="av" style="width:${size}px;height:${size}px;border-radius:${Math.round(size*.28)}px"><svg viewBox="0 0 12 12" shape-rendering="crispEdges"><rect width="12" height="12" fill="${a.bg}"/>${r}</svg></span>`; }
+
 // Small drawings for the game tiles, in the theme's colours.
 function art(kind){ const a='var(--accent)', s='var(--sub)';
   if(kind==='sweep'){ const n=[['','1','',''],['1','2','⚑',''],['','2','3','1'],['','1','⚑','1']]; let c='';
@@ -224,99 +328,205 @@ function art(kind){ const a='var(--accent)', s='var(--sub)';
   if(kind==='nono'){ let c=''; const g=['01110','11011','11111','01010','01110']; g.forEach((r,y)=>[...r].forEach((v,x)=>{ c+=`<rect x="${10+x*10}" y="${3+y*10}" width="9" height="9" rx="1.5" fill="${v==='1'?s:'var(--panel)'}"/>`; })); return `<svg viewBox="0 0 70 56" width="74" height="58">${c}</svg>`; }
   return `<svg viewBox="0 0 70 50" width="74" height="54"><path d="M10 30h50l-7 10H17z" fill="${s}"/><path d="M26 30V16h16v14M33 16V8" fill="none" stroke="${s}" stroke-width="3"/><path d="M6 44q6-4 12 0t12 0 12 0 12 0 12 0" fill="none" stroke="${s}" stroke-width="2"/></svg>`; }
 
-// ---------- theme ----------
+
+// ---------- stats: play time, days played ----------
+// Launching a game records {id, t}. Back on the Arcade, the session ends at the game's last summary write
+// (games write it when leaving and when hidden), or now; capped at 3 hours so an abandoned app can't inflate it.
+const todayStr=()=>{ const d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); };
+function settleSession(){ const o=A.open; if(!o) return; A.open=null;
+  const s=summary(o.id), now=Date.now(); let end=s&&s.last>o.t?Math.min(s.last,now):now;
+  const ms=Math.max(0,Math.min(end-o.t,3*36e5)); const st=A.stats[o.id]||(A.stats[o.id]={time:0,sessions:0,last:0});
+  st.time+=ms; st.sessions++; st.last=Math.max(st.last,end); persist(); }
+function countDay(){ const d=todayStr(); if(A.lastDay!==d){ A.lastDay=d; A.days=(A.days||0)+1; } }
+const fmtTime=ms=>{ const m=Math.round(ms/6e4); if(!ms) return t('{0} min',0); if(m<1) return t('{0} min','<1'); if(m<60) return t('{0} min',m); const h=Math.floor(m/60), r=m%60; return r?t('{0} h {1} min',h,r):t('{0} h',h); };
+const lastPlayed=id=>Math.max((A.stats[id]||{}).last||0,(summary(id)||{}).last||0);
+
+// ---------- totals ----------
+function totals(){ let got=0,all=0,played=0,time=0;
+  LIVE.forEach(g=>{ const s=summary(g.id); time+=(A.stats[g.id]||{}).time||0; if(!s) return; played++;
+    got+=s.ach.filter(a=>a[2]).length; all+=s.ach.length; });
+  return {got,all,played,time}; }
+const ago=ts=>{ const m=(Date.now()-ts)/6e4; if(m<2) return t('just now'); if(m<60) return t('{0} min ago',Math.round(m)); const h=m/60; if(h<24) return t('{0} h ago',Math.round(h)); const d=Math.round(h/24); return d===1?t('yesterday'):t('{0} days ago',d); };
+
+// ---------- themes and milestones ----------
+const THEMES=[
+  {id:'classic',name:'Classic',light:['#1c1c1e','#fff'],dark:['#f2f2f4','#111214']},
+  {id:'mint',name:'Mint',light:['#1f8a6d','#fff'],dark:['#4cc9a0','#0c1f19'],ms:'explorer'},
+  {id:'ocean',name:'Ocean',light:['#2563eb','#fff'],dark:['#60a5fa','#0b1324'],ms:'collector'},
+  {id:'sunset',name:'Sunset',light:['#e8590c','#fff'],dark:['#ff8c42','#1f0f05'],ms:'regular'},
+  {id:'grape',name:'Grape',light:['#7c3aed','#fff'],dark:['#a78bfa','#140b26'],ms:'allrounder'},
+  {id:'gold',name:'Gold',light:['#a87a06','#fff'],dark:['#f0c24b','#1d1505'],ms:'globetrotter'},
+  {id:'rose',name:'Rose',light:['#db2777','#fff'],dark:['#f472b6','#25091a'],ms:'completionist'},
+];
+const MILESTONES=[
+  {id:'explorer',name:'Explorer',desc:'Play 3 different games',goal:3,val:T=>T.played},
+  {id:'collector',name:'Collector',desc:'Earn 25 achievements',goal:25,val:T=>T.got},
+  {id:'regular',name:'Regular',desc:'Play on 7 different days',goal:7,val:()=>A.days||0},
+  {id:'allrounder',name:'All-rounder',desc:'Reach level 5 in 3 games',goal:3,val:()=>LIVE.filter(g=>{ const s=summary(g.id); return s&&s.level>=5; }).length},
+  {id:'globetrotter',name:'Globetrotter',desc:'Play every game',goal:LIVE.length,val:T=>T.played},
+  {id:'completionist',name:'Completionist',desc:'Earn 100 achievements',goal:100,val:T=>T.got},
+];
+const themeOpen=th=>!th.ms||A.ms.includes(th.ms);
+// Newly reached milestones are recorded (they stay unlocked) and announced once.
+function checkMilestones(){ const T=totals(), fresh=MILESTONES.filter(m=>!A.ms.includes(m.id)&&m.val(T)>=m.goal);
+  if(!fresh.length) return; fresh.forEach(m=>A.ms.push(m.id)); persist();
+  const m=fresh[0], th=THEMES.find(x=>x.ms===m.id);
+  setTimeout(()=>toast(t('Milestone: {0}',t(m.name))+(th?' · '+t('{0} theme unlocked',t(th.name)):'')),700); }
+
+// ---------- appearance ----------
 const darkMQ=window.matchMedia?matchMedia('(prefers-color-scheme: dark)'):null;
-function applyTheme(){ const d=A.set.appearance==='dark'||(A.set.appearance==='system'&&darkMQ&&darkMQ.matches);
-  document.documentElement.classList.toggle('dark',d); document.documentElement.style.colorScheme=d?'dark':'light';
+const isDark=()=>A.set.appearance==='dark'||(A.set.appearance==='system'&&darkMQ&&darkMQ.matches);
+function applyTheme(){ const d=isDark(), th=THEMES.find(x=>x.id===A.theme&&themeOpen(x))||THEMES[0], [ac,ink]=d?th.dark:th.light, R=document.documentElement;
+  R.classList.toggle('dark',d); R.style.colorScheme=d?'dark':'light';
+  R.style.setProperty('--accent',ac); R.style.setProperty('--accentInk',ink);
   document.body.classList.toggle('nomotion',!A.set.motion);
   $('meta[name=theme-color]').content=d?'#111214':'#f4f4f1'; }
 if(darkMQ){ const f=()=>{ if(A.set.appearance==='system') applyTheme(); }; darkMQ.addEventListener?darkMQ.addEventListener('change',f):darkMQ.addListener(f); }
 const buzz=ms=>{ if(A.set.haptics&&navigator.vibrate) try{ navigator.vibrate(ms); }catch(e){} };
-let toastT=0; function toast(m,act,fn){ const t=$('#toast'); t.textContent=m;
-  if(act){ const b=document.createElement('button'); b.textContent=act; b.style.cssText='margin-left:12px;font-weight:800;text-decoration:underline;color:inherit'; b.onclick=fn; t.appendChild(b); }
-  t.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('on'),act?9000:2600); }
+let toastT=0; function toast(m,act,fn){ const el=$('#toast'); el.textContent=m;
+  if(act){ const b=document.createElement('button'); b.textContent=act; b.style.cssText='margin-left:12px;font-weight:800;text-decoration:underline;color:inherit'; b.onclick=fn; el.appendChild(b); }
+  el.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove('on'),act?9000:2600); }
 // A new version finished downloading in the background. It's already saved for offline use; reloading shows it.
-if(navigator.serviceWorker) navigator.serviceWorker.addEventListener('message',e=>{ if(e.data&&e.data.type==='arcade-updated') toast('Arcade updated','Reload',()=>location.reload()); });
+if(navigator.serviceWorker) navigator.serviceWorker.addEventListener('message',e=>{ if(e.data&&e.data.type==='arcade-updated') toast(t('Arcade updated'),t('Reload'),()=>location.reload()); });
+// Install: the browser offers it once the app qualifies; Settings shows the row only then.
+let installEvt=null;
+addEventListener('beforeinstallprompt',e=>{ e.preventDefault(); installEvt=e; if(cur==='set') renderSettings(); });
+addEventListener('appinstalled',()=>{ installEvt=null; toast(t('Arcade installed')); if(cur==='set') renderSettings(); });
 
 // ---------- navigation ----------
 let cur='home';
 function show(id){ cur=id; $$('.screen').forEach(s=>s.classList.toggle('on',s.id===id));
-  if(id==='home') renderHome(); if(id==='ach') renderAch(); if(id==='set') renderSettings(); }
+  if(id==='home') renderHome(); if(id==='prof') renderProfile(); if(id==='ach') renderAch(); if(id==='set') renderSettings(); }
 document.addEventListener('click',e=>{ const g=e.target.closest('[data-go]'); if(g) show(g.dataset.go); });
-function launch(g,hash){ buzz(12); persist();
+function launch(g,hash){ buzz(12);
+  if(!A.known.includes(g.id)) A.known.push(g.id);
+  if(GAME_BUILDS[g.id]) A.seenBuild[g.id]=GAME_BUILDS[g.id];
+  countDay(); A.open={id:g.id,t:Date.now()}; persist();
   if(A.set.fullscreen&&document.fullscreenEnabled&&!document.fullscreenElement) document.documentElement.requestFullscreen({navigationUI:'hide'}).catch(()=>{});
   try{ sessionStorage.setItem('arcade.nav',g.id); }catch(e){}
   location.href=g.path+(hash||''); }
 // Coming back from a game with the Back button restores this page from memory, so refresh what it shows.
-addEventListener('pageshow',e=>{ if(e.persisted) show(cur); });
-
-// ---------- totals ----------
-function totals(){ let lv=0,max=0,got=0,all=0,played=0;
-  LIVE.forEach(g=>{ const s=summary(g.id); if(!s) return; played++; lv+=s.level; max+=s.maxLevel;
-    got+=s.ach.filter(a=>a[2]).length; all+=s.ach.length; });
-  return {lv,max,got,all,played}; }
-const ago=t=>{ const m=(Date.now()-t)/6e4; if(m<2) return 'just now'; if(m<60) return Math.round(m)+' min ago'; const h=m/60; if(h<24) return Math.round(h)+' h ago'; const d=Math.round(h/24); return d===1?'yesterday':d+' days ago'; };
+addEventListener('pageshow',e=>{ if(e.persisted){ settleSession(); checkMilestones(); show(cur); } });
 
 // ---------- home ----------
-function renderHome(){ const T=totals();
-  $('#hello').innerHTML=A.name?`Hi, <b style="color:var(--ink)">${esc(A.name)}</b>`:`<button class="chip" id="nameChip">${icon('user').replace('class="i"','class="i" style="width:16px;height:16px"')} Pick a username</button>`;
-  const nc=$('#nameChip'); if(nc) nc.onclick=()=>askName(false);
-  const pct=T.max?Math.round(T.lv/T.max*100):0;
-  $('#lvlCard').innerHTML=`<div class="badge">${T.lv||1}</div><div class="grow"><div class="t">Arcade level ${T.lv||1}</div><div class="bar"><i style="width:${pct}%"></i></div>
-    <div class="s">${T.played?LIVE.map(g=>{ const s=summary(g.id); return s?`${g.name} ${s.level}/${s.maxLevel}`:''; }).filter(Boolean).join(' · ')+' · the total of every game\'s level':'Every game\'s level adds up here.'}</div></div>
-    <div class="r"><b>${T.got}<small style="color:var(--sub)">/${T.all||'–'}</small></b><span>Awards</span></div>`;
-  const due=T.lv>=3||T.got>0, last=A.bk.last||0, later=A.bk.later||0;
-  $('#nudge').innerHTML=due&&Date.now()-last>30*864e5&&Date.now()-later>7*864e5?`<div class="card" style="flex-direction:column;align-items:stretch;gap:10px"><div><div class="t">Back up your progress</div><div class="s">${last?'Your last backup was '+ago(last)+'.':'You haven\'t made a backup yet.'} Everything lives only on this device. One file covers every game.</div></div>
-    <div style="display:flex;gap:8px"><button class="primary" style="width:auto;padding:10px 16px" id="nbGo">Back up</button><button class="ghost" style="width:auto" id="nbLater">Later</button></div></div>`:'';
+function badge(g){ if(!A.known.includes(g.id)) return 'New';
+  const b=GAME_BUILDS[g.id], seen=A.seenBuild[g.id];
+  if(b&&seen&&seen!==b) return 'Updated';
+  if(b&&!seen&&summary(g.id)) A.seenBuild[g.id]=b; // played before badges existed: start tracking from here
+  return ''; }
+function sortedGames(){ const fav=g=>A.fav.includes(g.id)?0:1;
+  return [...LIVE].sort((a,b)=>fav(a)-fav(b)||(A.sort==='az'?a.name.localeCompare(b.name,lang()):(lastPlayed(b.id)-lastPlayed(a.id))||LIVE.indexOf(a)-LIVE.indexOf(b))); }
+function renderIdCard(){ const T=totals(), av=avatarById(A.avatar), pct=T.all?Math.round(T.got/T.all*100):0;
+  $('#idCard').innerHTML=`${avatarSvg(av,58)}<div class="grow"><div class="t">${A.name?esc(A.name):t('Pick a username')}</div>
+    <div class="bar"><i style="width:${pct}%"></i></div>
+    <div class="s">${T.all?t('{0} of {1} achievements',T.got,T.all):t('Your achievements from every game add up here.')}</div></div><span class="chev">${icon('chev')}</span>`; }
+function renderHome(){ const T=totals(); translateStatic(); renderIdCard();
+  const due=T.got>0||T.played>=2, last=A.bk.last||0, later=A.bk.later||0;
+  $('#nudge').innerHTML=due&&Date.now()-last>30*864e5&&Date.now()-later>7*864e5?`<div class="card" style="flex-direction:column;align-items:stretch;gap:10px"><div><div class="t">${t('Back up your progress')}</div><div class="s">${last?t('Your last backup was {0}.',ago(last)):t('You haven\'t made a backup yet.')} ${t('Everything lives only on this device. One file covers every game.')}</div></div>
+    <div style="display:flex;gap:8px"><button class="primary" style="width:auto;padding:10px 16px" id="nbGo">${t('Back up')}</button><button class="ghost" style="width:auto" id="nbLater">${t('Later')}</button></div></div>`:'';
   if($('#nbGo')){ $('#nbGo').onclick=openBackup; $('#nbLater').onclick=()=>{ A.bk.later=Date.now(); persist(); renderHome(); }; }
-  $('#gCount').textContent=`${LIVE.length} of ${GAMES.length} ready`;
-  $('#games').innerHTML=GAMES.map(g=>{ const s=!g.soon&&summary(g.id);
+  $('#sortSeg').innerHTML=[['recent','Recent'],['az','A–Z']].map(([k,n])=>`<button data-sort="${k}" class="${A.sort===k?'on':''}">${t(n)}</button>`).join('');
+  $$('[data-sort]').forEach(b=>b.onclick=()=>{ A.sort=b.dataset.sort; persist(); renderHome(); });
+  $('#games').innerHTML=sortedGames().map(g=>{ const s=summary(g.id), tag=badge(g), fv=A.fav.includes(g.id);
     let ft;
-    if(g.soon) ft='Coming soon';
-    else if(s){ const span=s.xpNext?s.xpNext-s.xpLevel:1, p=s.xpNext?Math.round((s.xp-s.xpLevel)/span*100):100;
-      ft=`<span class="lv">Lv ${s.level}</span><div class="bar"><i style="width:${p}%"></i></div>`; }
-    else ft=hasSave(g)?'Open once to sync':'New';
-    const sub=s&&s.last?'Played '+ago(s.last):g.desc;
-    return `<${g.soon?'div':'button'} class="game ${g.soon?'soon':''}" data-g="${g.id}"><div class="art">${art(g.art)}</div><div class="nm">${g.name}</div><div class="ds">${sub}</div><div class="ft">${ft}</div></${g.soon?'div':'button'}>`; }).join('');
-  $$('button.game').forEach(b=>b.onclick=()=>launch(GAMES.find(g=>g.id===b.dataset.g)));
+    if(s){ const span=s.xpNext?s.xpNext-s.xpLevel:1, p=s.xpNext?Math.round((s.xp-s.xpLevel)/span*100):100;
+      ft=`<span class="lv">${t('Lv {0}',s.level)}</span><div class="bar"><i style="width:${p}%"></i></div>`; }
+    else ft=hasSave(g)?t('Open once to sync'):t('Not played yet');
+    const lp=lastPlayed(g.id), sub=lp?t('Played {0}',ago(lp)):t(g.desc);
+    return `<div class="game" role="button" tabindex="0" data-g="${g.id}">${tag?`<span class="tag">${t(tag)}</span>`:''}<button class="fav ${fv?'on':''}" data-fav="${g.id}" aria-label="${t('Favourite')}">${icon('star')}</button>
+      <div class="art">${art(g.art)}</div><div class="nm">${g.name}</div><div class="ds">${sub}</div><div class="ft">${ft}</div></div>`; }).join('');
+  persist();
+  $$('.game[data-g]').forEach(b=>b.onclick=e=>{ if(e.target.closest('[data-fav]')) return; launch(gameById(b.dataset.g)); });
+  $$('[data-fav]').forEach(b=>b.onclick=()=>{ const id=b.dataset.fav, i=A.fav.indexOf(id); i<0?A.fav.push(id):A.fav.splice(i,1); buzz(8); persist(); renderHome(); });
+  const soon=GAMES.filter(g=>g.soon);
+  $('#soon').innerHTML=soon.length?`<span>${t('Coming soon')}</span>`+soon.map(g=>`<span class="chip">${g.name}</span>`).join(''):'';
 }
 
+// ---------- profile ----------
+function renderProfile(){ const T=totals(), av=avatarById(A.avatar);
+  const rows=LIVE.map(g=>({g,s:summary(g.id),st:A.stats[g.id]||{time:0,sessions:0}})).filter(r=>r.s||r.st.sessions)
+    .sort((a,b)=>b.st.time-a.st.time||lastPlayed(b.g.id)-lastPlayed(a.g.id));
+  const top=rows.find(r=>r.st.time>0);
+  const since=new Date(A.created).toLocaleDateString(lang(),{month:'long',year:'numeric'});
+  $('#profBody').innerHTML=`<div class="phead"><button id="avBtn" aria-label="${t('Change avatar')}">${avatarSvg(av,96)}</button>
+      <div class="nmr">${A.name?esc(A.name):t('No username yet')} <button class="linkbtn" id="nmEdit">${A.name?t('Edit'):t('Pick')}</button></div>
+      <div class="s">${t('Playing since {0}',since)}</div></div>
+    <div class="tiles"><div class="tile"><b>${fmtTime(T.time)}</b><span>${t('Play time')}</span></div>
+      <div class="tile"><b>${T.played}<small style="color:var(--sub);font-size:14px">/${LIVE.length}</small></b><span>${t('Games played')}</span></div>
+      <div class="tile"><b>${T.got}<small style="color:var(--sub);font-size:14px">/${T.all||'–'}</small></b><span>${t('Achievements')}</span></div>
+      <div class="tile"><b>${A.days||0}</b><span>${t('Days played')}</span></div></div>
+    ${top?`<button class="card" style="margin-top:10px" data-open="${top.g.id}"><div class="prow" style="padding:0">${avatarSvg(gameAvatar(top.g.id),40)}<div class="grow"><div class="d">${t('Most played')}</div><div class="n">${top.g.name} · ${fmtTime(top.st.time)}</div></div></div></button>`:''}
+    <div class="label">${t('Your games')}</div>
+    <div class="card" style="flex-direction:column;align-items:stretch;gap:0;padding:4px 16px">${rows.length?rows.map(({g,s,st})=>{ const got=s?s.ach.filter(a=>a[2]).length:0, n=s?s.ach.length:0;
+      return `<button class="prow" data-open="${g.id}">${avatarSvg(gameAvatar(g.id),40)}<div class="grow"><div class="n">${g.name}</div>
+        <div class="d">${[s?t('Level {0}/{1}',s.level,s.maxLevel):'',st.sessions?plural(st.sessions,'{0} session','{0} sessions'):'',st.time?fmtTime(st.time):''].filter(Boolean).join(' · ')}</div>
+        ${n?`<div class="bar"><i style="width:${Math.round(got/n*100)}%"></i></div><div class="d">${t('{0} of {1} achievements',got,n)}</div>`:''}</div></button>`; }).join(''):`<div class="note" style="padding:12px 0">${t('Play a game and it shows up here.')}</div>`}</div>
+    <p class="note">${t('Play time counts time spent in a game opened from the Arcade, from version 0.11 on.')}</p>
+    <div class="label">${t('Arcade milestones')}<span>${A.ms.length}/${MILESTONES.length}</span></div>
+    <div class="card" style="flex-direction:column;align-items:stretch;gap:0;padding:4px 16px">${MILESTONES.map(m=>{ const done=A.ms.includes(m.id), v=Math.min(m.val(T),m.goal), th=THEMES.find(x=>x.ms===m.id);
+      return `<div class="ms ${done?'':'off'}"><div class="sw2" style="background:${th?th.light[0]:'var(--accent)'}">${icon(done?'check':'lock')}</div><div class="grow"><div class="n" style="font-weight:700">${t(m.name)}</div>
+        <div class="d" style="color:var(--sub);font-size:12.5px">${t(m.desc)}${th?' · '+t('{0} theme',t(th.name)):''}</div></div><b style="font-variant-numeric:tabular-nums;color:var(--sub)">${done?'✓':v+'/'+m.goal}</b></div>`; }).join('')}</div>
+    <button class="primary" style="margin-top:14px" data-go="ach">${t('All achievements')}</button>`;
+  $('#avBtn').onclick=openAvatars; $('#nmEdit').onclick=()=>askName(true);
+  $$('#profBody [data-open]').forEach(b=>b.onclick=()=>launch(gameById(b.dataset.open)));
+}
+function openAvatars(){ const draw=()=>{ sheet(`<h2>${t('Avatar')}</h2><div class="sub">${t('Each game\'s avatar unlocks once you\'ve played that game.')}</div>
+    <div class="avgrid">${AVATARS.map(a=>{ const open=avatarOpen(a), g=a.game&&gameById(a.game);
+      return `<button data-av="${a.id}" class="${A.avatar===a.id?'on':''} ${open?'':'lock'}">${avatarSvg(a,64)}${open?'':`<span class="lk">${icon('lock')}</span>`}<span>${g?g.name:t(a.name)}</span></button>`; }).join('')}</div>
+    <div class="btns"><button class="ghost" data-close>${t('Close')}</button></div>`);
+    $$('[data-av]').forEach(b=>b.onclick=()=>{ const a=avatarById(b.dataset.av);
+      if(!avatarOpen(a)){ toast(t('Play {0} to unlock it.',gameById(a.game).name)); return; }
+      A.avatar=a.id; persist(); buzz(8); draw(); show(cur); }); };
+  draw(); }
+
 // ---------- achievements by game ----------
-const openAch=new Set(['sweep']);
+const openAch=new Set();
 function renderAch(){ const T=totals(); $('#achCount').textContent=T.all?`${T.got}/${T.all}`:'';
-  $('#achBody').innerHTML=GAMES.map(g=>{ const s=!g.soon&&summary(g.id);
-    if(!s) return `<div class="card ach" style="opacity:.55"><div class="hd"><div class="grow"><div class="t">${g.name}</div><div class="s">${g.soon?'Coming soon':'Play it once to see its achievements here.'}</div></div></div></div>`;
+  $('#achBody').innerHTML=sortedGames().map(g=>{ const s=summary(g.id);
+    if(!s) return `<div class="card ach" style="opacity:.55"><div class="hd"><div class="grow"><div class="t">${g.name}</div><div class="s">${t('Play it once to see its achievements here.')}</div></div></div></div>`;
     const got=s.ach.filter(a=>a[2]).length, pct=Math.round(got/s.ach.length*100);
     const rows=[...s.ach].sort((a,b)=>b[2]-a[2]).map(([n,d,ok])=>`<div class="arow ${ok?'got':''}"><div class="dot">${icon(ok?'check':'lock')}</div><div><div class="n">${esc(n)}</div><div class="d">${esc(d)}</div></div></div>`).join('');
-    return `<div class="card ach ${openAch.has(g.id)?'open':''}" data-a="${g.id}"><button class="hd"><div class="grow"><div class="t">${g.name}</div><div class="bar"><i style="width:${pct}%"></i></div><div class="s">${got} of ${s.ach.length} · Level ${s.level}/${s.maxLevel}</div></div><span class="chev">${icon('chev')}</span></button><div class="list">${rows}
-      ${s.hi?`<div class="slabel" style="margin-top:12px">Highlights</div>`+s.hi.map(([k,v])=>`<div class="kv">${esc(k)}<span>${esc(v)}</span></div>`).join(''):''}
-      <button class="primary" style="margin:12px 0 6px" data-play="${g.id}">Open ${g.name}</button></div></div>`; }).join('');
+    return `<div class="card ach ${openAch.has(g.id)?'open':''}" data-a="${g.id}"><button class="hd"><div class="grow"><div class="t">${g.name}</div><div class="bar"><i style="width:${pct}%"></i></div><div class="s">${t('{0} of {1}',got,s.ach.length)} · ${t('Level {0}/{1}',s.level,s.maxLevel)}</div></div><span class="chev">${icon('chev')}</span></button><div class="list">${rows}
+      ${s.hi?`<div class="slabel" style="margin-top:12px">${t('Highlights')}</div>`+s.hi.map(([k,v])=>`<div class="kv">${esc(k)}<span>${esc(v)}</span></div>`).join(''):''}
+      <button class="primary" style="margin:12px 0 6px" data-play="${g.id}">${t('Open {0}',g.name)}</button></div></div>`; }).join('');
   $$('.ach .hd').forEach(h=>h.onclick=()=>{ const c=h.parentElement, id=c.dataset.a; c.classList.toggle('open'); c.classList.contains('open')?openAch.add(id):openAch.delete(id); });
-  $$('[data-play]').forEach(b=>b.onclick=()=>launch(GAMES.find(g=>g.id===b.dataset.play)));
+  $$('[data-play]').forEach(b=>b.onclick=()=>launch(gameById(b.dataset.play)));
 }
 
 // ---------- settings ----------
-const LANGS=[['auto','Automatic'],['en','English'],['es','Español'],['fr','Français'],['de','Deutsch'],['pt','Português (Brasil)']];
-function renderSettings(){ const S=A.set;
-  const sw=(k,l)=>`<button class="srow" data-set="${k}"><span>${l}</span><i class="sw ${S[k]?'on':''}"></i></button>`;
+function renderSettings(){ const S=A.set; translateStatic();
+  const sw=(k,l)=>`<button class="srow" data-set="${k}"><span>${t(l)}</span><i class="sw ${S[k]?'on':''}"></i></button>`;
   const more=(id,l,v)=>`<button class="srow" id="${id}"><span>${l}</span><span class="v">${v} ›</span></button>`;
-  const ap=[['system','Auto'],['light','Light'],['dark','Dark']].map(([k,n])=>`<button data-ap="${k}" class="${S.appearance===k?'on':''}">${n}</button>`).join('');
-  $('#settings').innerHTML=`<div class="slabel">Profile</div>`+more('nameBtn','Username',A.name?esc(A.name):'Not set')
-    +`<div class="slabel">Look &amp; sound</div><div class="srow"><span>Appearance</span><div class="seg">${ap}</div></div>`
+  const ap=[['system','Auto'],['light','Light'],['dark','Dark']].map(([k,n])=>`<button data-ap="${k}" class="${S.appearance===k?'on':''}">${t(n)}</button>`).join('');
+  const th=THEMES.find(x=>x.id===A.theme)||THEMES[0], standalone=matchMedia&&matchMedia('(display-mode: standalone)').matches;
+  $('#settings').innerHTML=`<div class="slabel">${t('Profile')}</div>`+more('nameBtn',t('Username'),A.name?esc(A.name):t('Not set'))+more('avSet',t('Avatar'),t(avatarById(A.avatar).name))
+    +`<div class="slabel">${t('Look & sound')}</div><div class="srow"><span>${t('Appearance')}</span><div class="seg">${ap}</div></div>`
+    +more('themeBtn',t('Arcade theme'),t(th.name))
     +sw('motion','Animations')+sw('sfx','Sound effects')+sw('music','Music')+sw('haptics','Vibration')
     +(document.fullscreenEnabled?sw('fullscreen','Full screen (hide phone bars)'):'')
-    +`<div class="slabel">Accessibility</div>`+sw('cb','Colourblind-safe colours')+sw('lefty','Left-handed controls')
-    +more('langBtn','Language',(LANGS.find(l=>l[0]===S.lang)||LANGS[0])[1])
-    +`<div class="slabel">Game settings</div>`+LIVE.map(g=>more('gs_'+g.id,g.name,'Gameplay, tutorial')).join('')
-    +`<div class="slabel">Your data</div>`+more('bkBtn','Backup &amp; restore','All games')+more('privBtn','Privacy','')
-    +more('aboutBtn','About Arcade','v'+VERSION);
-  $('#nameBtn').onclick=()=>askName(true); $('#langBtn').onclick=openLang; $('#bkBtn').onclick=openBackup; $('#privBtn').onclick=openPrivacy; $('#aboutBtn').onclick=openAbout;
+    +`<div class="slabel">${t('Accessibility')}</div>`+sw('cb','Colourblind-safe colours')+sw('lefty','Left-handed controls')
+    +more('langBtn',t('Language'),(LANGS.find(l=>l[0]===S.lang)||LANGS[0])[0]==='auto'?t('Automatic'):(LANGS.find(l=>l[0]===S.lang))[1])
+    +`<div class="slabel">${t('Game settings')}</div>`+[...LIVE].sort((a,b)=>a.name.localeCompare(b.name,lang())).map(g=>more('gs_'+g.id,g.name,t('Gameplay, tutorial'))).join('')
+    +`<div class="slabel">${t('Your data')}</div>`+more('bkBtn',t('Backup & restore'),t('All games'))+more('privBtn',t('Privacy'),'')
+    +`<div class="slabel">${t('Arcade')}</div>`+(installEvt&&!standalone?more('instBtn',t('Install Arcade'),t('Play like an app')):'')
+    +more('newsBtn',t('What\'s new'),'v'+VERSION)+more('aboutBtn',t('About Arcade'),'');
+  $('#nameBtn').onclick=()=>askName(true); $('#avSet').onclick=openAvatars; $('#themeBtn').onclick=openThemes; $('#langBtn').onclick=openLang;
+  $('#bkBtn').onclick=openBackup; $('#privBtn').onclick=openPrivacy; $('#aboutBtn').onclick=openAbout; $('#newsBtn').onclick=()=>openNews(false);
+  if($('#instBtn')) $('#instBtn').onclick=async()=>{ const e=installEvt; if(!e) return; e.prompt(); try{ await e.userChoice; }catch(x){} installEvt=null; renderSettings(); };
   LIVE.forEach(g=>$('#gs_'+g.id).onclick=()=>launch(g,'#game-settings'));
   $$('[data-ap]').forEach(b=>b.onclick=()=>{ S.appearance=b.dataset.ap; persist(); applyTheme(); renderSettings(); });
   $$('[data-set]').forEach(b=>b.onclick=()=>{ const k=b.dataset.set; S[k]=!S[k]; persist(); if(k==='motion') applyTheme(); if(k==='haptics') buzz(20);
     if(k==='fullscreen'){ if(S.fullscreen) document.documentElement.requestFullscreen({navigationUI:'hide'}).catch(()=>{}); else if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); }
     renderSettings(); });
 }
+function openThemes(){ const draw=()=>{ sheet(`<h2>${t('Arcade theme')}</h2><div class="sub">${t('Colours for the Arcade\'s own screens. Arcade milestones unlock more.')}</div>
+    <div class="thgrid">${THEMES.map(th=>{ const open=themeOpen(th), m=th.ms&&MILESTONES.find(x=>x.id===th.ms);
+      return `<button data-th="${th.id}" class="${A.theme===th.id?'on':''} ${open?'':'lock'}"><span class="dot" style="background:${(isDark()?th.dark:th.light)[0]}"></span><span>${t(th.name)}${open?'':`<small>${t(m.desc)}</small>`}</span></button>`; }).join('')}</div>
+    <div class="btns"><button class="ghost" data-close>${t('Close')}</button></div>`);
+    $$('[data-th]').forEach(b=>b.onclick=()=>{ const th=THEMES.find(x=>x.id===b.dataset.th);
+      if(!themeOpen(th)){ toast(t('Unlock it with the {0} milestone.',t(MILESTONES.find(x=>x.id===th.ms).name))); return; }
+      A.theme=th.id; persist(); applyTheme(); draw(); renderSettings(); }); };
+  draw(); }
 
 // ---------- sheets ----------
 function sheet(html){ $('#sheet').innerHTML=html; $('#ov').classList.add('on'); $$('#sheet [data-close]').forEach(b=>b.onclick=hide); }
@@ -325,28 +535,32 @@ $('#ov').addEventListener('click',e=>{ if(e.target.id==='ov') hide(); });
 const cleanName=s=>String(s||'').replace(/[^\p{L}\p{N} _.\-]/gu,'').replace(/\s+/g,' ').trim().slice(0,16);
 
 function askName(fromSettings){ A.askedName=true; persist();
-  sheet(`<h2>${A.name?'Change username':'Pick a username'}</h2><div class="sub">One name for every game: on challenges you send and when you join a League. It stays on this device unless you share a code.</div>
-    <input class="field" id="nm" maxlength="16" placeholder="Your name" autocomplete="off" value="${esc(A.name)}">
-    <div class="note" style="margin:8px 2px 0">Up to 16 letters, numbers, spaces, dots, dashes or underscores. A League name already locked for this season doesn't change until the season ends.</div>
-    <div class="btns"><button class="primary" id="nmGo">${A.name?'Save':'Continue'}</button><button class="ghost" data-close>${fromSettings?'Cancel':'Later'}</button></div>`);
+  sheet(`<h2>${A.name?t('Change username'):t('Pick a username')}</h2><div class="sub">${t('One name for every game: on challenges you send and when you join a League. It stays on this device unless you share a code.')}</div>
+    <input class="field" id="nm" maxlength="16" placeholder="${t('Your name')}" autocomplete="off" value="${esc(A.name)}">
+    <div class="note" style="margin:8px 2px 0">${t('Up to 16 letters, numbers, spaces, dots, dashes or underscores. A League name already locked for this season doesn\'t change until the season ends.')}</div>
+    <div class="btns"><button class="primary" id="nmGo">${A.name?t('Save'):t('Continue')}</button><button class="ghost" data-close>${fromSettings?t('Cancel'):t('Later')}</button></div>`);
   const f=$('#nm'); setTimeout(()=>f.focus(),220); f.onkeydown=e=>{ if(e.key==='Enter') $('#nmGo').click(); };
-  $('#nmGo').onclick=()=>{ const n=cleanName(f.value); if(!n){ toast('Pick a name first.'); f.focus(); return; }
-    A.name=n; persist(); hide(); show(cur); toast(`Welcome, ${n}!`); };
+  $('#nmGo').onclick=()=>{ const n=cleanName(f.value); if(!n){ toast(t('Pick a name first.')); f.focus(); return; }
+    A.name=n; persist(); hide(); show(cur); toast(t('Welcome, {0}!',n)); };
 }
-function openLang(){ sheet(`<h2>Language</h2><div class="sub">Used by every game. The Arcade's own menus are in English for now.</div>
-  <div class="pick">${LANGS.map(([k,n])=>`<button data-l="${k}" class="${A.set.lang===k?'on':''}"><span>${n}</span>${A.set.lang===k?icon('check'):''}</button>`).join('')}</div>
-  <div class="btns"><button class="ghost" data-close>Close</button></div>`);
-  $$('[data-l]').forEach(b=>b.onclick=()=>{ A.set.lang=b.dataset.l; persist(); hide(); renderSettings(); }); }
-function openPrivacy(){ sheet(`<h2>Privacy</h2><div class="sub">The Arcade and its games collect nothing. There are no ads, analytics, trackers or accounts, and the only network requests are loading the app itself.</div>
-  <div class="sub">Your progress, settings and username are stored only on this device. Codes you choose to share (challenges, League results, backups) contain only what they say.</div>
-  <div class="btns"><button class="ghost" data-close>Close</button></div>`); }
-function openAbout(){ sheet(`<h2>About Arcade</h2><div class="sub">A home for ad-free games. Each game keeps its own levels and unlocks; the Arcade adds them up, holds the settings they share, and backs everything up in one file.</div>
-  <div class="kv">Version<span>${VERSION}</span></div>${LIVE.map(g=>{ const s=summary(g.id); return `<div class="kv">${g.name}<span>${s?'v'+esc(s.ver):'–'}</span></div>`; }).join('')}
-  <div class="slabel" style="margin-top:14px">Credits</div>
-  <div class="note" style="margin:4px 2px 0">Fonts: Inter, JetBrains Mono and Caveat, under the SIL Open Font License.<br>
-  Tilecraft's words: the ENABLE word list (public domain). Its filter of offensive words started from the "List of Dirty, Naughty, Obscene and Otherwise Bad Words" by its contributors, under CC BY 4.0.<br>
-  Arcade and its games are open source under the MIT licence.</div>
-  <div class="btns"><button class="ghost" data-close>Close</button></div>`); }
+function openLang(){ sheet(`<h2>${t('Language')}</h2><div class="sub">${t('Used by the Arcade and every game.')}</div>
+  <div class="pick">${LANGS.map(([k,n])=>`<button data-l="${k}" class="${A.set.lang===k?'on':''}"><span>${k==='auto'?t('Automatic'):n}</span>${A.set.lang===k?icon('check'):''}</button>`).join('')}</div>
+  <div class="btns"><button class="ghost" data-close>${t('Close')}</button></div>`);
+  $$('[data-l]').forEach(b=>b.onclick=()=>{ A.set.lang=b.dataset.l; persist(); hide(); show(cur); }); }
+function openPrivacy(){ sheet(`<h2>${t('Privacy')}</h2><div class="sub">${t('The Arcade and its games collect nothing. There are no ads, analytics, trackers or accounts, and the only network requests are loading the app itself.')}</div>
+  <div class="sub">${t('Your progress, settings, username and play-time stats are stored only on this device. Codes you choose to share (challenges, League results, backups) contain only what they say.')}</div>
+  <div class="btns"><button class="ghost" data-close>${t('Close')}</button></div>`); }
+function openAbout(){ sheet(`<h2>${t('About Arcade')}</h2><div class="sub">${t('A home for ad-free games. Each game keeps its own levels and unlocks; the Arcade holds your profile and the settings they share, and backs everything up in one file.')}</div>
+  <div class="kv">${t('Version')}<span>${VERSION}</span></div>${LIVE.map(g=>{ const s=summary(g.id); return `<div class="kv">${g.name}<span>${s?'v'+esc(s.ver):'–'}</span></div>`; }).join('')}
+  <div class="slabel" style="margin-top:14px">${t('Credits')}</div>
+  <div class="note" style="margin:4px 2px 0">${t('Fonts: Inter, JetBrains Mono and Caveat, under the SIL Open Font License.')}<br>
+  ${t('Tilecraft\'s words: the ENABLE word list (public domain). Its filter of offensive words started from the "List of Dirty, Naughty, Obscene and Otherwise Bad Words" by its contributors, under CC BY 4.0.')}<br>
+  ${t('Arcade and its games are open source under the MIT licence.')}</div>
+  <div class="btns"><button class="ghost" data-close>${t('Close')}</button></div>`); }
+// What's new: everything after `since` (returning players, once), or the full history from Settings.
+function openNews(since){ const list=since?CHANGES.slice(0,Math.max(1,CHANGES.findIndex(c=>c[0]===since))):CHANGES;
+  sheet(`<h2>${t('What\'s new')}</h2>${list.map(([v,items])=>`<h3>${t('Version {0}',v)}</h3><ul>${items.map(i=>`<li>${esc(t(i))}</li>`).join('')}</ul>`).join('')}
+    <div class="btns"><button class="primary" data-close>${t('Got it')}</button></div>`); }
 
 // ---------- combined backup ----------
 // One code holds the Arcade's save plus every key each game owns. Format: ARCADE1Z.<base64url of gzipped JSON>,
@@ -362,48 +576,51 @@ async function makeCode(){ const body=JSON.stringify({v:1,app:'arcade',t:Date.no
 async function readCode(txt){ const m=String(txt).match(/ARCADE1Z?\.[A-Za-z0-9_-]+/); if(!m) return null;
   let bytes=unb64u(m[0].slice(m[0].indexOf('.')+1)); if(m[0].startsWith('ARCADE1Z.')) bytes=await pipe(bytes,new DecompressionStream('gzip'));
   const o=JSON.parse(new TextDecoder().decode(bytes)); return o&&o.app==='arcade'&&o.keys?o:null; }
-const fmtSize=n=>n<1024?n+' bytes':(n/1024).toFixed(1)+' KB';
+const fmtSize=n=>n<1024?t('{0} bytes',n):t('{0} KB',(n/1024).toFixed(1));
 const stamp=()=>{ const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
 
 async function openBackup(){ const code=await makeCode(), T=totals();
-  sheet(`<h2>Backup &amp; restore</h2><div class="sub">One file with your username, settings and every game's progress. Keep it somewhere safe, or use it to move to another device.</div>
-    <div class="kv">Arcade level<span>${T.lv||1}</span></div>${LIVE.map(g=>{ const s=summary(g.id); return `<div class="kv">${g.name}<span>${s?'Level '+s.level:'No progress yet'}</span></div>`; }).join('')}
-    <div class="btns"><button class="primary" id="bkFile">Save to file · ${fmtSize(code.length)}</button><button class="ghost" id="bkCopy" style="color:var(--ink)">Copy backup code</button></div>
-    <div class="slabel" style="margin-top:18px">Restore</div>
-    <textarea class="field" id="rsCode" placeholder="Paste a backup code, or load a file" spellcheck="false"></textarea>
-    <div class="btns"><button class="ghost" id="rsFile" style="color:var(--ink)">Load from file…</button><button class="primary" id="rsGo">Check backup</button><button class="ghost" data-close>Close</button></div>
+  sheet(`<h2>${t('Backup & restore')}</h2><div class="sub">${t('One file with your profile, settings and every game\'s progress. Keep it somewhere safe, or use it to move to another device.')}</div>
+    <div class="kv">${t('Achievements')}<span>${T.got}/${T.all||'–'}</span></div>${LIVE.map(g=>{ const s=summary(g.id); return `<div class="kv">${g.name}<span>${s?t('Level {0}',s.level):t('No progress yet')}</span></div>`; }).join('')}
+    <div class="btns"><button class="primary" id="bkFile">${t('Save to file · {0}',fmtSize(code.length))}</button><button class="ghost" id="bkCopy" style="color:var(--ink)">${t('Copy backup code')}</button></div>
+    <div class="slabel" style="margin-top:18px">${t('Restore')}</div>
+    <textarea class="field" id="rsCode" placeholder="${t('Paste a backup code, or load a file')}" spellcheck="false"></textarea>
+    <div class="btns"><button class="ghost" id="rsFile" style="color:var(--ink)">${t('Load from file…')}</button><button class="primary" id="rsGo">${t('Check backup')}</button><button class="ghost" data-close>${t('Close')}</button></div>
     <input type="file" id="rsPick" accept=".txt,text/plain" hidden>`);
-  $('#bkFile').onclick=()=>{ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([code],{type:'text/plain'})); a.download=`arcade-backup-${stamp()}.txt`; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },500); A.bk.last=Date.now(); persist(); toast('Backup saved'); };
-  $('#bkCopy').onclick=async()=>{ try{ await navigator.clipboard.writeText(code); A.bk.last=Date.now(); persist(); toast('Backup code copied'); }catch(e){ $('#rsCode').value=code; $('#rsCode').select(); toast('Select and copy the code below'); } };
+  $('#bkFile').onclick=()=>{ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([code],{type:'text/plain'})); a.download=`arcade-backup-${stamp()}.txt`; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },500); A.bk.last=Date.now(); persist(); toast(t('Backup saved')); };
+  $('#bkCopy').onclick=async()=>{ try{ await navigator.clipboard.writeText(code); A.bk.last=Date.now(); persist(); toast(t('Backup code copied')); }catch(e){ $('#rsCode').value=code; $('#rsCode').select(); toast(t('Select and copy the code below')); } };
   $('#rsFile').onclick=()=>$('#rsPick').click();
   $('#rsPick').onchange=async e=>{ const f=e.target.files[0]; if(f){ $('#rsCode').value=(await f.text()).trim(); $('#rsGo').click(); } };
   $('#rsGo').onclick=async()=>{ const v=$('#rsCode').value.trim();
-    if(/SWEEP1Z?\./.test(v)){ toast('That\'s a Sweep-only backup. Restore it in Sweep → Settings.'); return; }
-    let o=null; try{ o=await readCode(v); }catch(e){} if(!o){ toast('That doesn\'t look like an Arcade backup.'); return; }
+    if(/SWEEP1Z?\./.test(v)){ toast(t('That\'s a Sweep-only backup. Restore it in Sweep → Settings.')); return; }
+    let o=null; try{ o=await readCode(v); }catch(e){} if(!o){ toast(t('That doesn\'t look like an Arcade backup.')); return; }
     confirmRestore(o); };
 }
 function confirmRestore(o){ const K=o.keys, sum=id=>{ try{ return JSON.parse(K['arcade.summary.'+id]); }catch(e){ return null; } };
   const inBk=LIVE.filter(g=>Object.keys(K).some(k=>k.startsWith(g.prefix)));
   let pick='all', armed=false;
-  const draw=()=>{ sheet(`<h2>Restore backup</h2><div class="sub">From ${new Date(o.t).toLocaleString(undefined,{dateStyle:'medium',timeStyle:'short'})}. This replaces what's on this device for what you pick.</div>
-    <div class="pick"><button data-p="all" class="${pick==='all'?'on':''}"><span>Everything<br><small style="color:var(--sub)">Username, settings and all games</small></span>${pick==='all'?icon('check'):''}</button>
-    ${inBk.map(g=>{ const s=sum(g.id); return `<button data-p="${g.id}" class="${pick===g.id?'on':''}"><span>Only ${g.name}<br><small style="color:var(--sub)">${s?'Level '+s.level+' · '+s.ach.filter(a=>a[2]).length+' achievements':'Progress inside'}</small></span>${pick===g.id?icon('check'):''}</button>`; }).join('')}</div>
-    <div class="btns"><button class="primary" id="rsYes">${armed?'Tap again to replace':'Restore'}</button><button class="ghost" data-close>Cancel</button></div>`);
+  const draw=()=>{ sheet(`<h2>${t('Restore backup')}</h2><div class="sub">${t('From {0}. This replaces what\'s on this device for what you pick.',new Date(o.t).toLocaleString(lang(),{dateStyle:'medium',timeStyle:'short'}))}</div>
+    <div class="pick"><button data-p="all" class="${pick==='all'?'on':''}"><span>${t('Everything')}<br><small style="color:var(--sub)">${t('Profile, settings and all games')}</small></span>${pick==='all'?icon('check'):''}</button>
+    ${inBk.map(g=>{ const s=sum(g.id); return `<button data-p="${g.id}" class="${pick===g.id?'on':''}"><span>${t('Only {0}',g.name)}<br><small style="color:var(--sub)">${s?t('Level {0}',s.level)+' · '+t('{0} achievements',s.ach.filter(a=>a[2]).length):t('Progress inside')}</small></span>${pick===g.id?icon('check'):''}</button>`; }).join('')}</div>
+    <div class="btns"><button class="primary" id="rsYes">${armed?t('Tap again to replace'):t('Restore')}</button><button class="ghost" data-close>${t('Cancel')}</button></div>`);
     $$('[data-p]').forEach(b=>b.onclick=()=>{ pick=b.dataset.p; armed=false; draw(); });
     $('#rsYes').onclick=()=>{ if(!armed){ armed=true; draw(); return; } doRestore(K,pick); }; };
   draw(); }
-function doRestore(K,pick){ const own=k=>pick==='all'?(k.startsWith('arcade.')||LIVE.some(g=>k.startsWith(g.prefix))):(k.startsWith(GAMES.find(g=>g.id===pick).prefix)||k==='arcade.summary.'+pick);
+function doRestore(K,pick){ const own=k=>pick==='all'?(k.startsWith('arcade.')||LIVE.some(g=>k.startsWith(g.prefix))):(k.startsWith(gameById(pick).prefix)||k==='arcade.summary.'+pick);
   Object.keys(ownedKeys()).filter(own).forEach(k=>localStorage.removeItem(k));
   Object.entries(K).filter(([k])=>own(k)).forEach(([k,v])=>{ try{ localStorage.setItem(k,v); }catch(e){} });
-  if(pick==='all'){ A=Object.assign(defA(),read(AKEY)||{}); A.set=Object.assign(defSet(),A.set); }
-  persist(); hide(); applyTheme(); show('home'); toast(pick==='all'?'Everything restored':`${GAMES.find(g=>g.id===pick).name} restored`); }
+  if(pick==='all'){ A=Object.assign(defA(),read(AKEY)||{}); A.set=Object.assign(defSet(),A.set); if(!A.known) A.known=LIVE.map(g=>g.id); }
+  persist(); hide(); applyTheme(); show('home'); toast(pick==='all'?t('Everything restored'):t('{0} restored',gameById(pick).name)); }
 
 // ---------- start ----------
 $('#icoA').innerHTML=icon('trophy'); $('#icoS').innerHTML=icon('gear'); $$('.topbar .iconbtn').forEach(b=>b.innerHTML=icon('back'));
-applyTheme();
+$('#idCard').onclick=()=>show('prof');
+settleSession(); applyTheme();
 if(location.hash==='#prefs'){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} show('set'); } else show('home');
+checkMilestones();
 if(!A.name&&!A.askedName) setTimeout(()=>askName(false),migrated?600:350);
-else if(migrated) toast('Your Sweep progress is here');
+else if(migrated) toast(t('Your Sweep progress is here'));
+else if(A.seenVer!==VERSION){ const since=A.seenVer; A.seenVer=VERSION; persist(); setTimeout(()=>openNews(since||'0.10'),500); }
 </script>
 <script>
 if('serviceWorker' in navigator) addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{scope:''}).then(reg=>{

@@ -19,7 +19,7 @@ Each game keeps its own save, levels and unlocks. The Arcade adds the levels up,
 
 ## Layout
 ```
-src/index.html        the Arcade home, achievements, settings and backup
+src/parts/            the Arcade home (page and styles, script, card art, translations in tr.py); build.py joins them
 web/                  service worker template, manifest, icons
 games/<game>/         each game's own source, tests and build.py
 build.py              python3 build.py  →  docs/  (what GitHub Pages serves)
@@ -41,12 +41,13 @@ docs/                 built site — don't edit by hand
   mkdir -p /tmp/site && ln -sfn "$PWD/docs" /tmp/site/arcade
   python3 tests/server.py /tmp/site 8771 &
   python3 tests/arcade_flow.py     # shell, shared settings, backup, Sweep save migration
+  python3 tests/home_flow.py       # profile, avatars, favourites, badges, milestones, translations
   python3 tests/games_flow.py      # every game inside the Arcade
   python3 tests/offline_test.py    # airplane mode, dead connection, updates, broken updates, wiped caches
   ```
 
 ## Adding a game
-Follow the Arcade integration checklist (the game ships a folder with `src/`, `build.py` and `tests/`, an Arcade build with `window.__ARCADE__=1`, and the summary record). Then add it to `GAMES` in `src/index.html`, to the game list and cache parts in `build.py`, and to `tests/games_flow.py` and `tests/offline_test.py`.
+Follow the Arcade integration checklist (the game ships a folder with `src/`, `build.py` and `tests/`, an Arcade build with `window.__ARCADE__=1`, and the summary record). Then add it to `GAMES` in `src/parts/b_script.js` (and an avatar in `AVATARS`), to the game list and cache parts in `build.py`, and to `tests/games_flow.py` and `tests/offline_test.py`.
 
 The **import check** in `build.py` runs on every game: it makes sure leaving for the Arcade replaces the page in history and that `#game-settings` opens the game's settings, fixes either if missing and says so, and stops the build if it can't tell.
 

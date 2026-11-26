@@ -91,11 +91,27 @@ def build_from_source(game, folder, out_rel, settings_btn):
     assert html.count(link) == 1 and 'window.__ARCADE__=1' in html, f'{game}: not an Arcade build'
     return import_check(html.replace(link, link + '\n' + HEAD_LINKS), game, settings_btn)
 
+GAME_PAGES = ['sweep', 'shipfight', 'snake', 't2048', 'linefall', 'drift', 'tilecraft', 'solitaire', 'mahjong', 'sudoku']
+
+def build_shell():
+    """The Arcade home, assembled from src/parts: the page and styles, the translation table, the script and the card art.
+    Each game's page hash goes in GAME_BUILDS, which drives the "Updated" badge, so the games are built first."""
+    import importlib.util
+    parts = os.path.join(root, 'src', 'parts')
+    spec = importlib.util.spec_from_file_location('tr', os.path.join(parts, 'tr.py')); tr = importlib.util.module_from_spec(spec); spec.loader.exec_module(tr)
+    script = rd(parts, 'b_script.js')
+    keys = set(k.replace("\\'", "'") for k in re.findall(r"\bt\('((?:[^'\\]|\\.)*)'", script))
+    missing = sorted(k for k in keys if k not in tr.T)
+    assert not missing, f'Arcade strings with no translation row in src/parts/tr.py: {missing}'
+    builds = {g: hashlib.sha1(open(os.path.join(out, g, 'index.html'), 'rb').read()).hexdigest()[:10] for g in GAME_PAGES}
+    script = script.replace('/*GAME_BUILDS*/{}', json.dumps(builds)).replace('/*ART*/', rd(parts, 'c_art.js'))
+    assert '/*ART*/' not in script and '/*GAME_BUILDS*/' not in script
+    page = rd(parts, 'a_head.html').replace('<!--HEAD-->', HEAD.format(r=''))
+    return page + '<script>\n' + tr.js() + '\n' + script + '</script>\n' + REG.format(r='') + '</html>\n'
+
 def main():
     if os.path.exists(out): shutil.rmtree(out)
     os.makedirs(os.path.join(out, 'sweep'))
-    shell = rd(root, 'src', 'index.html').replace('<!--HEAD-->', HEAD.format(r='')).replace('</body>', REG.format(r=''))
-    open(os.path.join(out, 'index.html'), 'w', encoding='utf-8').write(shell)
     open(os.path.join(out, 'sweep', 'index.html'), 'w', encoding='utf-8').write(build_sweep())
     # Games built from source: (id, folder in games/, its Arcade build, its settings button)
     for gid, folder, rel, btn in [('shipfight', 'ship-fight', 'shipfight/index.html', 'homeSet'),
@@ -109,6 +125,7 @@ def main():
                                   ('sudoku', 'sudoku', 'sudoku/index.html', 'settingsBtn')]:
         os.makedirs(os.path.join(out, gid))
         open(os.path.join(out, gid, 'index.html'), 'w', encoding='utf-8').write(build_from_source(gid, folder, rel, btn))
+    open(os.path.join(out, 'index.html'), 'w', encoding='utf-8').write(build_shell())
     shutil.copy(os.path.join(sweep, 'web', 'fonts.css'), out)
     shutil.copytree(os.path.join(sweep, 'web', 'fonts'), os.path.join(out, 'fonts'))
     shutil.copy(os.path.join(root, 'web', 'manifest.webmanifest'), out)
