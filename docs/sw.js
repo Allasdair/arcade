@@ -9,9 +9,9 @@
 //   service workers can't touch at all.
 // - Self-repair: if a cache goes missing (cleared by the browser or another app on this site), it's
 //   refilled the next time the app is opened online.
-const BUILD='a0bb7b75';
+const BUILD='bd4f1464';
 const PARTS={
- "arcade-shell-f9e0ff6e0d": [
+ "arcade-shell-790c1da2e0": [
   "index.html",
   "fonts.css",
   "manifest.webmanifest",
@@ -57,6 +57,9 @@ const PARTS={
  ],
  "arcade-chess-aa811dfb69": [
   "chess/index.html"
+ ],
+ "arcade-quintessence-a1e4d1ca8a": [
+  "quintessence/index.html"
  ]
 };            // {cacheName: [files relative to this script]}
 const PREFIX='arcade-';

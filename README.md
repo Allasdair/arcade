@@ -15,6 +15,7 @@ Ad-free games. Nothing to buy, nothing tracked. Play at **https://allasdair.gith
 | Mahjong | `games/mahjong` | Mahjong solitaire: match pairs, clear the stack |
 | Sudoku | `games/sudoku` | Pure logic, never a guess |
 | Chess | `games/chess` | Play, solve, improve |
+| Quintessence | `games/quintessence` | Match the elements, master the storm |
 
 Each game keeps its own save, levels and unlocks. The Arcade adds the levels up, keeps the settings every game shares (username, appearance, sound, accessibility, language), and backs everything up in one file. Progress lives only on your device.
 
@@ -33,7 +34,7 @@ docs/                 built site — don't edit by hand
 2. Run `python3 build.py`. It builds every game, runs the import check on each (see below) and writes `docs/`.
 3. Test (below), then commit and push. Pages redeploys in 1–2 minutes; players get the update in the background and see "Arcade updated · Reload".
 
-**Saves must stay compatible.** Storage keys start with each game's id (`sweep.`, `shipfight.`, `snake.`, `t2048.`, `linefall.`, `drift.`, `tilecraft.`, `solitaire.`, `mahjong.`, `sudoku.`, `chess.`), and the Arcade's own are `arcade.*`. Never rename or remove a key players already have.
+**Saves must stay compatible.** Storage keys start with each game's id (`sweep.`, `shipfight.`, `snake.`, `t2048.`, `linefall.`, `drift.`, `tilecraft.`, `solitaire.`, `mahjong.`, `sudoku.`, `chess.`, `quintessence.`), and the Arcade's own are `arcade.*`. Never rename or remove a key players already have.
 
 ## Tests
 - Each game: `cd games/<game> && node tests/run.js`

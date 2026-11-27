@@ -45,6 +45,11 @@ function art(kind){ const a='var(--accent)', s='var(--sub)';
   if(kind==='chess'){ // a corner of the board with a knight standing on it
     let c=''; for(let y=0;y<4;y++) for(let x=0;x<5;x++) c+=`<rect x="${4+x*13}" y="${4+y*12.5}" width="13" height="12.5" fill="${(x+y)%2?s:'var(--panel)'}" opacity="${(x+y)%2?.35:1}"/>`;
     return `<svg viewBox="0 0 74 58" width="76" height="60"><g>${c}</g><path d="M30 50h22l-1.5-5h-2.5c-1-6 1-10 4-15l-1-9c-1-3-4-6-9-7l-1.5-3-2 3.5-1.5-2-1 3.5c-4 3-6 7-7 12l3 2.5 3-2.5 4-1c-2 4-6 7-8 11v3h-2z" fill="${a}" stroke="var(--bg)" stroke-width="1.4" stroke-linejoin="round"/><circle cx="37" cy="21" r="1.3" fill="var(--accentInk)"/></svg>`; }
+  if(kind==='quintessence'){ // a small board of element gems with a Prism star in the middle
+    const g=(x,y,k)=>{ const o=[1,.55,.3][k]; return k===0?`<path d="M${x} ${y-6}l6 6-6 6-6-6z" fill="${a}" opacity="${o}"/>`:k===1?`<circle cx="${x}" cy="${y}" r="5.5" fill="${a}" opacity="${o}"/>`:`<rect x="${x-5}" y="${y-5}" width="10" height="10" rx="2.5" fill="${a}" opacity="${o+.15}"/>`; };
+    let c=''; const pat=[[0,1,2,1,0],[2,0,-1,2,1],[1,2,0,1,2]];
+    pat.forEach((r,y)=>r.forEach((k,x)=>{ if(k>=0) c+=g(9+x*14,10+y*15,k); }));
+    return `<svg viewBox="0 0 74 48" width="80" height="52">${c}<path d="M37 16l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z" fill="${a}" stroke="var(--bg)" stroke-width="1.2" stroke-linejoin="round"/></svg>`; }
   if(kind==='nono'){ let c=''; const g=['01110','11011','11111','01010','01110']; g.forEach((r,y)=>[...r].forEach((v,x)=>{ c+=`<rect x="${10+x*10}" y="${3+y*10}" width="9" height="9" rx="1.5" fill="${v==='1'?s:'var(--panel)'}"/>`; })); return `<svg viewBox="0 0 70 56" width="74" height="58">${c}</svg>`; }
   return `<svg viewBox="0 0 70 50" width="74" height="54"><path d="M10 30h50l-7 10H17z" fill="${s}"/><path d="M26 30V16h16v14M33 16V8" fill="none" stroke="${s}" stroke-width="3"/><path d="M6 44q6-4 12 0t12 0 12 0 12 0 12 0" fill="none" stroke="${s}" stroke-width="2"/></svg>`; }
 

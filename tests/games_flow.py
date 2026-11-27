@@ -14,6 +14,7 @@ GAMES=[  # id, name, Arcade button, settings button, settings screen, how to giv
   ('mahjong','Mahjong','#arcadeBtn','#settingsBtn','#set',"S.xp=200; persist(); writeSummary();"),
   ('sudoku','Sudoku','#arcadeBtn','#settingsBtn','#set',"S.xp=200; persist(); writeSummary();"),
   ('chess','Chess','#arcadeBtn','#settingsBtn','#set',"S.xp=200; persist(); writeSummary();"),
+  ('quintessence','Quintessence','#arcadeBtn','#settingsBtn','#set',"S.xp=200; persist(); writeSummary();"),
 ]
 ok_all=True
 def check(n,c,x=''):

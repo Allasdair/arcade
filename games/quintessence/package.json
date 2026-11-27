@@ -1,0 +1,8 @@
+{
+  "name": "quintessence",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Quintessence for the Arcade: an elemental match-3 with fair boards and no boosters.",
+  "scripts": { "test": "node tests/run.js", "layout": "python3 build.py && node tests/layout.js", "build": "python3 build.py", "grade": "node tools/grade.js" },
+  "devDependencies": { "playwright": "^1.49.0" }
+}

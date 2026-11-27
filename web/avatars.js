@@ -16,6 +16,7 @@ const LIST=[
   {id:'dots',game:'mahjong',name:'Dots',bg:'#fef3c7',pal:{i:'#fffaf0',e:'#c9b68a',g:'#2a9d8f',r:'#e63946'},px:['.eeeeeeee.','.eiiiiiie.','.eigiigie.','.eiiiiiie.','.eiirriie.','.eiirriie.','.eiiiiiie.','.eigiigie.','.eiiiiiie.','.eeeeeeee.']},
   {id:'grid',game:'sudoku',name:'Grid',bg:'#dbeafe',pal:{l:'#94a3b8',b:'#2563eb',w:'#ffffff'},px:['llllllllll','lwwlwwlbbl','lwwlwwlbbl','llllllllll','lbblwwlwwl','lbblwwlwwl','llllllllll','lwwlbblwwl','lwwlbblwwl','llllllllll']},
   {id:'knight',game:'chess',name:'Knight',bg:'#e9dcc9',pal:{k:'#3b2a1a',w:'#ffffff',m:'#a06e3c'},px:['..........','....k.k...','...kkkkm..','..kkwkkmm.','.kkkkkkkm.','kkkkkkkkm.','kk..kkkkm.','....kkkk..','..kkkkkkk.','.kkkkkkkkk']},
+  {id:'prism',game:'quintessence',name:'Prism',bg:'#1f2a44',pal:{a:'#ffd54a',b:'#ff8a3d',c:'#5ec8ff',w:'#ffffff'},px:['....a.....','....a.....','...aba....','aabbwbbaa.','.abwwwba..','..bwcwb...','..abcba...','.aab.baa..','.a.....a..','..........']},
 ];
 const byId=id=>LIST.find(a=>a.id===id)||null;
 const byIdx=n=>LIST[(n|0)-1]||null;

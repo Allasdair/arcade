@@ -12,7 +12,7 @@ async def main():
         ctx=await br.new_context(viewport={'width':390,'height':844},device_scale_factor=2); pg=await ctx.new_page()
         pg.on('pageerror',lambda e:errs.append(str(e)))
         await pg.goto(U+'fonts.css')
-        await pg.evaluate("localStorage.setItem('arcade.v1',JSON.stringify({v:1,name:'Alasdair',askedName:true,avatar:'heart',seenVer:'0.12',set:{lang:'en'},known:['sweep','shipfight','snake','t2048','linefall','drift','tilecraft','solitaire','mahjong','sudoku','chess']}))")
+        await pg.evaluate("localStorage.setItem('arcade.v1',JSON.stringify({v:1,name:'Alasdair',askedName:true,avatar:'heart',seenVer:'0.12',set:{lang:'en'},known:['sweep','shipfight','snake','t2048','linefall','drift','tilecraft','solitaire','mahjong','sudoku','chess','quintessence']}))")
         # --- Tilecraft: Robin (rocket) started a game and made the first move; Alasdair pastes the code
         await pg.goto(U+'tilecraft/'); await pg.wait_for_timeout(900)
         code=await pg.evaluate("""(()=>{ const av=ArcadeAvatars.idx('rocket'), cfg=twoPlayerCfg({size:'medium',shape:'square',boardSeed:77,bagSeed:88,mods:{}},['Robin',''],[av,0]), st=newGame(cfg);
@@ -42,6 +42,7 @@ async def main():
         if await got.count() and await got.first.is_visible(): await got.first.click(); await pg.wait_for_timeout(300)
         kn=await pg.evaluate("ArcadeAvatars.idx('knight')"); me=await pg.evaluate("ArcadeAvatars.idx('heart')")
         check('the knight avatar is the 13th (appended, nothing reordered)', kn==13 and me==2, f'{kn}, {me}')
+        check('the prism avatar is the 14th', await pg.evaluate("ArcadeAvatars.idx('prism')")==14)
         code=await pg.evaluate("av=>'Your move! '+encodeGame({id:[4,4,4,4,4,4],c960:-1,p0black:false,names:['Kai',''],avs:[av,0],moves:['d2d4'],end:0,offer:false})",kn)
         await pg.evaluate("c=>{ openTp(); tpImport(c); }",code); await pg.wait_for_timeout(300)
         check("Chess join sheet shows Kai's knight", await pg.evaluate("!!document.querySelector('#sheet .av rect[fill=\"#e9dcc9\"]')"))

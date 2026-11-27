@@ -1,0 +1,1174 @@
+{
+ "quick": false,
+ "constants": {
+  "PLAYS": 300,
+  "STRONG": 24,
+  "TARGET": [
+   0.8,
+   0.65,
+   0.55
+  ],
+  "TIGHT": 0.15,
+  "PAR": 0.7,
+  "SEC_PER_MOVE": 3.5,
+  "CAP": 150,
+  "SCORE_PLAYS": 80,
+  "DAILY_DATES": 14,
+  "DAILY_PLAYS": 60,
+  "DAILY_STRONG": 6,
+  "DAILY_TARGET": 0.65,
+  "CL_PLAYS": 30,
+  "TIMED_MOVES": 40
+ },
+ "levels": [
+  {
+   "id": "o1",
+   "name": "First Spark",
+   "limit": 14,
+   "rate": 0.827,
+   "target": 0.8,
+   "par": 6,
+   "strongMedian": 5,
+   "casualMedian": 10,
+   "time": 0,
+   "goals": [
+    {
+     "t": "score",
+     "n": 19000
+    }
+   ]
+  },
+  {
+   "id": "o2",
+   "name": "Kindling",
+   "limit": 15,
+   "rate": 0.843,
+   "target": 0.8,
+   "par": 5,
+   "strongMedian": 7,
+   "casualMedian": 12,
+   "time": 0,
+   "goals": [
+    {
+     "t": "collect",
+     "e": 0,
+     "n": 70
+    }
+   ]
+  },
+  {
+   "id": "o3",
+   "name": "Square One",
+   "limit": 19,
+   "rate": 0.83,
+   "target": 0.8,
+   "par": 8,
+   "strongMedian": 7,
+   "casualMedian": 13,
+   "time": 0,
+   "goals": [
+    {
+     "t": "score",
+     "n": 16000
+    }
+   ]
+  },
+  {
+   "id": "o4",
+   "name": "Heartwood",
+   "limit": 17,
+   "rate": 0.847,
+   "target": 0.8,
+   "par": 4,
+   "strongMedian": 10,
+   "casualMedian": 14,
+   "time": 0,
+   "goals": [
+    {
+     "t": "collect",
+     "e": 1,
+     "n": 60
+    }
+   ]
+  },
+  {
+   "id": "o5",
+   "name": "First Frost",
+   "limit": 8,
+   "rate": 0.847,
+   "target": 0.8,
+   "par": 1,
+   "strongMedian": 6,
+   "casualMedian": 7,
+   "time": 0,
+   "goals": [
+    {
+     "t": "frost"
+    }
+   ]
+  },
+  {
+   "id": "o6",
+   "name": "Standing Stones",
+   "limit": 8,
+   "rate": 0.8,
+   "target": 0.8,
+   "par": 2,
+   "strongMedian": 5,
+   "casualMedian": 7,
+   "time": 0,
+   "goals": [
+    {
+     "t": "stone"
+    }
+   ]
+  },
+  {
+   "id": "o7",
+   "name": "Quickfire",
+   "limit": 22,
+   "rate": 0.827,
+   "target": 0.8,
+   "par": 35,
+   "strongMedian": 8,
+   "casualMedian": 17,
+   "time": 80,
+   "goals": [
+    {
+     "t": "score",
+     "n": 21000
+    }
+   ]
+  },
+  {
+   "id": "o8",
+   "name": "Diamond Dust",
+   "limit": 8,
+   "rate": 0.84,
+   "target": 0.8,
+   "par": 1,
+   "strongMedian": 7,
+   "casualMedian": 5,
+   "time": 0,
+   "goals": [
+    {
+     "t": "frost"
+    }
+   ]
+  },
+  {
+   "id": "o9",
+   "name": "Relic Run",
+   "limit": 10,
+   "rate": 0.863,
+   "target": 0.8,
+   "par": 4,
+   "strongMedian": 3,
+   "casualMedian": 8,
+   "time": 0,
+   "goals": [
+    {
+     "t": "relic",
+     "n": 3
+    }
+   ]
+  },
+  {
+   "id": "o10",
+   "name": "Thin Ice",
+   "puzzle": true,
+   "min": 3,
+   "firsts": 3
+  },
+  {
+   "id": "o11",
+   "name": "Frost and Stone",
+   "limit": 8,
+   "rate": 0.81,
+   "target": 0.8,
+   "par": 2,
+   "strongMedian": 5,
+   "casualMedian": 7,
+   "time": 0,
+   "goals": [
+    {
+     "t": "frost"
+    },
+    {
+     "t": "stone"
+    }
+   ]
+  },
+  {
+   "id": "o12",
+   "name": "Ring of Ash",
+   "limit": 11,
+   "rate": 0.827,
+   "target": 0.8,
+   "par": 4,
+   "strongMedian": 5,
+   "casualMedian": 8,
+   "time": 0,
+   "goals": [
+    {
+     "t": "relic",
+     "n": 3
+    }
+   ]
+  },
+  {
+   "id": "o13",
+   "name": "Deep Freeze",
+   "limit": 18,
+   "rate": 0.847,
+   "target": 0.8,
+   "par": 7,
+   "strongMedian": 7,
+   "casualMedian": 14,
+   "time": 0,
+   "goals": [
+    {
+     "t": "frost"
+    },
+    {
+     "t": "relic",
+     "n": 2
+    }
+   ]
+  },
+  {
+   "id": "o14",
+   "name": "Tight Spot",
+   "limit": 11,
+   "rate": 0.68,
+   "target": 0.65,
+   "par": 4,
+   "strongMedian": 4,
+   "casualMedian": 11,
+   "time": 0,
+   "goals": [
+    {
+     "t": "stone"
+    },
+    {
+     "t": "frost"
+    }
+   ]
+  },
+  {
+   "id": "o15",
+   "name": "Wellspring",
+   "limit": 17,
+   "rate": 0.833,
+   "target": 0.8,
+   "par": 7,
+   "strongMedian": 7,
+   "casualMedian": 13,
+   "time": 0,
+   "goals": [
+    {
+     "t": "frost"
+    },
+    {
+     "t": "relic",
+     "n": 3
+    }
+   ]
+  },
+  {
+   "id": "s1",
+   "name": "Static",
+   "limit": 13,
+   "rate": 0.697,
+   "target": 0.65,
+   "par": 5,
+   "strongMedian": 5,
+   "casualMedian": 12,
+   "time": 0,
+   "goals": [
+    {
+     "t": "score",
+     "n": 4500
+    }
+   ]
+  },
+  {
+   "id": "s2",
+   "name": "Conductor",
+   "limit": 17,
+   "rate": 0.673,
+   "target": 0.65,
+   "par": 4,
+   "strongMedian": 10,
+   "casualMedian": 16,
+   "time": 0,
+   "goals": [
+    {
+     "t": "collect",
+     "e": 4,
+     "n": 36
+    }
+   ]
+  },
+  {
+   "id": "s3",
+   "name": "Crossfire",
+   "limit": 17,
+   "rate": 0.677,
+   "target": 0.65,
+   "par": 8,
+   "strongMedian": 5,
+   "casualMedian": 15,
+   "time": 0,
+   "goals": [
+    {
+     "t": "score",
+     "n": 6000
+    }
+   ]
+  },
+  {
+   "id": "s4",
+   "name": "Crossroads",
+   "limit": 14,
+   "rate": 0.663,
+   "target": 0.65,
+   "par": 4,
+   "strongMedian": 7,
+   "casualMedian": 13,
+   "time": 0,
+   "goals": [
+    {
+     "t": "collect",
+     "e": 1,
+     "n": 28
+    },
+    {
+     "t": "score",
+     "n": 4500
+    }
+   ]
+  },
+  {
+   "id": "s5",
+   "name": "Magma",
+   "limit": 20,
+   "rate": 0.68,
+   "target": 0.65,
+   "par": 9,
+   "strongMedian": 7,
+   "casualMedian": 17,
+   "time": 0,
+   "goals": [
+    {
+     "t": "lava"
+    }
+   ]
+  },
+  {
+   "id": "s6",
+   "name": "Chained",
+   "limit": 13,
+   "rate": 0.69,
+   "target": 0.65,
+   "par": 4,
+   "strongMedian": 7,
+   "casualMedian": 12,
+   "time": 0,
+   "goals": [
+    {
+     "t": "collect",
+     "e": 4,
+     "n": 24
+    }
+   ]
+  },
+  {
+   "id": "s7",
+   "name": "Eruption",
+   "limit": 23,
+   "rate": 0.65,
+   "target": 0.65,
+   "par": 15,
+   "strongMedian": 1,
+   "casualMedian": 18,
+   "time": 0,
+   "goals": [
+    {
+     "t": "lava"
+    }
+   ]
+  },
+  {
+   "id": "s8",
+   "name": "Hourglass",
+   "limit": 11,
+   "rate": 0.713,
+   "target": 0.65,
+   "par": 4,
+   "strongMedian": 4,
+   "casualMedian": 9,
+   "time": 0,
+   "goals": [
+    {
+     "t": "frost"
+    }
+   ]
+  },
+  {
+   "id": "s9",
+   "name": "Flow Control",
+   "limit": 20,
+   "rate": 0.69,
+   "target": 0.65,
+   "par": 2,
+   "strongMedian": 17,
+   "casualMedian": 17,
+   "time": 0,
+   "goals": [
+    {
+     "t": "lava"
+    },
+    {
+     "t": "score",
+     "n": 5500
+    }
+   ]
+  },
+  {
+   "id": "s10",
+   "name": "Live Wire",
+   "puzzle": true,
+   "min": 3,
+   "firsts": 2
+  },
+  {
+   "id": "s11",
+   "name": "Chain Reaction",
+   "limit": 13,
+   "rate": 0.697,
+   "target": 0.65,
+   "par": 5,
+   "strongMedian": 5,
+   "casualMedian": 12,
+   "time": 0,
+   "goals": [
+    {
+     "t": "frost"
+    }
+   ]
+  },
+  {
+   "id": "s12",
+   "name": "Twin Islands",
+   "limit": 20,
+   "rate": 0.683,
+   "target": 0.65,
+   "par": 10,
+   "strongMedian": 5,
+   "casualMedian": 15,
+   "time": 0,
+   "goals": [
+    {
+     "t": "relic",
+     "n": 3
+    }
+   ]
+  },
+  {
+   "id": "s13",
+   "name": "Molten Relics",
+   "limit": 28,
+   "rate": 0.69,
+   "target": 0.65,
+   "par": 7,
+   "strongMedian": 17,
+   "casualMedian": 23,
+   "time": 0,
+   "goals": [
+    {
+     "t": "relic",
+     "n": 3
+    },
+    {
+     "t": "lava"
+    }
+   ]
+  },
+  {
+   "id": "s14",
+   "name": "Combo Theory",
+   "limit": 23,
+   "rate": 0.667,
+   "target": 0.65,
+   "par": 9,
+   "strongMedian": 9,
+   "casualMedian": 19,
+   "time": 0,
+   "goals": [
+    {
+     "t": "score",
+     "n": 2000
+    }
+   ]
+  },
+  {
+   "id": "s15",
+   "name": "Eye of the Storm",
+   "limit": 34,
+   "rate": 0.653,
+   "target": 0.65,
+   "par": 15,
+   "strongMedian": 12,
+   "casualMedian": 30,
+   "time": 0,
+   "goals": [
+    {
+     "t": "relic",
+     "n": 3
+    },
+    {
+     "t": "lava"
+    }
+   ]
+  },
+  {
+   "id": "f1",
+   "name": "First Snow",
+   "limit": 16,
+   "rate": 0.603,
+   "target": 0.55,
+   "par": 4,
+   "strongMedian": 10,
+   "casualMedian": 14,
+   "time": 0,
+   "goals": [
+    {
+     "t": "score",
+     "n": 4000
+    }
+   ]
+  },
+  {
+   "id": "f2",
+   "name": "Crystal Count",
+   "limit": 24,
+   "rate": 0.587,
+   "target": 0.55,
+   "par": 2,
+   "strongMedian": 20,
+   "casualMedian": 24,
+   "time": 0,
+   "goals": [
+    {
+     "t": "collect",
+     "e": 5,
+     "n": 24
+    }
+   ]
+  },
+  {
+   "id": "f3",
+   "name": "Hearth",
+   "limit": 31,
+   "rate": 0.563,
+   "target": 0.55,
+   "par": 7,
+   "strongMedian": 21,
+   "casualMedian": 30,
+   "time": 0,
+   "goals": [
+    {
+     "t": "frost"
+    }
+   ]
+  },
+  {
+   "id": "f4",
+   "name": "Great Heart",
+   "limit": 18,
+   "rate": 0.557,
+   "target": 0.55,
+   "par": 7,
+   "strongMedian": 8,
+   "casualMedian": 18,
+   "time": 0,
+   "goals": [
+    {
+     "t": "collect",
+     "e": 0,
+     "n": 26
+    },
+    {
+     "t": "score",
+     "n": 3500
+    }
+   ]
+  },
+  {
+   "id": "f5",
+   "name": "Whiteout",
+   "limit": 15,
+   "rate": 0.55,
+   "target": 0.55,
+   "par": 2,
+   "strongMedian": 11,
+   "casualMedian": 14,
+   "time": 0,
+   "goals": [
+    {
+     "t": "fog"
+    }
+   ]
+  },
+  {
+   "id": "f6",
+   "name": "Cold Front",
+   "limit": 27,
+   "rate": 0.57,
+   "target": 0.55,
+   "par": 15,
+   "strongMedian": 5,
+   "casualMedian": 24,
+   "time": 0,
+   "goals": [
+    {
+     "t": "lava"
+    }
+   ]
+  },
+  {
+   "id": "f7",
+   "name": "Blizzard Clock",
+   "limit": 18,
+   "rate": 0.58,
+   "target": 0.55,
+   "par": 20,
+   "strongMedian": 10,
+   "casualMedian": 18,
+   "time": 65,
+   "goals": [
+    {
+     "t": "score",
+     "n": 3500
+    }
+   ]
+  },
+  {
+   "id": "f8",
+   "name": "Great Ring",
+   "limit": 33,
+   "rate": 0.57,
+   "target": 0.55,
+   "par": 18,
+   "strongMedian": 6,
+   "casualMedian": 31,
+   "time": 0,
+   "goals": [
+    {
+     "t": "frost"
+    }
+   ]
+  },
+  {
+   "id": "f9",
+   "name": "Hidden Links",
+   "limit": 19,
+   "rate": 0.597,
+   "target": 0.55,
+   "par": 2,
+   "strongMedian": 16,
+   "casualMedian": 18,
+   "time": 0,
+   "goals": [
+    {
+     "t": "fog"
+    }
+   ]
+  },
+  {
+   "id": "f10",
+   "name": "Glacier",
+   "puzzle": true,
+   "min": 3,
+   "firsts": 2
+  },
+  {
+   "id": "f11",
+   "name": "Permafrost",
+   "limit": 28,
+   "rate": 0.597,
+   "target": 0.55,
+   "par": 9,
+   "strongMedian": 15,
+   "casualMedian": 27,
+   "time": 0,
+   "goals": [
+    {
+     "t": "frost"
+    },
+    {
+     "t": "stone"
+    }
+   ]
+  },
+  {
+   "id": "f12",
+   "name": "Great Islands",
+   "limit": 31,
+   "rate": 0.56,
+   "target": 0.55,
+   "par": 2,
+   "strongMedian": 27,
+   "casualMedian": 30,
+   "time": 0,
+   "goals": [
+    {
+     "t": "relic",
+     "n": 3
+    }
+   ]
+  },
+  {
+   "id": "f13",
+   "name": "Everything Melts",
+   "limit": 22,
+   "rate": 0.557,
+   "target": 0.55,
+   "par": 7,
+   "strongMedian": 11,
+   "casualMedian": 21,
+   "time": 0,
+   "goals": [
+    {
+     "t": "lava"
+    },
+    {
+     "t": "fog"
+    }
+   ]
+  },
+  {
+   "id": "f14",
+   "name": "Narrow Pass",
+   "limit": 20,
+   "rate": 0.44,
+   "target": 0.4,
+   "par": 2,
+   "strongMedian": 16,
+   "casualMedian": 21,
+   "time": 0,
+   "goals": [
+    {
+     "t": "frost"
+    },
+    {
+     "t": "fog"
+    }
+   ]
+  },
+  {
+   "id": "f15",
+   "name": "Quintessence",
+   "limit": 42,
+   "rate": 0.567,
+   "target": 0.55,
+   "par": 5,
+   "strongMedian": 34,
+   "casualMedian": 40,
+   "time": 0,
+   "goals": [
+    {
+     "t": "relic",
+     "n": 3
+    },
+    {
+     "t": "frost"
+    }
+   ]
+  }
+ ],
+ "daily": [
+  {
+   "wd": 0,
+   "limit": 26,
+   "par": 8,
+   "score": 0,
+   "rate": 0.687,
+   "days": [
+    "2026-11-29",
+    "2026-12-06",
+    "2026-12-13",
+    "2026-12-20",
+    "2026-12-27",
+    "2027-01-03",
+    "2027-01-10",
+    "2027-01-17",
+    "2027-01-24",
+    "2027-01-31",
+    "2027-02-07",
+    "2027-02-14",
+    "2027-02-21",
+    "2027-02-28"
+   ]
+  },
+  {
+   "wd": 1,
+   "limit": 17,
+   "par": 7,
+   "score": 21000,
+   "rate": 0.675,
+   "days": [
+    "2026-11-23",
+    "2026-11-30",
+    "2026-12-07",
+    "2026-12-14",
+    "2026-12-21",
+    "2026-12-28",
+    "2027-01-04",
+    "2027-01-11",
+    "2027-01-18",
+    "2027-01-25",
+    "2027-02-01",
+    "2027-02-08",
+    "2027-02-15",
+    "2027-02-22"
+   ]
+  },
+  {
+   "wd": 2,
+   "limit": 13,
+   "par": 3,
+   "score": 0,
+   "rate": 0.671,
+   "days": [
+    "2026-11-24",
+    "2026-12-01",
+    "2026-12-08",
+    "2026-12-15",
+    "2026-12-22",
+    "2026-12-29",
+    "2027-01-05",
+    "2027-01-12",
+    "2027-01-19",
+    "2027-01-26",
+    "2027-02-02",
+    "2027-02-09",
+    "2027-02-16",
+    "2027-02-23"
+   ]
+  },
+  {
+   "wd": 3,
+   "limit": 10,
+   "par": 2,
+   "score": 0,
+   "rate": 0.692,
+   "days": [
+    "2026-11-25",
+    "2026-12-02",
+    "2026-12-09",
+    "2026-12-16",
+    "2026-12-23",
+    "2026-12-30",
+    "2027-01-06",
+    "2027-01-13",
+    "2027-01-20",
+    "2027-01-27",
+    "2027-02-03",
+    "2027-02-10",
+    "2027-02-17",
+    "2027-02-24"
+   ]
+  },
+  {
+   "wd": 4,
+   "limit": 23,
+   "par": 10,
+   "score": 0,
+   "rate": 0.67,
+   "days": [
+    "2026-11-26",
+    "2026-12-03",
+    "2026-12-10",
+    "2026-12-17",
+    "2026-12-24",
+    "2026-12-31",
+    "2027-01-07",
+    "2027-01-14",
+    "2027-01-21",
+    "2027-01-28",
+    "2027-02-04",
+    "2027-02-11",
+    "2027-02-18",
+    "2027-02-25"
+   ]
+  },
+  {
+   "wd": 5,
+   "limit": 13,
+   "par": 5,
+   "score": 4000,
+   "rate": 0.695,
+   "days": [
+    "2026-11-27",
+    "2026-12-04",
+    "2026-12-11",
+    "2026-12-18",
+    "2026-12-25",
+    "2027-01-01",
+    "2027-01-08",
+    "2027-01-15",
+    "2027-01-22",
+    "2027-01-29",
+    "2027-02-05",
+    "2027-02-12",
+    "2027-02-19",
+    "2027-02-26"
+   ]
+  },
+  {
+   "wd": 6,
+   "limit": 15,
+   "par": 4,
+   "score": 0,
+   "rate": 0.681,
+   "days": [
+    "2026-11-28",
+    "2026-12-05",
+    "2026-12-12",
+    "2026-12-19",
+    "2026-12-26",
+    "2027-01-02",
+    "2027-01-09",
+    "2027-01-16",
+    "2027-01-23",
+    "2027-01-30",
+    "2027-02-06",
+    "2027-02-13",
+    "2027-02-20",
+    "2027-02-27"
+   ]
+  }
+ ],
+ "classic": {
+  "moves|7|4": [
+   27100,
+   37800
+  ],
+  "moves|7|5": [
+   9200,
+   11900
+  ],
+  "moves|7|6": [
+   5200,
+   6700
+  ],
+  "moves|8|4": [
+   49600,
+   70500
+  ],
+  "moves|8|5": [
+   13600,
+   17400
+  ],
+  "moves|8|6": [
+   7200,
+   8800
+  ],
+  "moves|9|4": [
+   69200,
+   134300
+  ],
+  "moves|9|5": [
+   15800,
+   23100
+  ],
+  "moves|9|6": [
+   6800,
+   8900
+  ],
+  "moves|heart|4": [
+   40100,
+   52800
+  ],
+  "moves|heart|5": [
+   9900,
+   13900
+  ],
+  "moves|heart|6": [
+   5300,
+   6400
+  ],
+  "moves|diamond|4": [
+   35900,
+   49100
+  ],
+  "moves|diamond|5": [
+   10500,
+   14700
+  ],
+  "moves|diamond|6": [
+   5800,
+   7700
+  ],
+  "moves|ring|4": [
+   15700,
+   22400
+  ],
+  "moves|ring|5": [
+   6000,
+   7200
+  ],
+  "moves|ring|6": [
+   3700,
+   4200
+  ],
+  "moves|cross|4": [
+   47700,
+   63700
+  ],
+  "moves|cross|5": [
+   14800,
+   19200
+  ],
+  "moves|cross|6": [
+   6300,
+   8100
+  ],
+  "moves|hourglass|4": [
+   35200,
+   47700
+  ],
+  "moves|hourglass|5": [
+   10100,
+   14800
+  ],
+  "moves|islands|4": [
+   15900,
+   19400
+  ],
+  "moves|hourglass|6": [
+   5200,
+   6700
+  ],
+  "moves|islands|6": [
+   4200,
+   4700
+  ],
+  "moves|islands|5": [
+   6300,
+   8200
+  ],
+  "timed|7|5": [
+   12200,
+   17500
+  ],
+  "timed|7|4": [
+   41100,
+   49700
+  ],
+  "timed|7|6": [
+   6600,
+   8500
+  ],
+  "timed|8|4": [
+   63800,
+   83600
+  ],
+  "timed|8|5": [
+   19200,
+   21200
+  ],
+  "timed|8|6": [
+   9000,
+   11200
+  ],
+  "timed|9|4": [
+   108700,
+   146700
+  ],
+  "timed|9|5": [
+   22800,
+   33600
+  ],
+  "timed|9|6": [
+   10100,
+   13100
+  ],
+  "timed|heart|4": [
+   53100,
+   60900
+  ],
+  "timed|heart|6": [
+   7400,
+   10100
+  ],
+  "timed|heart|5": [
+   14100,
+   22100
+  ],
+  "timed|diamond|4": [
+   46600,
+   60000
+  ],
+  "timed|diamond|5": [
+   14200,
+   17400
+  ],
+  "timed|diamond|6": [
+   7700,
+   9700
+  ],
+  "timed|ring|4": [
+   21400,
+   28800
+  ],
+  "timed|ring|5": [
+   8100,
+   10100
+  ],
+  "timed|ring|6": [
+   5000,
+   6200
+  ],
+  "timed|cross|5": [
+   16600,
+   22700
+  ],
+  "timed|cross|4": [
+   60900,
+   80500
+  ],
+  "timed|cross|6": [
+   8200,
+   10000
+  ],
+  "timed|hourglass|4": [
+   52200,
+   60500
+  ],
+  "timed|hourglass|5": [
+   15100,
+   20200
+  ],
+  "timed|hourglass|6": [
+   7400,
+   8400
+  ],
+  "timed|islands|4": [
+   23100,
+   28800
+  ],
+  "timed|islands|5": [
+   8800,
+   10400
+  ],
+  "timed|islands|6": [
+   5500,
+   6400
+  ]
+ },
+ "obFactor": 1.083,
+ "seconds": 147
+}

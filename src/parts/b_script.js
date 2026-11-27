@@ -3,7 +3,7 @@
 // play-time stats, Arcade milestones and themes, and the overview. Each game owns its own save, XP, levels and unlocks.
 // The Arcade only ever reads a game's summary record, `arcade.summary.<id>`, which the game writes.
 // Storage keys are prefixed with the game's id so nothing collides.
-const VERSION='0.13', AKEY='arcade.v1';
+const VERSION='0.14', AKEY='arcade.v1';
 const GAME_BUILDS=/*GAME_BUILDS*/{}; // filled in by build.py: a hash of each game's page, for "Updated" badges
 const $=q=>document.querySelector(q), $$=q=>[...document.querySelectorAll(q)];
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -21,12 +21,14 @@ const GAMES=[
   {id:'mahjong',name:'Mahjong',desc:'Match pairs, clear the stack',path:'mahjong/index.html',prefix:'mahjong.',art:'mahjong'},
   {id:'sudoku',name:'Sudoku',desc:'Pure logic, never a guess',path:'sudoku/index.html',prefix:'sudoku.',art:'sudoku'},
   {id:'chess',name:'Chess',desc:'Play, solve, improve',path:'chess/index.html',prefix:'chess.',art:'chess'},
+  {id:'quintessence',name:'Quintessence',desc:'Match the elements, master the storm',path:'quintessence/index.html',prefix:'quintessence.',art:'quintessence'},
   {id:'nonogram',name:'Nonograms',desc:'Picture logic puzzles',soon:true,art:'nono'},
 ];
 const LIVE=GAMES.filter(g=>!g.soon), gameById=id=>GAMES.find(g=>g.id===id);
 
 // What's new in the Arcade itself, newest first. Returning players see the entries since their last visit once.
 const CHANGES=[
+  ['0.14',['New game: Quintessence']],
   ['0.13',['New game: Chess']],
   ['0.12',['Your avatar travels with you: Sweep\'s League and challenges and Tilecraft\'s 2-Player games show every player\'s avatar next to their name']],
   ['0.11',['A profile card with a pixel-art avatar and your achievements across every game','Profile: play time, most played game, games played and Arcade milestones','Arcade milestones unlock themes for the Arcade home','Favourite games, sorting, and New / Updated badges','The Arcade\'s own menus in Español, Français, Deutsch and Português','Install Arcade from Settings, and this What\'s new']],
